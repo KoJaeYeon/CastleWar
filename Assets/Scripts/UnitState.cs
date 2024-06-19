@@ -1,16 +1,36 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
-public class IdleState : IState
+public abstract class UnitState : IState
 {
-    private readonly Unit _character;
-    
+    protected Unit _character;
 
-    public IdleState(Unit character)
+    public virtual void Enter()
+    {
+    }
+
+    public virtual void ExecuteFixedUpdate()
+    {
+    }
+
+    public virtual void ExecuteUpdate()
+    {
+    }
+
+    public virtual void Exit()
+    {
+    }
+}
+
+public class UnitIdleState : UnitState
+{  
+
+    public UnitIdleState(Unit character)
     {
         _character = character;
     }
 
-    public void Enter()
+    public override void Enter()
     {
         Debug.Log("Entering Idle State");
         // Idle 상태로 전환할 때 필요한 초기 설정
@@ -18,65 +38,70 @@ public class IdleState : IState
         _character.StartCoroutine(_character.Spawn_Init());
     }
 
-    public void ExecuteUpdate()
+    public override void ExecuteUpdate()
     {
         // Idle 상태에서 실행할 로직
         _character.OnValueChanged_SpawnSlider(Time.deltaTime);
     }
 
-    public void ExecuteFixedUpdate()
+    public override void ExecuteFixedUpdate()
     {
 
     }
 
-    public void Exit()
+    public override void Exit()
     {
         Debug.Log("Exiting Idle State");
         // Idle 상태에서 나갈 때 필요한 정리 작업
     }
 }
 
-public class MoveState : IState
+public class UnitMoveState : UnitState
 {
-    private readonly Unit _character;
-
-    public MoveState(Unit character)
+    public UnitMoveState(Unit character)
     {
         _character = character;
     }
 
-    public void Enter()
+    public override void Enter()
     {
         Debug.Log("Entering Walking State");
         // Walking 상태로 전환할 때 필요한 초기 설정
     }
 
-    public void ExecuteUpdate()
+    public override void ExecuteUpdate()
     {
         // Idle 상태에서 실행할 로직
         return;
 
     }
 
-    public void ExecuteFixedUpdate()
+    public override void ExecuteFixedUpdate()
     {
+        _character.SearchEnemy();
+        if(_character.TargetChanged)
+        {
+            //Astar
+        }
         Move();
     }
 
-    public void Exit()
+    public override void Exit()
     {
         Debug.Log("Exiting Walking State");
         // Walking 상태에서 나갈 때 필요한 정리 작업
     }
 
     /*
-     * 앞으로 움직이는 기능
      * 적을 탐색하는 기능
      * 적을 향해 움직이는 기능
-     * 적을 발견하고 사이에 장애물이 있으면 돌아가는 기능
+     * 앞으로 움직이는 기능
+     * 적을 발견하고 사이에 장애물이 있으면 돌아가는 기능 -> Astar
      */
+
     public void Move()
     {
         
     }
+    
 }
