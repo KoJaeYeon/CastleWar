@@ -40,7 +40,7 @@ public class Astar : MonoBehaviour
 {
     public GameObject destination;
 
-    public int range = 5;
+    public int range = 2;
 
     public Vector2Int bottomLeft, topRight, start_Pos, end_Pos;
 
@@ -50,7 +50,7 @@ public class Astar : MonoBehaviour
     //대각선을 이용 할것인지 경우 // false일 시 직선으로만 이동
     public bool AllowDigonal = true;
     //코너를 가로질러 가지 않을 경우 이동중 수직 수평 장애물이 있는 지 판단 //false일 시 코너에 닿으면서 지나감
-    public bool DontCrossCorner = true;
+    public bool DontCrossCorner = false;
 
     Node startNode, endNode, curNode;
 
@@ -66,10 +66,6 @@ public class Astar : MonoBehaviour
     {
         this.index = index;
     }
-    public void SetDestination(GameObject gameObject)
-    {
-        destination = gameObject;
-    }
     public void Clear()
     {
         final_node.Clear();
@@ -77,11 +73,11 @@ public class Astar : MonoBehaviour
 
     public void SetPosInit()
     {
-        float minX, maxX, minY, maxY;
+        float minX, maxX, minZ, maxZ;
         minX = transform.position.x;
         maxX = destination.transform.position.x;
-        minY = transform.position.y;
-        maxY = destination.transform.position.y;
+        minZ = transform.position.z;
+        maxZ = destination.transform.position.z;
 
         if (transform.position.x > destination.transform.position.x)
         {
@@ -89,27 +85,28 @@ public class Astar : MonoBehaviour
             minX = maxX;
             maxX = temp;
         }
-        if (transform.position.y > destination.transform.position.y)
+        if (transform.position.z > destination.transform.position.z)
         {
-            float temp = minY;
-            minY = maxY;
-            maxY = temp;
+            float temp = minZ;
+            minZ = maxZ;
+            maxZ = temp;
         }
 
-        //시작부터 도착까지 5넓은 범위로 검색
+        //시작부터 도착까지 range만큼 넓은 범위로 검색
         minX -= range;
-        minY -= range;
+        minZ -= range;
         maxX += range;
-        maxY += range;
+        maxZ += range;
 
-        bottomLeft = new Vector2Int((int)minX, (int)minY);
-        topRight = new Vector2Int((int)maxX, (int)maxY);
-        start_Pos = new Vector2Int((int)transform.position.x, (int)transform.position.y);
-        end_Pos = new Vector2Int((int)destination.transform.position.x, (int)destination.transform.position.y);
+        bottomLeft = new Vector2Int((int)minX, (int)minZ);
+        topRight = new Vector2Int((int)maxX, (int)maxZ);
+        start_Pos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        end_Pos = new Vector2Int((int)destination.transform.position.x, (int)destination.transform.position.z);
     }
 
-    public List<Node> AStar()
+    public List<Node> AStar(GameObject targetObject)
     {
+        destination = targetObject;
         SetPosInit();
         sizeX = topRight.x-bottomLeft.x + 1;
         sizeY = topRight.y-bottomLeft.y + 1;
@@ -121,19 +118,11 @@ public class Astar : MonoBehaviour
             {
                 bool isObstacle = false;
                 //각 노드에 0.49f반지름의 원을 생성하여 충돌감지 후 노드 담기
-                foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(i + bottomLeft.x, j + bottomLeft.y), 0.49f))
+                foreach (Collider col in Physics.OverlapSphere(new Vector3(i + bottomLeft.x,0, j + bottomLeft.y), 0.49f))
                 {
-                    if (col.gameObject.layer.Equals(LayerMask.NameToLayer("Resources")))
+                    if (col.gameObject.layer.Equals(LayerMask.NameToLayer("Border")))
                     {
                         isObstacle = true;
-                    }
-                    else if (col.gameObject.layer.Equals(LayerMask.NameToLayer("Furniture")))
-                    {
-                        //int index = col.gameObject.GetComponent<Building>().index;
-                        //if (palAI.targetBulding.index != index)
-                        //{
-                        //    isObstacle = true;
-                        //}
                     }
                 }
                 nodeArray[i, j] = new Node(isObstacle, i + bottomLeft.x, j + bottomLeft.y);
@@ -262,8 +251,8 @@ public class Astar : MonoBehaviour
             for (int i = index; i < final_node.Count - 1; i++)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(new Vector2(final_node[i].x, final_node[i].y),
-                    new Vector2(final_node[i + 1].x, final_node[i + 1].y));
+                Gizmos.DrawLine(new Vector3(final_node[i].x,0, final_node[i].y),
+                    new Vector3(final_node[i + 1].x,0, final_node[i + 1].y));
             }
         }
     }

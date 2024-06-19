@@ -14,8 +14,8 @@ TagManager:
   - Water
   - UI
   - Border
-  - GroundUnit
-  - AirUnit
+  - EnemyGroundUnit
+  - EnemyAirUnit
   - 
   - 
   - 
