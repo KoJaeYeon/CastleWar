@@ -23,22 +23,21 @@ public class Unit : MonoBehaviour
     [SerializeField] float _moveSpeed;
     [SerializeField] Slider _slider;
 
-    UnityAction<float> Change_SliderUI;
-
-    private void Awake()
+    public float MoveSpeed
     {
-        Change_SliderUI = new UnityAction<float>(OnValueChange_SliderUI);
+        get { return _moveSpeed; }
     }
+
+
     private void OnEnable()
     {
-        _slider?.onValueChanged.AddListener(Change_SliderUI);
         _currentState = new IdleState(this);
         _currentState.Enter();
-
     }
+
     private void OnDisable()
     {
-        _slider?.onValueChanged.RemoveListener(Change_SliderUI);
+        _currentState = null;
     }
 
     private void Update()
@@ -63,7 +62,7 @@ public class Unit : MonoBehaviour
         if(_slider != null)
         {
             Debug.Log(_slider.value);
-            _slider.value += value/10;
+            _slider.value += value;
         }
     }
 
@@ -77,15 +76,8 @@ public class Unit : MonoBehaviour
         yield return new WaitForSeconds(_spawnTime);
 
         _slider?.gameObject.SetActive(false);
-        //OnChangeState(new MoveState(this));
+        OnChangeState(new MoveState(this));
         yield break;
-    }
-
-    public void OnValueChange_SliderUI(float value)
-    {
-
-    }
-
-    
+    }   
     
 }

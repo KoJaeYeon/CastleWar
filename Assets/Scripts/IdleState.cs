@@ -59,13 +59,24 @@ public class MoveState : IState
     }
 
     public void ExecuteFixedUpdate()
-    {
-
+    {   
+        _character.transform.Translate(Vector3.forward * Time.fixedDeltaTime * _character.MoveSpeed);
     }
 
     public void Exit()
     {
         Debug.Log("Exiting Walking State");
         // Walking 상태에서 나갈 때 필요한 정리 작업
+    }
+
+    /*
+     * 앞으로 움직이는 기능
+     * 적을 탐색하는 기능
+     * 적을 향해 움직이는 기능
+     * 적을 발견하고 사이에 장애물이 있으면 돌아가는 기능
+     */
+    public void Move()
+    {
+
     }
 }
