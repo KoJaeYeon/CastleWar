@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class IdleState : IState
 {
@@ -13,14 +13,14 @@ public class IdleState : IState
     public void Enter()
     {
         Debug.Log("Entering Idle State");
-        // Idle »óÅÂ·Î ÀüÈ¯ÇÒ ¶§ ÇÊ¿äÇÑ ÃÊ±â ¼³Á¤
-        // ¼ÒÈ¯ ÈÄ ´ë±â»óÅÂ Á¾·á ÈÄ MoveState ÁøÀÔ
+        // Idle ìƒíƒœë¡œ ì „í™˜í•  ë•Œ í•„ìš”í•œ ì´ˆê¸° ì„¤ì •
+        // ì†Œí™˜ í›„ ëŒ€ê¸°ìƒíƒœ ì¢…ë£Œ í›„ MoveState ì§„ì…
         _character.StartCoroutine(_character.Spawn_Init());
     }
 
     public void ExecuteUpdate()
     {
-        // Idle »óÅÂ¿¡¼­ ½ÇÇàÇÒ ·ÎÁ÷
+        // Idle ìƒíƒœì—ì„œ ì‹¤í–‰í•  ë¡œì§
         _character.OnValueChanged_SpawnSlider(Time.deltaTime);
     }
 
@@ -32,7 +32,7 @@ public class IdleState : IState
     public void Exit()
     {
         Debug.Log("Exiting Idle State");
-        // Idle »óÅÂ¿¡¼­ ³ª°¥ ¶§ ÇÊ¿äÇÑ Á¤¸® ÀÛ¾÷
+        // Idle ìƒíƒœì—ì„œ ë‚˜ê°ˆ ë•Œ í•„ìš”í•œ ì •ë¦¬ ì‘ì—…
     }
 }
 
@@ -48,35 +48,35 @@ public class MoveState : IState
     public void Enter()
     {
         Debug.Log("Entering Walking State");
-        // Walking »óÅÂ·Î ÀüÈ¯ÇÒ ¶§ ÇÊ¿äÇÑ ÃÊ±â ¼³Á¤
+        // Walking ìƒíƒœë¡œ ì „í™˜í•  ë•Œ í•„ìš”í•œ ì´ˆê¸° ì„¤ì •
     }
 
     public void ExecuteUpdate()
     {
-        // Idle »óÅÂ¿¡¼­ ½ÇÇàÇÒ ·ÎÁ÷
+        // Idle ìƒíƒœì—ì„œ ì‹¤í–‰í•  ë¡œì§
         return;
 
     }
 
     public void ExecuteFixedUpdate()
-    {   
-        _character.transform.Translate(Vector3.forward * Time.fixedDeltaTime * _character.MoveSpeed);
+    {
+        Move();
     }
 
     public void Exit()
     {
         Debug.Log("Exiting Walking State");
-        // Walking »óÅÂ¿¡¼­ ³ª°¥ ¶§ ÇÊ¿äÇÑ Á¤¸® ÀÛ¾÷
+        // Walking ìƒíƒœì—ì„œ ë‚˜ê°ˆ ë•Œ í•„ìš”í•œ ì •ë¦¬ ì‘ì—…
     }
 
     /*
-     * ¾ÕÀ¸·Î ¿òÁ÷ÀÌ´Â ±â´É
-     * ÀûÀ» Å½»öÇÏ´Â ±â´É
-     * ÀûÀ» ÇâÇØ ¿òÁ÷ÀÌ´Â ±â´É
-     * ÀûÀ» ¹ß°ßÇÏ°í »çÀÌ¿¡ Àå¾Ö¹°ÀÌ ÀÖÀ¸¸é µ¹¾Æ°¡´Â ±â´É
+     * ì•ìœ¼ë¡œ ì›€ì§ì´ëŠ” ê¸°ëŠ¥
+     * ì ì„ íƒìƒ‰í•˜ëŠ” ê¸°ëŠ¥
+     * ì ì„ í–¥í•´ ì›€ì§ì´ëŠ” ê¸°ëŠ¥
+     * ì ì„ ë°œê²¬í•˜ê³  ì‚¬ì´ì— ì¥ì• ë¬¼ì´ ìˆìœ¼ë©´ ëŒì•„ê°€ëŠ” ê¸°ëŠ¥
      */
     public void Move()
     {
-
+        
     }
 }
