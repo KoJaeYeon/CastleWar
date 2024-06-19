@@ -230,6 +230,7 @@ public class UnitAttackState : UnitState
 {
     public UnitAttackState(Unit character) : base(character) { }
 
+    //delegate void UnitAttackHandler unitAttackHandler;
     public override void Enter()
     {
         _character.OnCalledAnimationisAttack(true);
