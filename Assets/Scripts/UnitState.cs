@@ -226,11 +226,13 @@ public class UnitMoveState : UnitState
         return false;
     }
 }
+
+
 public class UnitAttackState : UnitState
 {
     public UnitAttackState(Unit character) : base(character) { }
+       
 
-    //delegate void UnitAttackHandler unitAttackHandler;
     public override void Enter()
     {
         _character.OnCalledAnimationisAttack(true);
@@ -269,3 +271,4 @@ public class UnitAttackState : UnitState
         }
     }
 }
+  

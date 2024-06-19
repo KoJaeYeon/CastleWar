@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public enum UnitStateEnum
@@ -14,6 +15,7 @@ public class Unit : MonoBehaviour
     private readonly float _spawnTime = 1f;
     Animator _animator;
 
+    [SerializeField] int _unitId;
     [SerializeField] float _health;
     [SerializeField] float _attackSpeed;
     [SerializeField] float _attackRange;
@@ -23,12 +25,32 @@ public class Unit : MonoBehaviour
 
     bool _targetChanged = false;
     GameObject _targetEnemy;
+    UnitAttackDelegate _unitAttack;
 
     float _searchRadius = 12f;
 
+    public int UnitId
+    {
+        get => _unitId;
+        set
+        {
+            _unitId = value;
+        }
+    }
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
+    public UnitAttackDelegate UnitAttack
+    {
+        get
+        {
+            if (_unitAttack == null)
+            {
+                _unitAttack = UnitAttackManager.Instance.GetAttackMethod(_unitId);
+            }
+            return _unitAttack;
+        }
+    }
 
     public GameObject TargetEnemy
     {
@@ -87,6 +109,11 @@ public class Unit : MonoBehaviour
             Debug.Log(_slider.value);
             _slider.value += value;
         }
+    }
+
+    public void OnCalledAnimationEventAttack()
+    {
+        UnitAttack.Invoke();
     }
 
     public void OnCalledAnimationStartMove()
