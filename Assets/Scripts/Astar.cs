@@ -38,7 +38,7 @@ public class Node
 }
 public class Astar : MonoBehaviour
 {
-    public GameObject destination;
+    GameObject destination;
 
     public int range = 2;
 

@@ -311,9 +311,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 0
   _attackSpeed: 0
-  _attackRange: 0
+  _attackRange: 3
   _isMelee: 0
-  _moveSpeed: 7
+  _moveSpeed: 3
   _slider: {fileID: 984105411847109694}
 --- !u!1 &4983838695841996764
 GameObject:

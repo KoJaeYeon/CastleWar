@@ -38,6 +38,7 @@ public class UnitIdleState : UnitState
     public override void Exit()
     {
         Debug.Log("Exiting Idle State");
+        _character.OnCalledAnimationStartMove();
     }
 }
 
@@ -48,6 +49,7 @@ public class UnitMoveState : UnitState
     private Collider[] hitColliders = new Collider[10]; // 충돌을 저장할 배열
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
+    private float _rotationSpeed = 3f;
 
     public UnitMoveState(Unit character) : base(character) { }
 
@@ -94,7 +96,7 @@ public class UnitMoveState : UnitState
         }
         else
         {
-            Move();
+            MoveNoneTarget();
         }
     }
 
@@ -103,43 +105,54 @@ public class UnitMoveState : UnitState
         Debug.Log("Exiting Move State");
     }
 
+    #region Move
     private void MoveTowardsTarget()
     {
         if (_character.TargetEnemy != null)
         {
             Vector3 direction = (_character.TargetEnemy.transform.position - _character.transform.position).normalized;
+
             _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+
+            PlayerRotateOnMove(direction);
         }
     }
 
-    private void Move()
+    private void MoveNoneTarget()
     {
-        Vector3 direction = _character.transform.forward;
+        Vector3 direction = _character.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
         _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+
+        PlayerRotateOnMove(direction);
     }
 
     private void MoveAlongPath()
     {
-        if (path != null && currentPathIndex < path.Count)
+        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _character.transform.position.y, path[currentPathIndex].y);
+        Vector3 direction = (nextPosition - _character.transform.position).normalized;
+        _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+
+        if (Vector3.Distance(_character.transform.position, nextPosition) < 0.1f)
         {
-            Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _character.transform.position.y, path[currentPathIndex].y);
-            Vector3 direction = (nextPosition - _character.transform.position).normalized;
-            _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+            currentPathIndex++;
 
-            if (Vector3.Distance(_character.transform.position, nextPosition) < 0.1f)
+            if (currentPathIndex < path.Count && !BorderCheck())
             {
-                currentPathIndex++;
-
-                if (currentPathIndex < path.Count && !BorderCheck())
-                {
-                    path.Clear();
-                    MoveTowardsTarget();
-                    return;
-                }
+                path.Clear();
+                return;
             }
         }
-    }
 
+        PlayerRotateOnMove(direction);
+    }
+    #endregion
+    #region Roation
+    public void PlayerRotateOnMove(Vector3 direction)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        _character.transform.rotation = Quaternion.Slerp(_character.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
+    }
+    #endregion
     private void SearchEnemy()
     {
         if (_character.TargetEnemy != null)
@@ -151,7 +164,14 @@ public class UnitMoveState : UnitState
             }
 
             float distance = Vector3.Distance(_character.transform.position, _character.TargetEnemy.transform.position);
-            if (distance > _character.SearchRadius) _character.TargetEnemy = null;
+            if (distance > _character.SearchRadius) // 거리가 멀어질 때
+            {
+                _character.TargetEnemy = null;
+            }
+            else if (distance < _character.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
+            {
+                _character.OnChangeState(new UnitAttackState(_character));
+            }
             return;
         }
 
@@ -181,10 +201,10 @@ public class UnitMoveState : UnitState
             }
         }
 
-        if (_character.TargetEnemy != null)
-        {
-            Debug.Log("Target enemy: " + _character.TargetEnemy.name);
-        }
+        //if (_character.TargetEnemy != null)
+        //{
+        //    Debug.Log("Target enemy: " + _character.TargetEnemy.name);
+        //}
     }
 
     private bool BorderCheck()
@@ -200,10 +220,51 @@ public class UnitMoveState : UnitState
 
         if (Physics.Raycast(_character.transform.position, direction, out RaycastHit hit, distance, layerMask))
         {
-            Debug.Log("Hit Border: " + hit.collider.name);
             return true;
         }
 
         return false;
+    }
+}
+public class UnitAttackState : UnitState
+{
+    public UnitAttackState(Unit character) : base(character) { }
+
+    public override void Enter()
+    {
+        _character.OnCalledAnimationisAttack(true);
+    }
+
+    public override void ExecuteFixedUpdate()
+    {
+        CheckEnemy();
+    }
+
+    public override void ExecuteUpdate() { }
+
+    public override void Exit()
+    {
+        _character.OnCalledAnimationisAttack(false);
+    }
+
+    public void CheckEnemy()
+    {
+        if (_character.TargetEnemy != null)
+        {
+            if (!_character.TargetEnemy.activeSelf) // 타겟 이너미가 죽었을 때
+            {
+                _character.TargetEnemy = null;
+                _character.OnChangeState(new UnitMoveState(_character));
+                return;
+            }
+
+            float distance = Vector3.Distance(_character.transform.position, _character.TargetEnemy.transform.position);
+            if (distance > _character.AttackRadius) // 거리가 멀어질 때
+            {
+                _character.TargetEnemy = null;
+                _character.OnChangeState(new UnitMoveState(_character));
+            }
+            return;
+        }
     }
 }

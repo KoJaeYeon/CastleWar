@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour
 {
     private IState _currentState;
     private readonly float _spawnTime = 1f;
+    Animator _animator;
 
     [SerializeField] float _health;
     [SerializeField] float _attackSpeed;
@@ -23,11 +24,11 @@ public class Unit : MonoBehaviour
     bool _targetChanged = false;
     GameObject _targetEnemy;
 
-    float _attackRadius = 4f;
     float _searchRadius = 12f;
 
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
+    public float AttackRadius => _attackRange;
 
     public GameObject TargetEnemy
     {
@@ -41,7 +42,10 @@ public class Unit : MonoBehaviour
             }
         }
     }
-
+    private void Awake()
+    {
+        _animator = GetComponentInChildren<Animator>();
+    }
     public bool TargetChanged
     {
         get => _targetChanged;
@@ -85,6 +89,16 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void OnCalledAnimationStartMove()
+    {
+        _animator.SetTrigger("StartMove");
+    }
+
+    public void OnCalledAnimationisAttack(bool isAttack)
+    {
+        _animator.SetBool("isAttack", isAttack);
+    }
+
     public IEnumerator Spawn_Init()
     {
         if (_slider != null)
@@ -102,7 +116,7 @@ public class Unit : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _attackRadius);
+        Gizmos.DrawWireSphere(transform.position, _attackRange);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, _searchRadius);
 

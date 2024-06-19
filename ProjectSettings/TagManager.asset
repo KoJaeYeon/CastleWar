@@ -16,8 +16,8 @@ TagManager:
   - Border
   - EnemyGroundUnit
   - EnemyAirUnit
-  - 
-  - 
+  - FriendGroundUnit
+  - FriendAirUnit
   - 
   - 
   - 
