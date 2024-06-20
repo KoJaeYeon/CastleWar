@@ -13,7 +13,14 @@ public class AnimationAttack : MonoBehaviour
     {
         if (_unit != null)
         {
-            _unit.OnCalledAnimationEventAttack();
+            _unit.OnCalled_Attack_AnimationEventAttack();
+        }
+    }
+    public void OnSetEnemyAnimationStart()
+    {
+        if (_unit != null)
+        {
+            _unit.OnCalled_SetEnemy_AnimationEventAttack();
         }
     }
 }

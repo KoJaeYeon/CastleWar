@@ -25,7 +25,8 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] Slider _slider;
 
     bool _targetChanged = false;
-    GameObject _targetEnemy;
+    GameObject _attackTargerEnemy; // 공격해야하는 적
+    GameObject _targetEnemy; // 탐색되는 적
     UnitAttackDelegate _unitAttack;
 
     float _searchRadius = 12f;
@@ -41,6 +42,7 @@ public class Unit : MonoBehaviour, IAttack
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
+    public float AttackDamage => _attackDamage;
     public GameObject TargetEnemy
     {
         get => _targetEnemy;
@@ -110,13 +112,17 @@ public class Unit : MonoBehaviour, IAttack
         _health -= damage;
     }
 
-    public void OnCalledAnimationEventAttack()
+    public void OnCalled_SetEnemy_AnimationEventAttack()
+    {
+        _attackTargerEnemy = _targetEnemy;
+    }
+    public void OnCalled_Attack_AnimationEventAttack()
     {
         if (_unitAttack == null)
         {
             _unitAttack = UnitAttackManager.Instance.GetAttackMethod(_unitId);
         }
-        _unitAttack.Invoke(_targetEnemy,_attackDamage);
+        _unitAttack.Invoke(_attackTargerEnemy, this);
     }
 
     public IEnumerator Spawn_Init()

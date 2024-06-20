@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void UnitAttackDelegate(GameObject targetObject, float attackDamage);
+public delegate void UnitAttackDelegate(GameObject targetObject, Unit attackStartUnit);
 public class UnitAttackManager : MonoBehaviour
 {
     private static UnitAttackManager _instance;
@@ -51,12 +51,12 @@ public class UnitAttackManager : MonoBehaviour
         return null;
     }
 
-    public void Attack_Vanguard(GameObject targetObject, float attackDamage)
+    public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
     {
         IAttack targetAttack = targetObject.GetComponent<IAttack>();
         if (targetAttack != null)
         {
-            targetAttack.OnTakeDamaged(attackDamage);
+            targetAttack.OnTakeDamaged(attackStartUnit.AttackDamage);
         }
     }
 }
