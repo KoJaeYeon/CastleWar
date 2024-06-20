@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class UnitState : IState
 {
-    protected Unit _character;
+    protected Unit _unit;
 
-    public UnitState(Unit character)
+    public UnitState(Unit unit)
     {
-        _character = character;
+        _unit = unit;
     }
 
     public virtual void Enter() { }
@@ -22,23 +22,23 @@ public abstract class UnitState : IState
 
 public class UnitIdleState : UnitState
 {
-    public UnitIdleState(Unit character) : base(character) { }
+    public UnitIdleState(Unit unit) : base(unit) { }
 
     public override void Enter()
     {
         Debug.Log("Entering Idle State");
-        _character.StartCoroutine(_character.Spawn_Init());
+        _unit.StartCoroutine(_unit.Spawn_Init());
     }
 
     public override void ExecuteUpdate()
     {
-        _character.OnValueChanged_SpawnSlider(Time.deltaTime);
+        _unit.OnValueChanged_SpawnSlider(Time.deltaTime);
     }
 
     public override void Exit()
     {
         Debug.Log("Exiting Idle State");
-        _character.OnCalledAnimationStartMove();
+        _unit.Animator.SetTrigger("StartMove");
     }
 }
 
@@ -51,7 +51,7 @@ public class UnitMoveState : UnitState
     private float _lastSearchTime = 0f;
     private float _rotationSpeed = 3f;
 
-    public UnitMoveState(Unit character) : base(character) { }
+    public UnitMoveState(Unit unit) : base(unit) { }
 
     public override void Enter()
     {
@@ -65,18 +65,18 @@ public class UnitMoveState : UnitState
 
     public override void ExecuteFixedUpdate()
     {
-        if (_character.TargetChanged)
+        if (_unit.TargetChanged)
         {
-            _character.TargetChanged = false;
+            _unit.TargetChanged = false;
 
             if (BorderCheck())
             {
-                path = _character.GetComponent<Astar>().AStar(_character.TargetEnemy);
+                path = _unit.GetComponent<Astar>().AStar(_unit.TargetEnemy);
                 currentPathIndex = 0;
 
                 if (path == null || path.Count == 0)
                 {
-                    _character.TargetEnemy = null;
+                    _unit.TargetEnemy = null;
                     SearchEnemy();
                 }
             }
@@ -90,7 +90,7 @@ public class UnitMoveState : UnitState
         {
             MoveAlongPath();
         }
-        else if (_character.TargetEnemy != null)
+        else if (_unit.TargetEnemy != null)
         {
             MoveTowardsTarget();
         }
@@ -108,11 +108,11 @@ public class UnitMoveState : UnitState
     #region Move
     private void MoveTowardsTarget()
     {
-        if (_character.TargetEnemy != null)
+        if (_unit.TargetEnemy != null)
         {
-            Vector3 direction = (_character.TargetEnemy.transform.position - _character.transform.position).normalized;
+            Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
 
-            _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+            _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
             PlayerRotateOnMove(direction);
         }
@@ -120,19 +120,19 @@ public class UnitMoveState : UnitState
 
     private void MoveNoneTarget()
     {
-        Vector3 direction = _character.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
-        _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+        Vector3 direction = _unit.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
+        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
         PlayerRotateOnMove(direction);
     }
 
     private void MoveAlongPath()
     {
-        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _character.transform.position.y, path[currentPathIndex].y);
-        Vector3 direction = (nextPosition - _character.transform.position).normalized;
-        _character.transform.position += direction * _character.MoveSpeed * Time.fixedDeltaTime;
+        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
+        Vector3 direction = (nextPosition - _unit.transform.position).normalized;
+        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
-        if (Vector3.Distance(_character.transform.position, nextPosition) < 0.1f)
+        if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
         {
             currentPathIndex++;
 
@@ -150,27 +150,27 @@ public class UnitMoveState : UnitState
     public void PlayerRotateOnMove(Vector3 direction)
     {
         Quaternion targetRotation = Quaternion.LookRotation(direction);
-        _character.transform.rotation = Quaternion.Slerp(_character.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
+        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
     }
     #endregion
     private void SearchEnemy()
     {
-        if (_character.TargetEnemy != null)
+        if (_unit.TargetEnemy != null)
         {
-            if (!_character.TargetEnemy.activeSelf)
+            if (!_unit.TargetEnemy.activeSelf)
             {
-                _character.TargetEnemy = null;
+                _unit.TargetEnemy = null;
                 return;
             }
 
-            float distance = Vector3.Distance(_character.transform.position, _character.TargetEnemy.transform.position);
-            if (distance > _character.SearchRadius) // 거리가 멀어질 때
+            float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
+            if (distance > _unit.SearchRadius) // 거리가 멀어질 때
             {
-                _character.TargetEnemy = null;
+                _unit.TargetEnemy = null;
             }
-            else if (distance < _character.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
+            else if (distance < _unit.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
             {
-                _character.OnChangeState(new UnitAttackState(_character));
+                _unit.OnChangeState(new UnitAttackState(_unit));
             }
             return;
         }
@@ -178,47 +178,47 @@ public class UnitMoveState : UnitState
         if (Time.time - _lastSearchTime < _searchInterval) return; // 검색 주기가 되지 않으면 반환
         _lastSearchTime = Time.time;
 
-        Vector3 origin = _character.transform.position;
-        string[] targetLayers = _character.tag.Equals("Friend") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "FriendGroundUnit", "FriendAirUnit" };
+        Vector3 origin = _unit.transform.position;
+        string[] targetLayers = _unit.tag.Equals("Friend") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "FriendGroundUnit", "FriendAirUnit" };
         int layerMask = LayerMask.GetMask(targetLayers);
 
-        int hitCount = Physics.OverlapSphereNonAlloc(origin, _character.SearchRadius, hitColliders, layerMask);
+        int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);
 
         float closestDistance = float.MaxValue;
 
         for (int i = 0; i < hitCount; i++)
         {
-            if (!hitColliders[i].CompareTag(_character.tag))
+            if (!hitColliders[i].CompareTag(_unit.tag))
             {
-                float distance = (_character.transform.position - hitColliders[i].transform.position).sqrMagnitude;
+                float distance = (_unit.transform.position - hitColliders[i].transform.position).sqrMagnitude;
 
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
-                    _character.TargetEnemy = hitColliders[i].gameObject;
-                    _character.TargetChanged = true;
+                    _unit.TargetEnemy = hitColliders[i].gameObject;
+                    _unit.TargetChanged = true;
                 }
             }
         }
 
-        //if (_character.TargetEnemy != null)
+        //if (_unit.TargetEnemy != null)
         //{
-        //    Debug.Log("Target enemy: " + _character.TargetEnemy.name);
+        //    Debug.Log("Target enemy: " + _unit.TargetEnemy.name);
         //}
     }
 
     private bool BorderCheck()
     {
-        if (_character.TargetEnemy == null)
+        if (_unit.TargetEnemy == null)
         {
             return false;
         }
 
-        Vector3 direction = (_character.TargetEnemy.transform.position - _character.transform.position).normalized;
-        float distance = Vector3.Distance(_character.transform.position, _character.TargetEnemy.transform.position);
+        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+        float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
         int layerMask = LayerMask.GetMask("Border");
 
-        if (Physics.Raycast(_character.transform.position, direction, out RaycastHit hit, distance, layerMask))
+        if (Physics.Raycast(_unit.transform.position, direction, out RaycastHit hit, distance, layerMask))
         {
             return true;
         }
@@ -230,12 +230,12 @@ public class UnitMoveState : UnitState
 
 public class UnitAttackState : UnitState
 {
-    public UnitAttackState(Unit character) : base(character) { }
+    public UnitAttackState(Unit unit) : base(unit) { }
        
 
     public override void Enter()
     {
-        _character.OnCalledAnimationisAttack(true);
+        SetAnimationisAttack(true);
     }
 
     public override void ExecuteFixedUpdate()
@@ -247,28 +247,33 @@ public class UnitAttackState : UnitState
 
     public override void Exit()
     {
-        _character.OnCalledAnimationisAttack(false);
+        SetAnimationisAttack(false);
     }
 
     public void CheckEnemy()
     {
-        if (_character.TargetEnemy != null)
+        if (_unit.TargetEnemy != null)
         {
-            if (!_character.TargetEnemy.activeSelf) // 타겟 이너미가 죽었을 때
+            if (!_unit.TargetEnemy.activeSelf) // 타겟 이너미가 죽었을 때
             {
-                _character.TargetEnemy = null;
-                _character.OnChangeState(new UnitMoveState(_character));
+                _unit.TargetEnemy = null;
+                _unit.OnChangeState(new UnitMoveState(_unit));
                 return;
             }
 
-            float distance = Vector3.Distance(_character.transform.position, _character.TargetEnemy.transform.position);
-            if (distance > _character.AttackRadius) // 거리가 멀어질 때
+            float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
+            if (distance > _unit.AttackRadius) // 거리가 멀어질 때
             {
-                _character.TargetEnemy = null;
-                _character.OnChangeState(new UnitMoveState(_character));
+                _unit.TargetEnemy = null;
+                _unit.OnChangeState(new UnitMoveState(_unit));
             }
             return;
         }
+    }
+
+    public void SetAnimationisAttack(bool isAttack)
+    {
+        _unit.Animator.SetBool("isAttack", isAttack);
     }
 }
   

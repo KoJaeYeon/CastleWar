@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void UnitAttackDelegate();
+public delegate void UnitAttackDelegate(GameObject targetObject, float attackDamage);
 public class UnitAttackManager : MonoBehaviour
 {
     private static UnitAttackManager _instance;
@@ -25,17 +25,13 @@ public class UnitAttackManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-    }
 
-    void Start()
-    {
-        RegisterAttackMethod(1, Attack1);
+        RegisterAttackMethod(1, Attack_Vanguard);
     }
 
     public void RegisterAttackMethod(int id, UnitAttackDelegate attackMethod)
@@ -55,8 +51,12 @@ public class UnitAttackManager : MonoBehaviour
         return null;
     }
 
-    public void Attack1()
+    public void Attack_Vanguard(GameObject targetObject, float attackDamage)
     {
-        Debug.Log("Attack1 executed");
+        IAttack targetAttack = targetObject.GetComponent<IAttack>();
+        if (targetAttack != null)
+        {
+            targetAttack.OnTakeDamaged(attackDamage);
+        }
     }
 }

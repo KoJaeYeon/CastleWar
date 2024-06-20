@@ -9,7 +9,7 @@ public enum UnitStateEnum
     Move,
 }
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, IAttack
 {
     private IState _currentState;
     private readonly float _spawnTime = 1f;
@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour
 
     [SerializeField] int _unitId;
     [SerializeField] float _health;
+    [SerializeField] float _attackDamage;
     [SerializeField] float _attackSpeed;
     [SerializeField] float _attackRange;
     [SerializeField] bool _isMelee;
@@ -40,18 +41,6 @@ public class Unit : MonoBehaviour
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
-    public UnitAttackDelegate UnitAttack
-    {
-        get
-        {
-            if (_unitAttack == null)
-            {
-                _unitAttack = UnitAttackManager.Instance.GetAttackMethod(_unitId);
-            }
-            return _unitAttack;
-        }
-    }
-
     public GameObject TargetEnemy
     {
         get => _targetEnemy;
@@ -63,6 +52,11 @@ public class Unit : MonoBehaviour
                 TargetChanged = true;
             }
         }
+    }
+
+    public Animator Animator
+    {
+        get => _animator;
     }
     private void Awake()
     {
@@ -95,6 +89,7 @@ public class Unit : MonoBehaviour
         _currentState.ExecuteFixedUpdate();
     }
 
+
     public void OnChangeState(IState newState)
     {
         _currentState.Exit();
@@ -110,20 +105,18 @@ public class Unit : MonoBehaviour
             _slider.value += value;
         }
     }
+    public void OnTakeDamaged(float damage)
+    {
+        _health -= damage;
+    }
 
     public void OnCalledAnimationEventAttack()
     {
-        UnitAttack.Invoke();
-    }
-
-    public void OnCalledAnimationStartMove()
-    {
-        _animator.SetTrigger("StartMove");
-    }
-
-    public void OnCalledAnimationisAttack(bool isAttack)
-    {
-        _animator.SetBool("isAttack", isAttack);
+        if (_unitAttack == null)
+        {
+            _unitAttack = UnitAttackManager.Instance.GetAttackMethod(_unitId);
+        }
+        _unitAttack.Invoke(_targetEnemy,_attackDamage);
     }
 
     public IEnumerator Spawn_Init()
