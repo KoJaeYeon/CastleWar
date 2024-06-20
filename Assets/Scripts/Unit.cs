@@ -17,12 +17,14 @@ public class Unit : MonoBehaviour, IAttack
 
     [SerializeField] int _unitId;
     [SerializeField] float _health;
+    [SerializeField] float _maxHealth;
     [SerializeField] float _attackDamage;
     [SerializeField] float _attackSpeed;
     [SerializeField] float _attackRange;
     [SerializeField] bool _isMelee;
     [SerializeField] float _moveSpeed;
-    [SerializeField] Slider _slider;
+    [SerializeField] Slider HpSlider;
+    [SerializeField] Image SpawnTimerImage;
 
     bool _targetChanged = false;
     GameObject _attackTargerEnemy; // 공격해야하는 적
@@ -31,6 +33,15 @@ public class Unit : MonoBehaviour, IAttack
 
     float _searchRadius = 12f;
 
+    public float Helath
+    {
+        get => _health;
+        set
+        {
+            _health = value;
+            CheckHealthBar();
+        }
+    }
     public int UnitId
     {
         get => _unitId;
@@ -39,6 +50,7 @@ public class Unit : MonoBehaviour, IAttack
             _unitId = value;
         }
     }
+
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
@@ -74,6 +86,7 @@ public class Unit : MonoBehaviour, IAttack
     {
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
+        CheckHealthBar();
     }
 
     private void OnDisable()
@@ -91,6 +104,18 @@ public class Unit : MonoBehaviour, IAttack
         _currentState.ExecuteFixedUpdate();
     }
 
+    public void CheckHealthBar()
+    {
+        if (_health == _maxHealth)
+        {
+            HpSlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            HpSlider.gameObject.SetActive(true);
+            HpSlider.value = _health / _maxHealth;
+        }
+    }
 
     public void OnChangeState(IState newState)
     {
@@ -101,15 +126,15 @@ public class Unit : MonoBehaviour, IAttack
 
     public void OnValueChanged_SpawnSlider(float value)
     {
-        if (_slider != null)
+        if (SpawnTimerImage != null)
         {
-            Debug.Log(_slider.value);
-            _slider.value += value;
+            Debug.Log(SpawnTimerImage.fillAmount);
+            SpawnTimerImage.fillAmount += value;
         }
     }
     public void OnTakeDamaged(float damage)
     {
-        _health -= damage;
+        Helath -= damage;
     }
 
     public void OnCalled_SetEnemy_AnimationEventAttack()
@@ -127,14 +152,14 @@ public class Unit : MonoBehaviour, IAttack
 
     public IEnumerator Spawn_Init()
     {
-        if (_slider != null)
+        if (SpawnTimerImage != null)
         {
-            _slider.gameObject.SetActive(true);
-            _slider.value = 0;
+            SpawnTimerImage.transform.parent.gameObject.SetActive(true);
+            SpawnTimerImage.fillAmount = 0;
         }
         yield return new WaitForSeconds(_spawnTime);
 
-        _slider?.gameObject.SetActive(false);
+        SpawnTimerImage?.transform.parent.gameObject.SetActive(false);
         OnChangeState(new UnitMoveState(this));
         yield break;
     }

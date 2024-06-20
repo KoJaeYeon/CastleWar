@@ -33,50 +33,11 @@ Shader "Custom/SpriteShadow"
         void surf (Input IN, inout SurfaceOutput o)
         {
             // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-            o.Albedo = c.rgb;
-            o.Alpha = c.a;
+            fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
+            o.Albedo = c.rgb * _Color.rgb;
+            o.Alpha = c.a * _Color.a;
         }
         ENDCG
-
-        // Add a pass to render object as a shadow caster
-        Pass
-        {
-            Name "ShadowCaster"
-            Tags { "LightMode" = "ShadowCaster" }
-            ZWrite On
-            ColorMask 0
-            Cull Off
-
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile_shadowcaster
-            #include "UnityCG.cginc"
-
-            struct appdata_shadow
-            {
-                float4 vertex : POSITION;
-            };
-
-            struct v2fShadow
-            {
-                V2F_SHADOW_CASTER;
-            };
-
-            v2fShadow vert(appdata_shadow v)
-            {
-                v2fShadow o = (v2fShadow)0;
-                TRANSFER_SHADOW_CASTER(o)
-                return o;
-            }
-
-            float4 frag(v2fShadow i) : SV_Target
-            {
-                SHADOW_CASTER_FRAGMENT(i)
-            }
-            ENDCG
-        }
     }
     FallBack "Diffuse"
 }
