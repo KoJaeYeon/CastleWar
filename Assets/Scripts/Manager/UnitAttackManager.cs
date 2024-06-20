@@ -58,7 +58,6 @@ public class UnitAttackManager : MonoBehaviour
 
     public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
     {
-        if(targetObject.GetComponent<Unit>().UnitDied) { return; }
         IAttack targetAttack = targetObject.GetComponent<IAttack>();
         if (targetAttack != null)
         {
@@ -68,7 +67,6 @@ public class UnitAttackManager : MonoBehaviour
 
     public void Attack_Archer(GameObject targetObject, Unit attackStartUnit)
     {
-        if (targetObject.GetComponent<Unit>().UnitDied) { return; }
         //[TODO] 풀매니저 추가해야함
         GameObject arrow = Instantiate(new GameObject());
     }

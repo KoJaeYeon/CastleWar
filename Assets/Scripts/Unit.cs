@@ -35,7 +35,6 @@ public class Unit : MonoBehaviour, IAttack
     Rigidbody _rigidbody;
 
     float _searchRadius = 12f;
-    bool _unitDied = false;
 
     public float Helath
     {
@@ -52,14 +51,6 @@ public class Unit : MonoBehaviour, IAttack
         set
         {
             _unitId = value;
-        }
-    }
-    public bool UnitDied
-    {
-        get => _unitDied;
-        private set
-        {
-            _unitDied = value;
         }
     }
 
@@ -124,6 +115,10 @@ public class Unit : MonoBehaviour, IAttack
         {
             HpSlider.gameObject.SetActive(false);
         }
+        else if(_health <= 0)
+        {
+            HpSlider.gameObject.SetActive(false);
+        }
         else
         {
             HpSlider.gameObject.SetActive(true);
@@ -132,12 +127,10 @@ public class Unit : MonoBehaviour, IAttack
     }
 
     public IEnumerator UnitDieCoroutine()
-    {
-        _unitDied = true;
-        gameObject.layer = LayerMask.NameToLayer("DeadUnit");
+    {        
         yield return null;
         yield return null;
-        gameObject.SetActive(false);
+        OnChangeState(new UnitDeadState(this));
     }
 
     public void OnChangeState(IState newState)
@@ -157,7 +150,8 @@ public class Unit : MonoBehaviour, IAttack
     }
     public void OnTakeDamaged(float damage)
     {
-        if (_unitDied) return;
+        if (_health <= 0) return;
+
         Helath -= damage;
         if(_health <= 0)
         {

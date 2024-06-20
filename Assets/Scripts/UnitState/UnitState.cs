@@ -331,4 +331,28 @@ public class UnitAttackState : UnitState
         _unit.Animator.SetBool("isAttack", isAttack);
     }
 }
-  
+
+
+public class UnitDeadState : UnitState
+{
+    public UnitDeadState(Unit unit) : base(unit) { }
+
+
+    public override void Enter()
+    {
+        _unit.gameObject.layer = LayerMask.NameToLayer("DeadUnit");
+        _unit.Animator.SetTrigger("Death");
+    }
+
+    public override void ExecuteFixedUpdate()
+    {
+    }
+
+    public override void ExecuteUpdate() { }
+
+    public override void Exit()
+    {
+
+    }
+
+}
