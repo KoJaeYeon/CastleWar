@@ -26,7 +26,9 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] Slider HpSlider;
     [SerializeField] Image SpawnTimerImage;
 
-    bool _targetChanged = false; // 
+    public MapCornerPoint MapCornerPoint { get; set; }
+
+    bool _targetChanged = false; // 가까운 유닛이 변경 되었을 때 경계검사 한번(Astar, Ray 포함)
     GameObject _attackTargerEnemy; // 공격해야하는 적
     GameObject _targetEnemy; // 탐색되는 적
     UnitAttackDelegate _unitAttack;
@@ -61,6 +63,7 @@ public class Unit : MonoBehaviour, IAttack
         }
     }
 
+    
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;

@@ -120,10 +120,65 @@ public class UnitMoveState : UnitState
 
     private void MoveNoneTarget()
     {
-        Vector3 direction = _unit.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
+        Vector3 direction;
+        if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
+        {
+            direction = _unit.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
+        }
+        else
+        {
+            direction = CheckMapCorner();
+        }
         _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
         PlayerRotateOnMove(direction);
+    
+    
+    }
+
+    private Vector3 CheckMapCorner()
+    {
+        if (_unit.tag == "Friend")
+        {
+            return CheckMapCorner_GoUp();
+        }
+        else
+        {
+            return CheckMapCorner_GoDown();
+        }
+    }
+    private Vector3 CheckMapCorner_GoUp()
+    {
+        switch (_unit.MapCornerPoint)
+        {
+            case MapCornerPoint.BottomLeftCenter:
+            case MapCornerPoint.TopRight:
+            case MapCornerPoint.TopRightCenter:
+                return Vector3.left;
+            case MapCornerPoint.BottomRightCenter:
+            case MapCornerPoint.TopLeft:
+            case MapCornerPoint.TopLeftCenter:
+                return Vector3.right;
+            default:
+                return Vector3.forward;
+        }
+    }
+
+    private Vector3 CheckMapCorner_GoDown()
+    {
+        switch (_unit.MapCornerPoint)
+        {
+            case MapCornerPoint.BottomRightCenter:
+            case MapCornerPoint.BottomRight:
+            case MapCornerPoint.TopLeftCenter:
+                return Vector3.left;
+            case MapCornerPoint.BottomLeftCenter:
+            case MapCornerPoint.BottomLeft:
+            case MapCornerPoint.TopRightCenter:
+                return Vector3.right;
+            default:
+                return Vector3.forward;
+        }
     }
 
     private void MoveAlongPath()
