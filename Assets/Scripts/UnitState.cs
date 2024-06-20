@@ -59,12 +59,12 @@ public class UnitMoveState : UnitState
     }
 
     public override void ExecuteUpdate()
-    {
-        SearchEnemy();
+    {        
     }
 
     public override void ExecuteFixedUpdate()
     {
+        SearchEnemy();
         if (_unit.TargetChanged)
         {
             _unit.TargetChanged = false;

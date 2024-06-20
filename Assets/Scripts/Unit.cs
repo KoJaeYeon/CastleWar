@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
@@ -26,12 +26,14 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] Slider HpSlider;
     [SerializeField] Image SpawnTimerImage;
 
-    bool _targetChanged = false;
-    GameObject _attackTargerEnemy; // °ø°ÝÇØ¾ßÇÏ´Â Àû
-    GameObject _targetEnemy; // Å½»öµÇ´Â Àû
+    bool _targetChanged = false; // 
+    GameObject _attackTargerEnemy; // ê³µê²©í•´ì•¼í•˜ëŠ” ì 
+    GameObject _targetEnemy; // íƒìƒ‰ë˜ëŠ” ì 
     UnitAttackDelegate _unitAttack;
+    Rigidbody _rigidbody;
 
     float _searchRadius = 12f;
+    bool _unitDied = false;
 
     public float Helath
     {
@@ -48,6 +50,14 @@ public class Unit : MonoBehaviour, IAttack
         set
         {
             _unitId = value;
+        }
+    }
+    public bool UnitDied
+    {
+        get => _unitDied;
+        private set
+        {
+            _unitDied = value;
         }
     }
 
@@ -75,6 +85,7 @@ public class Unit : MonoBehaviour, IAttack
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
     public bool TargetChanged
     {
@@ -117,6 +128,14 @@ public class Unit : MonoBehaviour, IAttack
         }
     }
 
+    public IEnumerator UnitDieCoroutine()
+    {
+        _unitDied = true;
+        yield return null;
+        yield return null;
+        gameObject.SetActive(false);
+    }
+
     public void OnChangeState(IState newState)
     {
         _currentState.Exit();
@@ -134,7 +153,12 @@ public class Unit : MonoBehaviour, IAttack
     }
     public void OnTakeDamaged(float damage)
     {
+        if (_unitDied) return;
         Helath -= damage;
+        if(_health <= 0)
+        {
+            StartCoroutine(UnitDieCoroutine());
+        }
     }
 
     public void OnCalled_SetEnemy_AnimationEventAttack()
@@ -147,7 +171,12 @@ public class Unit : MonoBehaviour, IAttack
         {
             _unitAttack = UnitAttackManager.Instance.GetAttackMethod(_unitId);
         }
-        _unitAttack.Invoke(_attackTargerEnemy, this);
+
+        if(_attackTargerEnemy != null)
+        {
+            _unitAttack.Invoke(_attackTargerEnemy, this);
+        }
+        
     }
 
     public IEnumerator Spawn_Init()
@@ -178,5 +207,12 @@ public class Unit : MonoBehaviour, IAttack
             float distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
             Gizmos.DrawLine(transform.position, transform.position + direction * distance);
         }
+    }
+
+    public void OnCollisionExit(Collision collision)
+    {
+        // ì¶©ëŒ ì‹œì—ë„ ì†ë„ë¥¼ 0ìœ¼ë¡œ ìœ ì§€
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 }
