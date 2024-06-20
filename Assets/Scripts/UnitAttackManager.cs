@@ -53,6 +53,7 @@ public class UnitAttackManager : MonoBehaviour
 
     public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
     {
+        if(targetObject.GetComponent<Unit>().UnitDied) { return; }
         IAttack targetAttack = targetObject.GetComponent<IAttack>();
         if (targetAttack != null)
         {
