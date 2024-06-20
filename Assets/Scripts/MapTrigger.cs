@@ -24,11 +24,4 @@ public class MapTrigger : MonoBehaviour
             unit.MapCornerPoint = MapCornerPoint;
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent<Unit>(out var unit))
-        {
-            unit.MapCornerPoint = MapCornerPoint.NoCorner;
-        }
-    }
 }
