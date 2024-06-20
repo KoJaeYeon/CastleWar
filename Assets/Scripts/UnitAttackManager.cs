@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void UnitAttackDelegate(GameObject targetObject, Unit attackStartUnit);
@@ -48,7 +48,11 @@ public class UnitAttackManager : MonoBehaviour
         {
             return attackMethods[id];
         }
-        return null;
+        else
+        {
+            Debug.LogError($"ID :{id}의 애니메이션이 없음");
+            return null;
+        }
     }
 
     public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
@@ -59,5 +63,12 @@ public class UnitAttackManager : MonoBehaviour
         {
             targetAttack.OnTakeDamaged(attackStartUnit.AttackDamage);
         }
+    }
+
+    public void Attack_Archer(GameObject targetObject, Unit attackStartUnit)
+    {
+        if (targetObject.GetComponent<Unit>().UnitDied) { return; }
+        //[TODO] 풀매니저 추가해야함
+        GameObject arrow = Instantiate(new GameObject());
     }
 }
