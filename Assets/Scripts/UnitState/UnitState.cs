@@ -309,7 +309,7 @@ public class UnitAttackState : UnitState
     {
         if (_unit.TargetEnemy != null)
         {
-            if (!_unit.TargetEnemy.activeSelf) // 타겟 이너미가 죽었을 때
+            if (_unit.TargetEnemy.layer == LayerMask.NameToLayer("DeadUnit"))// 타겟 이너미가 죽었을 때
             {
                 _unit.TargetEnemy = null;
                 _unit.OnChangeState(new UnitMoveState(_unit));
@@ -317,7 +317,7 @@ public class UnitAttackState : UnitState
             }
 
             float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
-            if (distance > _unit.AttackRadius) // 거리가 멀어질 때
+            if (distance > _unit.AttackRadius + 0.1f) // 거리가 멀어질 때
             {
                 _unit.TargetEnemy = null;
                 _unit.OnChangeState(new UnitMoveState(_unit));

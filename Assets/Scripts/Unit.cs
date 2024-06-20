@@ -134,6 +134,7 @@ public class Unit : MonoBehaviour, IAttack
     public IEnumerator UnitDieCoroutine()
     {
         _unitDied = true;
+        gameObject.layer = LayerMask.NameToLayer("DeadUnit");
         yield return null;
         yield return null;
         gameObject.SetActive(false);

@@ -32,6 +32,7 @@ public class UnitAttackManager : MonoBehaviour
         }
 
         RegisterAttackMethod(1, Attack_Vanguard);
+        RegisterAttackMethod(2, Attack_Archer);
     }
 
     public void RegisterAttackMethod(int id, UnitAttackDelegate attackMethod)
@@ -50,7 +51,7 @@ public class UnitAttackManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"ID :{id}의 애니메이션이 없음");
+            Debug.LogError($"ID :{id}의 공격 메서드가 없음");
             return null;
         }
     }
