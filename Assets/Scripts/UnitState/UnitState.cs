@@ -340,11 +340,9 @@ public class UnitAttackState : UnitState
 
 public class UnitRetreatState : UnitState
 {
-    private List<Node> path; // A* 경로를 저장할 리스트
-    private int currentPathIndex; // 현재 경로의 인덱스
-    //private Transform _castleTrans; // 복귀해야 할 캐슬의 트랜스폼
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
+    private Transform _castleTrans;
     private float _rotationSpeed = 3f;
     private bool _castleSearched = false;
 
@@ -354,8 +352,8 @@ public class UnitRetreatState : UnitState
     {
         Debug.Log("Entering Retreat State");
         GameObject castle = CastleManager.Instance.GetCastleGameObj(_unit.IsAlly());
-        path = _unit.GetComponent<Astar>().AStar(castle);
-        currentPathIndex = 0;
+        _castleTrans = castle.transform;
+        _castleSearched =false;
     }
 
     public override void ExecuteUpdate()
@@ -365,10 +363,6 @@ public class UnitRetreatState : UnitState
     public override void ExecuteFixedUpdate()
     {
         MoveNoneTarget_Retreat();
-        //if (path != null && currentPathIndex < path.Count)
-        //{
-        //    MoveAlongPath();
-        //}
     }
 
     public override void Exit()
