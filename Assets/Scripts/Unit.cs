@@ -27,8 +27,7 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] Image SpawnTimerImage;
 
     public MapCornerPoint MapCornerPoint { get; set; }
-
-    bool _targetChanged = false; // 가까운 유닛이 변경 되었을 때 경계검사 한번(Astar, Ray 포함)
+        
     GameObject _attackTargerEnemy; // 공격해야하는 적
     GameObject _targetEnemy; // 탐색되는 적
     UnitAttackDelegate _unitAttack;
@@ -65,10 +64,6 @@ public class Unit : MonoBehaviour, IAttack
         set
         {
             _targetEnemy = value;
-            if (_targetEnemy != null)
-            {
-                TargetChanged = true;
-            }
         }
     }
 
@@ -81,12 +76,6 @@ public class Unit : MonoBehaviour, IAttack
         _animator = GetComponentInChildren<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
     }
-    public bool TargetChanged
-    {
-        get => _targetChanged;
-        set => _targetChanged = value;
-    }
-
     private void OnEnable()
     {
         _currentState = new UnitIdleState(this);

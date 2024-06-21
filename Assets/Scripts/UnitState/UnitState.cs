@@ -50,6 +50,7 @@ public class UnitMoveState : UnitState
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
     private float _rotationSpeed = 3f;
+    private bool _targetChanged = false;
 
     public UnitMoveState(Unit unit) : base(unit) { }
 
@@ -65,9 +66,9 @@ public class UnitMoveState : UnitState
     public override void ExecuteFixedUpdate()
     {
         SearchEnemy();
-        if (_unit.TargetChanged)
+        if (_targetChanged)
         {
-            _unit.TargetChanged = false;
+            _targetChanged = false;
 
             if (BorderCheck())
             {
@@ -212,7 +213,7 @@ public class UnitMoveState : UnitState
     {
         if (_unit.TargetEnemy != null)
         {
-            if (!_unit.TargetEnemy.activeSelf)
+            if (_unit.TargetEnemy.layer == LayerMask.NameToLayer("DeadUnit"))
             {
                 _unit.TargetEnemy = null;
                 return;
@@ -250,8 +251,13 @@ public class UnitMoveState : UnitState
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
-                    _unit.TargetEnemy = hitColliders[i].gameObject;
-                    _unit.TargetChanged = true;
+
+                    if(_unit.TargetEnemy != hitColliders[i].gameObject) //타겟이 변경되었을 때
+                    {
+                        _targetChanged = true;
+                        _unit.TargetEnemy = hitColliders[i].gameObject;
+                    }                   
+                    
                 }
             }
         }
@@ -336,16 +342,18 @@ public class UnitRetreatState : UnitState
 {
     private List<Node> path; // A* 경로를 저장할 리스트
     private int currentPathIndex; // 현재 경로의 인덱스
-    private Collider[] hitColliders = new Collider[10]; // 충돌을 저장할 배열
+    private Transform _castleTrans; // 복귀해야 할 캐슬의 트랜스폼
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
     private float _rotationSpeed = 3f;
+    private bool _castleSearched = false;
 
     public UnitRetreatState(Unit unit) : base(unit) { }
 
     public override void Enter()
     {
         Debug.Log("Entering Retreat State");
+
     }
 
     public override void ExecuteUpdate()
@@ -353,7 +361,45 @@ public class UnitRetreatState : UnitState
     }
 
     public override void ExecuteFixedUpdate()
-    {
+    {        
+        if (!_castleSearched)
+        {
+
+        }
+        else
+        {
+            if(SearchCastle()) // 캐슬과 가까워 졌을 때
+            {
+                if (BorderCheck())
+                {
+                    path = _unit.GetComponent<Astar>().AStar(_castleTrans.gameObject);
+                    currentPathIndex = 0;
+
+                    if (path == null || path.Count == 0)
+                    {
+                        _unit.TargetEnemy = null;
+                        SearchCastle();
+                    }
+                }
+                else
+                {
+                    path = null;
+                }
+            }
+        }
+
+        if (path != null && currentPathIndex < path.Count)
+        {
+            MoveAlongPath();
+        }
+        else if (_unit.TargetEnemy != null)
+        {
+            MoveTowardsTarget();
+        }
+        else
+        {
+            MoveNoneTarget();
+        }
     }
 
     public override void Exit()
@@ -361,181 +407,147 @@ public class UnitRetreatState : UnitState
         Debug.Log("Exiting Retreat State");
     }
 
-    //#region Move
-    //private void MoveTowardsTarget()
-    //{
-    //    if (_unit.TargetEnemy != null)
-    //    {
-    //        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+    #region Move
+    private void MoveTowardsTarget()
+    {
+        if (_unit.TargetEnemy != null)
+        {
+            Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
 
-    //        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+            _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
-    //        PlayerRotateOnMove(direction);
-    //    }
-    //}
+            PlayerRotateOnMove(direction);
+        }
+    }
 
-    //private void MoveNoneTarget()
-    //{
-    //    Vector3 direction;
-    //    if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
-    //    {
-    //        direction = _unit.tag.Equals("Ally") ? Vector3.forward : Vector3.back;
-    //    }
-    //    else
-    //    {
-    //        direction = CheckMapCorner();
-    //    }
-    //    _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+    private void MoveNoneTarget()
+    {
+        Vector3 direction;
+        if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
+        {
+            direction = _unit.tag.Equals("Ally") ? Vector3.forward : Vector3.back;
+        }
+        else
+        {
+            direction = CheckMapCorner();
+        }
+        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
-    //    PlayerRotateOnMove(direction);
+        PlayerRotateOnMove(direction);
 
 
-    //}
+    }
 
-    //private Vector3 CheckMapCorner()
-    //{
-    //    if (_unit.tag == "Ally")
-    //    {
-    //        return CheckMapCorner_GoUp();
-    //    }
-    //    else
-    //    {
-    //        return CheckMapCorner_GoDown();
-    //    }
-    //}
-    //private Vector3 CheckMapCorner_GoUp()
-    //{
-    //    switch (_unit.MapCornerPoint)
-    //    {
-    //        case MapCornerPoint.BottomLeftCenter:
-    //        case MapCornerPoint.TopRight:
-    //        case MapCornerPoint.TopRightCenter:
-    //            return Vector3.left;
-    //        case MapCornerPoint.BottomRightCenter:
-    //        case MapCornerPoint.TopLeft:
-    //        case MapCornerPoint.TopLeftCenter:
-    //            return Vector3.right;
-    //        default:
-    //            return Vector3.forward;
-    //    }
-    //}
+    private Vector3 CheckMapCorner()
+    {
+        if (_unit.tag == "Ally")
+        {
+            return CheckMapCorner_GoUp();
+        }
+        else
+        {
+            return CheckMapCorner_GoDown();
+        }
+    }
+    private Vector3 CheckMapCorner_GoUp()
+    {
+        switch (_unit.MapCornerPoint)
+        {
+            case MapCornerPoint.BottomLeftCenter:
+            case MapCornerPoint.TopRight:
+            case MapCornerPoint.TopRightCenter:
+                return Vector3.left;
+            case MapCornerPoint.BottomRightCenter:
+            case MapCornerPoint.TopLeft:
+            case MapCornerPoint.TopLeftCenter:
+                return Vector3.right;
+            default:
+                return Vector3.forward;
+        }
+    }
 
-    //private Vector3 CheckMapCorner_GoDown()
-    //{
-    //    switch (_unit.MapCornerPoint)
-    //    {
-    //        case MapCornerPoint.BottomRightCenter:
-    //        case MapCornerPoint.BottomRight:
-    //        case MapCornerPoint.TopLeftCenter:
-    //            return Vector3.left;
-    //        case MapCornerPoint.BottomLeftCenter:
-    //        case MapCornerPoint.BottomLeft:
-    //        case MapCornerPoint.TopRightCenter:
-    //            return Vector3.right;
-    //        default:
-    //            return Vector3.forward;
-    //    }
-    //}
+    private Vector3 CheckMapCorner_GoDown()
+    {
+        switch (_unit.MapCornerPoint)
+        {
+            case MapCornerPoint.BottomRightCenter:
+            case MapCornerPoint.BottomRight:
+            case MapCornerPoint.TopLeftCenter:
+                return Vector3.left;
+            case MapCornerPoint.BottomLeftCenter:
+            case MapCornerPoint.BottomLeft:
+            case MapCornerPoint.TopRightCenter:
+                return Vector3.right;
+            default:
+                return Vector3.forward;
+        }
+    }
 
-    //private void MoveAlongPath()
-    //{
-    //    Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
-    //    Vector3 direction = (nextPosition - _unit.transform.position).normalized;
-    //    _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+    private void MoveAlongPath()
+    {
+        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
+        Vector3 direction = (nextPosition - _unit.transform.position).normalized;
+        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
-    //    if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
-    //    {
-    //        currentPathIndex++;
+        if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
+        {
+            currentPathIndex++;
 
-    //        if (currentPathIndex < path.Count && !BorderCheck())
-    //        {
-    //            path.Clear();
-    //            return;
-    //        }
-    //    }
+            if (currentPathIndex < path.Count && !BorderCheck())
+            {
+                path.Clear();
+                return;
+            }
+        }
 
-    //    PlayerRotateOnMove(direction);
-    //}
-    //#endregion
-    //#region Roation
-    //public void PlayerRotateOnMove(Vector3 direction)
-    //{
-    //    Quaternion targetRotation = Quaternion.LookRotation(direction);
-    //    _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
-    //}
-    //#endregion
-    //private void SearchEnemy()
-    //{
-    //    if (_unit.TargetEnemy != null)
-    //    {
-    //        if (!_unit.TargetEnemy.activeSelf)
-    //        {
-    //            _unit.TargetEnemy = null;
-    //            return;
-    //        }
+        PlayerRotateOnMove(direction);
+    }
+    #endregion
+    #region Roation
+    public void PlayerRotateOnMove(Vector3 direction)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
+    }
+    #endregion
+    private bool SearchCastle()
+    {
+        if (Time.time - _lastSearchTime < _searchInterval) return false; // 검색 주기가 되지 않으면 반환
+        _lastSearchTime = Time.time;
 
-    //        float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
-    //        if (distance > _unit.SearchRadius) // 거리가 멀어질 때
-    //        {
-    //            _unit.TargetEnemy = null;
-    //        }
-    //        else if (distance < _unit.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
-    //        {
-    //            _unit.OnChangeState(new UnitAttackState(_unit));
-    //        }
-    //        return;
-    //    }
+        Vector3 origin = _unit.transform.position;
+        float distance = Vector3.Distance(_castleTrans.position, origin);
 
-    //    if (Time.time - _lastSearchTime < _searchInterval) return; // 검색 주기가 되지 않으면 반환
-    //    _lastSearchTime = Time.time;
+        if (distance < 15)
+        {
+            _castleSearched = true;
 
-    //    Vector3 origin = _unit.transform.position;
-    //    string[] targetLayers = _unit.tag.Equals("Ally") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
-    //    int layerMask = LayerMask.GetMask(targetLayers);
+            return true;
 
-    //    int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);
 
-    //    float closestDistance = float.MaxValue;
+        }
+        else return false;
 
-    //    for (int i = 0; i < hitCount; i++)
-    //    {
-    //        if (!hitColliders[i].CompareTag(_unit.tag))
-    //        {
-    //            float distance = (_unit.transform.position - hitColliders[i].transform.position).sqrMagnitude;
+    }
 
-    //            if (distance < closestDistance)
-    //            {
-    //                closestDistance = distance;
-    //                _unit.TargetEnemy = hitColliders[i].gameObject;
-    //                _unit.TargetChanged = true;
-    //            }
-    //        }
-    //    }
+    private bool BorderCheck()
+    {
+        if (_unit.TargetEnemy == null)
+        {
+            return false;
+        }
 
-    //    //if (_unit.TargetEnemy != null)
-    //    //{
-    //    //    Debug.Log("Target enemy: " + _unit.TargetEnemy.name);
-    //    //}
-    //}
+        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+        float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
+        int layerMask = LayerMask.GetMask("Border");
 
-    //private bool BorderCheck()
-    //{
-    //    if (_unit.TargetEnemy == null)
-    //    {
-    //        return false;
-    //    }
+        if (Physics.Raycast(_unit.transform.position, direction, out RaycastHit hit, distance, layerMask))
+        {
+            return true;
+        }
 
-    //    Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
-    //    float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
-    //    int layerMask = LayerMask.GetMask("Border");
-
-    //    if (Physics.Raycast(_unit.transform.position, direction, out RaycastHit hit, distance, layerMask))
-    //    {
-    //        return true;
-    //    }
-
-    //    return false;
-    //}
+        return false;
+    }
 }
 
 public class UnitDeadState : UnitState
