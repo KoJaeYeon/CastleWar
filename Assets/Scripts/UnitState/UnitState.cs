@@ -345,6 +345,7 @@ public class UnitRetreatState : UnitState
     private Transform _castleTrans;
     private float _rotationSpeed = 3f;
     private bool _castleSearched = false;
+    private float _retreatDistance = 21f;
 
     public UnitRetreatState(Unit unit) : base(unit) { }
 
@@ -362,7 +363,16 @@ public class UnitRetreatState : UnitState
 
     public override void ExecuteFixedUpdate()
     {
-        MoveNoneTarget_Retreat();
+        if(_castleSearched)
+        {
+            MoveTowardsTarget_Retreat();
+        }
+        else
+        {
+            MoveNoneTarget_Retreat();
+            SearchCastle();
+        }
+        
     }
 
     public override void Exit()
@@ -372,37 +382,30 @@ public class UnitRetreatState : UnitState
 
     #region Move
 
-    private void MoveAlongPath()
+    private void SearchCastle()
     {
-        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
-        Vector3 direction = (nextPosition - _unit.transform.position).normalized;
+        if (Time.time - _lastSearchTime < _searchInterval) return; // 검색 주기가 되지 않으면 반환
+        _lastSearchTime = Time.time;
+
+        Vector3 origin = _unit.transform.position;
+
+        float distance = Vector3.Distance(_castleTrans.position, origin);
+
+        if(distance < _retreatDistance)
+        {
+            _castleSearched=true;
+        }
+    }
+
+    private void MoveTowardsTarget_Retreat()
+    {
+
+        Vector3 direction = (_castleTrans.position - _unit.transform.position).normalized;
+
         _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
-        if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
-        {
-            currentPathIndex++;
-        }
-
         PlayerRotateOnMove(direction);
-    }
-    #endregion
-    #region Roation
-    public void PlayerRotateOnMove(Vector3 direction)
-    {
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
-    }
 
-    private void MoveTowardsTarget()
-    {
-        if (_unit.TargetEnemy != null)
-        {
-            Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
-
-            _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
-
-            PlayerRotateOnMove(direction);
-        }
     }
 
     private void MoveNoneTarget_Retreat()
@@ -419,8 +422,6 @@ public class UnitRetreatState : UnitState
         _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
 
         PlayerRotateOnMove(direction);
-
-
     }
 
     private Vector3 CheckMapCorner()
@@ -466,6 +467,13 @@ public class UnitRetreatState : UnitState
             default:
                 return Vector3.forward;
         }
+    }
+    #endregion
+    #region Roation
+    public void PlayerRotateOnMove(Vector3 direction)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
     }
     #endregion
 }
