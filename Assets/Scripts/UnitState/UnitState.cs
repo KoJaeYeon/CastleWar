@@ -39,6 +39,7 @@ public class UnitIdleState : UnitState
     {
         Debug.Log("Exiting Idle State");
         _unit.Animator.SetTrigger("StartMove");
+        UnitManager.Instance.RegisterRetreatCallback(_unit.HandleOnRetreatState);
     }
 }
 
@@ -352,9 +353,10 @@ public class UnitRetreatState : UnitState
     public override void Enter()
     {
         Debug.Log("Entering Retreat State");
-        GameObject castle = CastleManager.Instance.GetCastleGameObj(_unit.IsAlly());
+        GameObject castle = CastleManager.Instance.GetCastleGameObj(_unit.IsTagAlly());
         _castleTrans = castle.transform;
         _castleSearched =false;
+        UnitManager.Instance.RegisterCancelCallback(_unit.HandleOnMoveState);
     }
 
     public override void ExecuteUpdate()
@@ -378,6 +380,7 @@ public class UnitRetreatState : UnitState
     public override void Exit()
     {
         Debug.Log("Exiting Retreat State");
+        UnitManager.Instance.UnRegisterCancelCallback(_unit.HandleOnMoveState);
     }
 
     #region Move
@@ -426,7 +429,7 @@ public class UnitRetreatState : UnitState
 
     private Vector3 CheckMapCorner()
     {
-        if (_unit.IsAlly())
+        if (_unit.IsTagAlly())
         {
             return CheckMapCorner_GoDown();
         }
@@ -487,6 +490,7 @@ public class UnitDeadState : UnitState
     {
         _unit.gameObject.layer = LayerMask.NameToLayer("DeadUnit");
         _unit.Animator.SetTrigger("Death");
+        UnitManager.Instance.UnRegisterRetreatCallback(_unit.HandleOnRetreatState);
     }
 
     public override void ExecuteFixedUpdate()

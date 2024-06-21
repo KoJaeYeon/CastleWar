@@ -80,14 +80,12 @@ public class Unit : MonoBehaviour, IAttack
     {
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
-        CheckHealthBar();
-        UnitManager.Instance.RegisterRetreatCallback(tag.Equals("Ally"),OnChange_RetreatState);
+        CheckHealthBar();        
     }
 
     private void OnDisable()
     {
-        _currentState = null;
-        UnitManager.Instance.UnRegisterRetreatCallback(tag.Equals("Ally"), OnChange_RetreatState);
+        _currentState = null;        
     }
 
     private void Update()
@@ -131,12 +129,23 @@ public class Unit : MonoBehaviour, IAttack
         _currentState.Enter();
     }
 
-    public void OnChange_RetreatState()
+    public void HandleOnRetreatState(bool Ally)
     {
-        OnChangeState(new UnitRetreatState(this));
+        if(IsTagAlly() == Ally) // 같은 명령이면
+        {
+            OnChangeState(new UnitRetreatState(this));
+        }        
     }
 
-    public bool IsAlly()
+    public void HandleOnMoveState(bool Ally)
+    {
+        if (IsTagAlly() == Ally) // 같은 명령이면
+        {
+            OnChangeState(new UnitMoveState(this));
+        }
+    }
+
+    public bool IsTagAlly()
     {
         if (tag.Equals("Ally")) return true;
         return false;

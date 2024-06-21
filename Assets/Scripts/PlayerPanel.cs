@@ -8,4 +8,9 @@ public class PlayerPanel : MonoBehaviour
     {
         UnitManager.Instance.OnCalled_Retreat(isAlly:true);
     }
+
+    public void OnClick_Btn_Cancel()
+    {
+        UnitManager.Instance.OnCalled_Cancel(isAlly: true);
+    }
 }

@@ -22,8 +22,8 @@ public class UnitManager : MonoBehaviour
     Dictionary<int, Unit> _frinedUnitDic = new Dictionary<int, Unit>();
     Dictionary<int, Unit> _enemyUnitDic = new Dictionary<int, Unit>();
 
-    Action _RetreatAllyCallback;
-    Action _RetreatEnemyCallback;
+    public event Action<bool> _RetreatCallback;
+    public event Action<bool> _CanelCallback;
 
     public void AddDictionaryUnit(Unit unit, bool isTagAlly)
     {
@@ -39,49 +39,33 @@ public class UnitManager : MonoBehaviour
 
     }
 
-    public void RegisterRetreatCallback(bool isAlly, Action retreatCallback)
+    public void RegisterRetreatCallback(Action<bool> retreatCallback)
     {
-        if (isAlly)
-        {
-            _RetreatAllyCallback += retreatCallback;
-        }
-        else
-        {
-            _RetreatEnemyCallback += retreatCallback;
-        }
+        _RetreatCallback += retreatCallback;
     }
 
-    public void UnRegisterRetreatCallback(bool isAlly, Action retreatCallback)
+    public void RegisterCancelCallback(Action<bool> moveCallback)
     {
-        if (isAlly)
-        {
-            _RetreatAllyCallback -= retreatCallback;
-        }
-        else
-        {
-            _RetreatEnemyCallback -= retreatCallback;
-        }
+        _CanelCallback += moveCallback;
     }
+
+    public void UnRegisterRetreatCallback(Action<bool> retreatCallback)
+    {
+        _RetreatCallback -= retreatCallback;
+    }
+
+    public void UnRegisterCancelCallback(Action<bool> moveCallback)
+    {
+        _CanelCallback -= moveCallback;
+    }  
 
     public void OnCalled_Retreat(bool isAlly)
     {
-        if(isAlly)
-        {
-            _RetreatAllyCallback?.Invoke();
-        }
-        else
-        {
-            _RetreatEnemyCallback?.Invoke();
-        }
+        _RetreatCallback?.Invoke(isAlly);
     }
 
-    public void ReturnUnitsToCastle(bool isTagAlly)
+    public void OnCalled_Cancel(bool isAlly)
     {
-        Dictionary<int, Unit> tempDic;
-        tempDic = isTagAlly ? _frinedUnitDic : _enemyUnitDic;
-        foreach(Unit unit in tempDic.Values)
-        {
-            unit.OnChange_RetreatState();
-        }
+        _CanelCallback?.Invoke(isAlly);
     }
 }
