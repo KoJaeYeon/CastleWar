@@ -5,7 +5,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class AddressableInitializer : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         // Addressables √ ±‚»≠
         Addressables.InitializeAsync().Completed += OnAddressablesInitialized;
