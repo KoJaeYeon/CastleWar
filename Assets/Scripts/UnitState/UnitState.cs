@@ -59,45 +59,45 @@ public class UnitMoveState : UnitState
     }
 
     public override void ExecuteUpdate()
-    {        
+    {
     }
 
     public override void ExecuteFixedUpdate()
     {
-        //SearchEnemy();
-        //if (_unit.TargetChanged)
-        //{
-        //    _unit.TargetChanged = false;
+        SearchEnemy();
+        if (_unit.TargetChanged)
+        {
+            _unit.TargetChanged = false;
 
-        //    if (BorderCheck())
-        //    {
-        //        path = _unit.GetComponent<Astar>().AStar(_unit.TargetEnemy);
-        //        currentPathIndex = 0;
+            if (BorderCheck())
+            {
+                path = _unit.GetComponent<Astar>().AStar(_unit.TargetEnemy);
+                currentPathIndex = 0;
 
-        //        if (path == null || path.Count == 0)
-        //        {
-        //            _unit.TargetEnemy = null;
-        //            SearchEnemy();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        path = null;
-        //    }
-        //}
+                if (path == null || path.Count == 0)
+                {
+                    _unit.TargetEnemy = null;
+                    SearchEnemy();
+                }
+            }
+            else
+            {
+                path = null;
+            }
+        }
 
-        //if (path != null && currentPathIndex < path.Count)
-        //{
-        //    MoveAlongPath();
-        //}
-        //else if (_unit.TargetEnemy != null)
-        //{
-        //    MoveTowardsTarget();
-        //}
-        //else
-        //{
-        //    MoveNoneTarget();
-        //}
+        if (path != null && currentPathIndex < path.Count)
+        {
+            MoveAlongPath();
+        }
+        else if (_unit.TargetEnemy != null)
+        {
+            MoveTowardsTarget();
+        }
+        else
+        {
+            MoveNoneTarget();
+        }
     }
 
     public override void Exit()
@@ -208,7 +208,7 @@ public class UnitMoveState : UnitState
         _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
     }
     #endregion
-    private void SearchAllyCastle()
+    private void SearchEnemy()
     {
         if (_unit.TargetEnemy != null)
         {
