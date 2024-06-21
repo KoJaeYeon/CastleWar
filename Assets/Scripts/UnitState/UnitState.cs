@@ -342,7 +342,7 @@ public class UnitRetreatState : UnitState
 {
     private List<Node> path; // A* 경로를 저장할 리스트
     private int currentPathIndex; // 현재 경로의 인덱스
-    private Transform _castleTrans; // 복귀해야 할 캐슬의 트랜스폼
+    //private Transform _castleTrans; // 복귀해야 할 캐슬의 트랜스폼
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
     private float _rotationSpeed = 3f;
@@ -353,7 +353,9 @@ public class UnitRetreatState : UnitState
     public override void Enter()
     {
         Debug.Log("Entering Retreat State");
-
+        GameObject castle = CastleManager.Instance.GetCastleGameObj(_unit.IsAlly());
+        path = _unit.GetComponent<Astar>().AStar(castle);
+        currentPathIndex = 0;
     }
 
     public override void ExecuteUpdate()
@@ -361,45 +363,12 @@ public class UnitRetreatState : UnitState
     }
 
     public override void ExecuteFixedUpdate()
-    {        
-        if (!_castleSearched)
-        {
-
-        }
-        else
-        {
-            if(SearchCastle()) // 캐슬과 가까워 졌을 때
-            {
-                if (BorderCheck())
-                {
-                    path = _unit.GetComponent<Astar>().AStar(_castleTrans.gameObject);
-                    currentPathIndex = 0;
-
-                    if (path == null || path.Count == 0)
-                    {
-                        _unit.TargetEnemy = null;
-                        SearchCastle();
-                    }
-                }
-                else
-                {
-                    path = null;
-                }
-            }
-        }
-
-        if (path != null && currentPathIndex < path.Count)
-        {
-            MoveAlongPath();
-        }
-        else if (_unit.TargetEnemy != null)
-        {
-            MoveTowardsTarget();
-        }
-        else
-        {
-            MoveNoneTarget();
-        }
+    {
+        MoveNoneTarget_Retreat();
+        //if (path != null && currentPathIndex < path.Count)
+        //{
+        //    MoveAlongPath();
+        //}
     }
 
     public override void Exit()
@@ -408,6 +377,28 @@ public class UnitRetreatState : UnitState
     }
 
     #region Move
+
+    private void MoveAlongPath()
+    {
+        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
+        Vector3 direction = (nextPosition - _unit.transform.position).normalized;
+        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+
+        if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
+        {
+            currentPathIndex++;
+        }
+
+        PlayerRotateOnMove(direction);
+    }
+    #endregion
+    #region Roation
+    public void PlayerRotateOnMove(Vector3 direction)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
+    }
+
     private void MoveTowardsTarget()
     {
         if (_unit.TargetEnemy != null)
@@ -420,12 +411,12 @@ public class UnitRetreatState : UnitState
         }
     }
 
-    private void MoveNoneTarget()
+    private void MoveNoneTarget_Retreat()
     {
         Vector3 direction;
         if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
         {
-            direction = _unit.tag.Equals("Ally") ? Vector3.forward : Vector3.back;
+            direction = _unit.tag.Equals("Ally") ? Vector3.back : Vector3.forward;
         }
         else
         {
@@ -440,13 +431,13 @@ public class UnitRetreatState : UnitState
 
     private Vector3 CheckMapCorner()
     {
-        if (_unit.tag == "Ally")
+        if (_unit.IsAlly())
         {
-            return CheckMapCorner_GoUp();
+            return CheckMapCorner_GoDown();
         }
         else
         {
-            return CheckMapCorner_GoDown();
+            return CheckMapCorner_GoUp();
         }
     }
     private Vector3 CheckMapCorner_GoUp()
@@ -482,72 +473,7 @@ public class UnitRetreatState : UnitState
                 return Vector3.forward;
         }
     }
-
-    private void MoveAlongPath()
-    {
-        Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
-        Vector3 direction = (nextPosition - _unit.transform.position).normalized;
-        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
-
-        if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
-        {
-            currentPathIndex++;
-
-            if (currentPathIndex < path.Count && !BorderCheck())
-            {
-                path.Clear();
-                return;
-            }
-        }
-
-        PlayerRotateOnMove(direction);
-    }
     #endregion
-    #region Roation
-    public void PlayerRotateOnMove(Vector3 direction)
-    {
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
-    }
-    #endregion
-    private bool SearchCastle()
-    {
-        if (Time.time - _lastSearchTime < _searchInterval) return false; // 검색 주기가 되지 않으면 반환
-        _lastSearchTime = Time.time;
-
-        Vector3 origin = _unit.transform.position;
-        float distance = Vector3.Distance(_castleTrans.position, origin);
-
-        if (distance < 15)
-        {
-            _castleSearched = true;
-
-            return true;
-
-
-        }
-        else return false;
-
-    }
-
-    private bool BorderCheck()
-    {
-        if (_unit.TargetEnemy == null)
-        {
-            return false;
-        }
-
-        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
-        float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
-        int layerMask = LayerMask.GetMask("Border");
-
-        if (Physics.Raycast(_unit.transform.position, direction, out RaycastHit hit, distance, layerMask))
-        {
-            return true;
-        }
-
-        return false;
-    }
 }
 
 public class UnitDeadState : UnitState

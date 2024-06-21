@@ -136,11 +136,16 @@ public class Unit : MonoBehaviour, IAttack
         OnChangeState(new UnitRetreatState(this));
     }
 
+    public bool IsAlly()
+    {
+        if (tag.Equals("Ally")) return true;
+        return false;
+    }
+
     public void OnValueChanged_SpawnSlider(float value)
     {
         if (SpawnTimerImage != null)
         {
-            Debug.Log(SpawnTimerImage.fillAmount);
             SpawnTimerImage.fillAmount += value;
         }
     }
