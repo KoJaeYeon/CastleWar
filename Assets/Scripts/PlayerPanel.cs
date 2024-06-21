@@ -6,6 +6,6 @@ public class PlayerPanel : MonoBehaviour
 {
     public void OnClick_Btn_Retreat()
     {
-
+        UnitManager.Instance.OnCalled_Retreat(isFriend:true);
     }
 }

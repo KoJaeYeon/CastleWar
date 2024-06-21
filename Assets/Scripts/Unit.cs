@@ -92,11 +92,13 @@ public class Unit : MonoBehaviour, IAttack
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
         CheckHealthBar();
+        UnitManager.Instance.RegisterRetreatCallback(tag.Equals("Friend"),OnChange_RetreatState);
     }
 
     private void OnDisable()
     {
         _currentState = null;
+        UnitManager.Instance.UnRegisterRetreatCallback(tag.Equals("Friend"), OnChange_RetreatState);
     }
 
     private void Update()
@@ -138,6 +140,11 @@ public class Unit : MonoBehaviour, IAttack
         _currentState.Exit();
         _currentState = newState;
         _currentState.Enter();
+    }
+
+    public void OnChange_RetreatState()
+    {
+        OnChangeState(new UnitRetreatState(this));
     }
 
     public void OnValueChanged_SpawnSlider(float value)

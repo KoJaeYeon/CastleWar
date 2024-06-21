@@ -332,6 +332,211 @@ public class UnitAttackState : UnitState
     }
 }
 
+public class UnitRetreatState : UnitState
+{
+    private List<Node> path; // A* 경로를 저장할 리스트
+    private int currentPathIndex; // 현재 경로의 인덱스
+    private Collider[] hitColliders = new Collider[10]; // 충돌을 저장할 배열
+    private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
+    private float _lastSearchTime = 0f;
+    private float _rotationSpeed = 3f;
+
+    public UnitRetreatState(Unit unit) : base(unit) { }
+
+    public override void Enter()
+    {
+        Debug.Log("Entering Retreat State");
+    }
+
+    public override void ExecuteUpdate()
+    {
+    }
+
+    public override void ExecuteFixedUpdate()
+    {
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exiting Retreat State");
+    }
+
+    //#region Move
+    //private void MoveTowardsTarget()
+    //{
+    //    if (_unit.TargetEnemy != null)
+    //    {
+    //        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+
+    //        _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+
+    //        PlayerRotateOnMove(direction);
+    //    }
+    //}
+
+    //private void MoveNoneTarget()
+    //{
+    //    Vector3 direction;
+    //    if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
+    //    {
+    //        direction = _unit.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
+    //    }
+    //    else
+    //    {
+    //        direction = CheckMapCorner();
+    //    }
+    //    _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+
+    //    PlayerRotateOnMove(direction);
+
+
+    //}
+
+    //private Vector3 CheckMapCorner()
+    //{
+    //    if (_unit.tag == "Friend")
+    //    {
+    //        return CheckMapCorner_GoUp();
+    //    }
+    //    else
+    //    {
+    //        return CheckMapCorner_GoDown();
+    //    }
+    //}
+    //private Vector3 CheckMapCorner_GoUp()
+    //{
+    //    switch (_unit.MapCornerPoint)
+    //    {
+    //        case MapCornerPoint.BottomLeftCenter:
+    //        case MapCornerPoint.TopRight:
+    //        case MapCornerPoint.TopRightCenter:
+    //            return Vector3.left;
+    //        case MapCornerPoint.BottomRightCenter:
+    //        case MapCornerPoint.TopLeft:
+    //        case MapCornerPoint.TopLeftCenter:
+    //            return Vector3.right;
+    //        default:
+    //            return Vector3.forward;
+    //    }
+    //}
+
+    //private Vector3 CheckMapCorner_GoDown()
+    //{
+    //    switch (_unit.MapCornerPoint)
+    //    {
+    //        case MapCornerPoint.BottomRightCenter:
+    //        case MapCornerPoint.BottomRight:
+    //        case MapCornerPoint.TopLeftCenter:
+    //            return Vector3.left;
+    //        case MapCornerPoint.BottomLeftCenter:
+    //        case MapCornerPoint.BottomLeft:
+    //        case MapCornerPoint.TopRightCenter:
+    //            return Vector3.right;
+    //        default:
+    //            return Vector3.forward;
+    //    }
+    //}
+
+    //private void MoveAlongPath()
+    //{
+    //    Vector3 nextPosition = new Vector3(path[currentPathIndex].x, _unit.transform.position.y, path[currentPathIndex].y);
+    //    Vector3 direction = (nextPosition - _unit.transform.position).normalized;
+    //    _unit.transform.position += direction * _unit.MoveSpeed * Time.fixedDeltaTime;
+
+    //    if (Vector3.Distance(_unit.transform.position, nextPosition) < 0.1f)
+    //    {
+    //        currentPathIndex++;
+
+    //        if (currentPathIndex < path.Count && !BorderCheck())
+    //        {
+    //            path.Clear();
+    //            return;
+    //        }
+    //    }
+
+    //    PlayerRotateOnMove(direction);
+    //}
+    //#endregion
+    //#region Roation
+    //public void PlayerRotateOnMove(Vector3 direction)
+    //{
+    //    Quaternion targetRotation = Quaternion.LookRotation(direction);
+    //    _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
+    //}
+    //#endregion
+    //private void SearchEnemy()
+    //{
+    //    if (_unit.TargetEnemy != null)
+    //    {
+    //        if (!_unit.TargetEnemy.activeSelf)
+    //        {
+    //            _unit.TargetEnemy = null;
+    //            return;
+    //        }
+
+    //        float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
+    //        if (distance > _unit.SearchRadius) // 거리가 멀어질 때
+    //        {
+    //            _unit.TargetEnemy = null;
+    //        }
+    //        else if (distance < _unit.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
+    //        {
+    //            _unit.OnChangeState(new UnitAttackState(_unit));
+    //        }
+    //        return;
+    //    }
+
+    //    if (Time.time - _lastSearchTime < _searchInterval) return; // 검색 주기가 되지 않으면 반환
+    //    _lastSearchTime = Time.time;
+
+    //    Vector3 origin = _unit.transform.position;
+    //    string[] targetLayers = _unit.tag.Equals("Friend") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "FriendGroundUnit", "FriendAirUnit" };
+    //    int layerMask = LayerMask.GetMask(targetLayers);
+
+    //    int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);
+
+    //    float closestDistance = float.MaxValue;
+
+    //    for (int i = 0; i < hitCount; i++)
+    //    {
+    //        if (!hitColliders[i].CompareTag(_unit.tag))
+    //        {
+    //            float distance = (_unit.transform.position - hitColliders[i].transform.position).sqrMagnitude;
+
+    //            if (distance < closestDistance)
+    //            {
+    //                closestDistance = distance;
+    //                _unit.TargetEnemy = hitColliders[i].gameObject;
+    //                _unit.TargetChanged = true;
+    //            }
+    //        }
+    //    }
+
+    //    //if (_unit.TargetEnemy != null)
+    //    //{
+    //    //    Debug.Log("Target enemy: " + _unit.TargetEnemy.name);
+    //    //}
+    //}
+
+    //private bool BorderCheck()
+    //{
+    //    if (_unit.TargetEnemy == null)
+    //    {
+    //        return false;
+    //    }
+
+    //    Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+    //    float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
+    //    int layerMask = LayerMask.GetMask("Border");
+
+    //    if (Physics.Raycast(_unit.transform.position, direction, out RaycastHit hit, distance, layerMask))
+    //    {
+    //        return true;
+    //    }
+
+    //    return false;
+    //}
+}
 
 public class UnitDeadState : UnitState
 {
