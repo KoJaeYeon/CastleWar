@@ -22,13 +22,13 @@ public class UnitManager : MonoBehaviour
     Dictionary<int, Unit> _frinedUnitDic = new Dictionary<int, Unit>();
     Dictionary<int, Unit> _enemyUnitDic = new Dictionary<int, Unit>();
 
-    Action _RetreatFriendCallback;
+    Action _RetreatAllyCallback;
     Action _RetreatEnemyCallback;
 
-    public void AddDictionaryUnit(Unit unit, bool isTagFriend)
+    public void AddDictionaryUnit(Unit unit, bool isTagAlly)
     {
         unit.GetInstanceID();
-        if(isTagFriend)
+        if(isTagAlly)
         {
             _frinedUnitDic.Add(unit.GetInstanceID(), unit);
         }
@@ -39,11 +39,11 @@ public class UnitManager : MonoBehaviour
 
     }
 
-    public void RegisterRetreatCallback(bool isFriend, Action retreatCallback)
+    public void RegisterRetreatCallback(bool isAlly, Action retreatCallback)
     {
-        if (isFriend)
+        if (isAlly)
         {
-            _RetreatFriendCallback += retreatCallback;
+            _RetreatAllyCallback += retreatCallback;
         }
         else
         {
@@ -51,11 +51,11 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void UnRegisterRetreatCallback(bool isFriend, Action retreatCallback)
+    public void UnRegisterRetreatCallback(bool isAlly, Action retreatCallback)
     {
-        if (isFriend)
+        if (isAlly)
         {
-            _RetreatFriendCallback -= retreatCallback;
+            _RetreatAllyCallback -= retreatCallback;
         }
         else
         {
@@ -63,11 +63,11 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void OnCalled_Retreat(bool isFriend)
+    public void OnCalled_Retreat(bool isAlly)
     {
-        if(isFriend)
+        if(isAlly)
         {
-            _RetreatFriendCallback?.Invoke();
+            _RetreatAllyCallback?.Invoke();
         }
         else
         {
@@ -75,10 +75,10 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void ReturnUnitsToCastle(bool isTagFriend)
+    public void ReturnUnitsToCastle(bool isTagAlly)
     {
         Dictionary<int, Unit> tempDic;
-        tempDic = isTagFriend ? _frinedUnitDic : _enemyUnitDic;
+        tempDic = isTagAlly ? _frinedUnitDic : _enemyUnitDic;
         foreach(Unit unit in tempDic.Values)
         {
             unit.OnChange_RetreatState();

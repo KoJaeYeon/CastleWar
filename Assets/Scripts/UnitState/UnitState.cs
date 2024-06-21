@@ -64,40 +64,40 @@ public class UnitMoveState : UnitState
 
     public override void ExecuteFixedUpdate()
     {
-        SearchEnemy();
-        if (_unit.TargetChanged)
-        {
-            _unit.TargetChanged = false;
+        //SearchEnemy();
+        //if (_unit.TargetChanged)
+        //{
+        //    _unit.TargetChanged = false;
 
-            if (BorderCheck())
-            {
-                path = _unit.GetComponent<Astar>().AStar(_unit.TargetEnemy);
-                currentPathIndex = 0;
+        //    if (BorderCheck())
+        //    {
+        //        path = _unit.GetComponent<Astar>().AStar(_unit.TargetEnemy);
+        //        currentPathIndex = 0;
 
-                if (path == null || path.Count == 0)
-                {
-                    _unit.TargetEnemy = null;
-                    SearchEnemy();
-                }
-            }
-            else
-            {
-                path = null;
-            }
-        }
+        //        if (path == null || path.Count == 0)
+        //        {
+        //            _unit.TargetEnemy = null;
+        //            SearchEnemy();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        path = null;
+        //    }
+        //}
 
-        if (path != null && currentPathIndex < path.Count)
-        {
-            MoveAlongPath();
-        }
-        else if (_unit.TargetEnemy != null)
-        {
-            MoveTowardsTarget();
-        }
-        else
-        {
-            MoveNoneTarget();
-        }
+        //if (path != null && currentPathIndex < path.Count)
+        //{
+        //    MoveAlongPath();
+        //}
+        //else if (_unit.TargetEnemy != null)
+        //{
+        //    MoveTowardsTarget();
+        //}
+        //else
+        //{
+        //    MoveNoneTarget();
+        //}
     }
 
     public override void Exit()
@@ -123,7 +123,7 @@ public class UnitMoveState : UnitState
         Vector3 direction;
         if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
         {
-            direction = _unit.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
+            direction = _unit.tag.Equals("Ally") ? Vector3.forward : Vector3.back;
         }
         else
         {
@@ -138,7 +138,7 @@ public class UnitMoveState : UnitState
 
     private Vector3 CheckMapCorner()
     {
-        if (_unit.tag == "Friend")
+        if (_unit.tag == "Ally")
         {
             return CheckMapCorner_GoUp();
         }
@@ -208,7 +208,7 @@ public class UnitMoveState : UnitState
         _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
     }
     #endregion
-    private void SearchEnemy()
+    private void SearchAllyCastle()
     {
         if (_unit.TargetEnemy != null)
         {
@@ -234,7 +234,7 @@ public class UnitMoveState : UnitState
         _lastSearchTime = Time.time;
 
         Vector3 origin = _unit.transform.position;
-        string[] targetLayers = _unit.tag.Equals("Friend") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "FriendGroundUnit", "FriendAirUnit" };
+        string[] targetLayers = _unit.tag.Equals("Ally") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
         int layerMask = LayerMask.GetMask(targetLayers);
 
         int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);
@@ -379,7 +379,7 @@ public class UnitRetreatState : UnitState
     //    Vector3 direction;
     //    if (_unit.MapCornerPoint == MapCornerPoint.NoCorner)
     //    {
-    //        direction = _unit.tag.Equals("Friend") ? Vector3.forward : Vector3.back;
+    //        direction = _unit.tag.Equals("Ally") ? Vector3.forward : Vector3.back;
     //    }
     //    else
     //    {
@@ -394,7 +394,7 @@ public class UnitRetreatState : UnitState
 
     //private Vector3 CheckMapCorner()
     //{
-    //    if (_unit.tag == "Friend")
+    //    if (_unit.tag == "Ally")
     //    {
     //        return CheckMapCorner_GoUp();
     //    }
@@ -490,7 +490,7 @@ public class UnitRetreatState : UnitState
     //    _lastSearchTime = Time.time;
 
     //    Vector3 origin = _unit.transform.position;
-    //    string[] targetLayers = _unit.tag.Equals("Friend") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "FriendGroundUnit", "FriendAirUnit" };
+    //    string[] targetLayers = _unit.tag.Equals("Ally") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
     //    int layerMask = LayerMask.GetMask(targetLayers);
 
     //    int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);

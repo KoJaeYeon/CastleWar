@@ -92,13 +92,13 @@ public class Unit : MonoBehaviour, IAttack
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
         CheckHealthBar();
-        UnitManager.Instance.RegisterRetreatCallback(tag.Equals("Friend"),OnChange_RetreatState);
+        UnitManager.Instance.RegisterRetreatCallback(tag.Equals("Ally"),OnChange_RetreatState);
     }
 
     private void OnDisable()
     {
         _currentState = null;
-        UnitManager.Instance.UnRegisterRetreatCallback(tag.Equals("Friend"), OnChange_RetreatState);
+        UnitManager.Instance.UnRegisterRetreatCallback(tag.Equals("Ally"), OnChange_RetreatState);
     }
 
     private void Update()

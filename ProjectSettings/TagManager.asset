@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Friend
   - Enemy
+  - Ally
   layers:
   - Default
   - TransparentFX
@@ -16,10 +16,10 @@ TagManager:
   - Border
   - EnemyGroundUnit
   - EnemyAirUnit
-  - FriendGroundUnit
-  - FriendAirUnit
-  - 
-  - 
+  - EnemyBuilding
+  - AllyGroundUnit
+  - AllyAirUnit
+  - AllyBuilding
   - DeadUnit
   - 
   - 
