@@ -5,20 +5,28 @@ using UnityEngine;
 public class AnimationAttack : MonoBehaviour
 {
     Unit _unit;
-    private void Awake()
+
+    Unit Unit
     {
-        _unit = transform.parent.GetComponent<Unit>();
+        get
+        {
+            if (_unit == null)
+            {
+                _unit = transform.parent.GetComponent<Unit>();
+            }
+            return _unit;
+        }
     }
     public void OnAttackAnimationEnd()
     {
-        if (_unit != null)
+        if (Unit != null)
         {
             _unit.OnCalled_Attack_AnimationEventAttack();
         }
     }
     public void OnSetEnemyAnimationStart()
     {
-        if (_unit != null)
+        if (Unit != null)
         {
             _unit.OnCalled_SetEnemy_AnimationEventAttack();
         }

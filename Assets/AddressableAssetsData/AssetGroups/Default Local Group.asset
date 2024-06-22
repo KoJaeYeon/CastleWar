@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 8fcf08773a2969f47bcd1ea8de90d39b
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: e924bdf2fc9b9f247a720eee4598a803
+    m_Address: Assets/Resources_moved/Prefabs/Warrior/Model_Warrior.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f801bc9b5ce5c3c46b652f8ec81526a6, type: 2}
   m_SchemaSet:
