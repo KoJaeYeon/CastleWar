@@ -5,13 +5,14 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class UnitSpawner : MonoBehaviour
 {
-    public GameObject unitPrefab; // 큰 프리팹
+    GameObject unitPrefab; // 큰 프리팹
     public List<string> subPrefabAddresses; // 하위 프리팹의 주소 리스트 (각각의 개별 주소)
     private Dictionary<string, GameObject> cachedSubPrefabs = new Dictionary<string, GameObject>(); // 캐싱용 딕셔너리
 
+    SpawnManager spawnManager; 
     void Start()
     {
-
+        unitPrefab = Resources.Load("Prefabs/Unit_Base") as GameObject;
         SpawnUnitWithSubPrefab(0);
 
 
