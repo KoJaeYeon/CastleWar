@@ -71,13 +71,14 @@ public class Unit : MonoBehaviour, IAttack
     {
         get => _animator;
     }
-    private void Awake()
+    public void InitAwake()
     {
         _animator = GetComponentInChildren<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
     }
+    
     private void OnEnable()
-    {
+    {        
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
         CheckHealthBar();        

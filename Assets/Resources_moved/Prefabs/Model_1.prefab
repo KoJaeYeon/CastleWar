@@ -2929,7 +2929,7 @@ GameObject:
   - component: {fileID: 2423515848647047500}
   - component: {fileID: 5241077552094780791}
   m_Layer: 0
-  m_Name: Archer
+  m_Name: Model_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
