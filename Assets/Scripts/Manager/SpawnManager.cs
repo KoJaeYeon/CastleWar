@@ -31,6 +31,15 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         unit_Base_Prefab = Resources.Load("Prefabs/Unit_Base") as GameObject;
 
         _root = new GameObject("UnitPrefabRoot").transform;
@@ -49,6 +58,11 @@ public class SpawnManager : MonoBehaviour
     public void OnClick_AddSlot1()
     {        
         ObjectPoolingSlot(0,0);
+    }
+
+    public void OnClick_AddSlot2()
+    {
+        ObjectPoolingSlot(1, 1);
     }
 
     public void Update()
@@ -133,6 +147,7 @@ public class SpawnManager : MonoBehaviour
             GameObject baseUnit = GetBasePrefab();
             //하위 프리팹 베이스 프리팹에 생성해주기
             GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
+            baseUnit.GetComponent<Unit>().InitAwake();
 
             //풀에 담아두기
             poolStack.Push(baseUnit);
