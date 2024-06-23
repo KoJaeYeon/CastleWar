@@ -18,6 +18,8 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    Transform _root;
+
     #region Addressible
     [SerializeField] GameObject unit_Base_Prefab;
 
@@ -31,11 +33,16 @@ public class SpawnManager : MonoBehaviour
     {
         unit_Base_Prefab = Resources.Load("Prefabs/Unit_Base") as GameObject;
 
-        GameObject root = new GameObject("UnitPrefabRoot");
+        _root = new GameObject("UnitPrefabRoot").transform;
+
+        GameObject baseRoot = new GameObject("BaseRoot");
+        baseRoot.transform.SetParent(_root);
+
         for (int i = 0; i < 200; i++)
         {
-            GameObject prefab = Instantiate(unit_Base_Prefab, root.transform);
+            GameObject prefab = Instantiate(unit_Base_Prefab, baseRoot.transform);
             prefab.SetActive(false);
+            Stack_BaseUnit.Push(prefab);
         }
     }
 
@@ -66,6 +73,7 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("Instantiate");
             return Instantiate(unit_Base_Prefab);
         }
     }
@@ -107,23 +115,28 @@ public class SpawnManager : MonoBehaviour
     {
         Stack<GameObject> poolStack = StackSpawnUnitObject[index];
         poolStack = new Stack<GameObject>();
+        GameObject slot = new GameObject($"slot[{index}]");
+        slot.transform.SetParent(_root);
         GetCacheSubPrefabModel(id, subPrefab =>
         {
-            StartCoroutine(PoolingForTerm(poolStack, subPrefab));
+            StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform));
         });
     }
 
-    IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab)
+    IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root)
     {
         for(int i = 0; i < 50; i++)
         {
             //베이스 프리팹 가져오기
             GameObject baseUnit = GetBasePrefab();
             //하위 프리팹 베이스 프리팹에 생성해주기
-            GameObject mergedUnit = Instantiate(subPrefab,baseUnit.transform);
+            GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
 
             //풀에 담아두기
-            poolStack.Push(mergedUnit);
+            poolStack.Push(baseUnit);
+
+            //루트 위치 옮겨주기
+            baseUnit.transform.SetParent(root);
             yield return new WaitForSeconds(0.1f);
         }
     }
