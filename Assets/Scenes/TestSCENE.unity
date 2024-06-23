@@ -227,6 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1131607880}
   - component: {fileID: 1131607879}
+  - component: {fileID: 1131607881}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -241,12 +242,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1131607878}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f332624e9273207478864dcc38acc811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 3480077108692597432, guid: 919a09eeb3bc47c4c87704c50a9cc3ab, type: 3}
   subPrefabAddresses:
   - Assets/Resources_moved/Prefabs/Warrior/Model_Warrior.prefab
 --- !u!4 &1131607880
@@ -264,6 +264,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1131607881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131607878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e50bed06cd466e04493c3abe7865c4a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit_Base_Prefab: {fileID: 0}
 --- !u!1 &2009784446
 GameObject:
   m_ObjectHideFlags: 0

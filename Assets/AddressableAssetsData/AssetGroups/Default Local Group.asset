@@ -18,12 +18,12 @@ MonoBehaviour:
   m_GUID: 8fcf08773a2969f47bcd1ea8de90d39b
   m_SerializeEntries:
   - m_GUID: e924bdf2fc9b9f247a720eee4598a803
-    m_Address: Assets/Resources_moved/Prefabs/Warrior/Model_Warrior.prefab
+    m_Address: Assets/Resources_moved/Prefabs/Model_Warrior.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 90cfa4975a2605c46b3cd1286c480ea0
-    m_Address: Assets/Resources_moved/Prefabs/Archer.prefab
+    m_Address: Assets/Resources_moved/Prefabs/Model_Archer.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

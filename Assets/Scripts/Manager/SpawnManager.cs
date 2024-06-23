@@ -1,8 +1,8 @@
+ï»¿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-
+using UnityEngine.ResourceManagement.AsyncOperations;
 public class SpawnManager : MonoBehaviour
 {
     private static SpawnManager _instance;
@@ -23,54 +23,84 @@ public class SpawnManager : MonoBehaviour
 
     private string defaultPath = "Assets/Resources_moved/Prefabs/Model_{0}.prefab";
 
-    private Dictionary<int, GameObject> cachedSubPrefabs = new Dictionary<int, GameObject>(); // Ä³½Ì¿ë µñ¼Å³Ê¸®
+    private Dictionary<int, GameObject> cachedSubPrefabs = new Dictionary<int, GameObject>(); // ìºì‹±ìš© ë”•ì…”ë„ˆë¦¬
 
-    private Stack<GameObject> Stack_BaseUnit = new Stack<GameObject>(); // º£ÀÌ½º À¯´Ö ´ã¾ÆÁÖ´Â ½ºÅÃ Ç®
+    private Stack<GameObject> Stack_BaseUnit = new Stack<GameObject>(); // ë² ì´ìŠ¤ ìœ ë‹› ë‹´ì•„ì£¼ëŠ” ìŠ¤íƒ í’€
 
     private void Awake()
     {
         unit_Base_Prefab = Resources.Load("Prefabs/Unit_Base") as GameObject;
-        SpawnUnitWithSubPrefab(0);
+        GetCacheSubPrefabModel(0);
     }
-    void SpawnUnitWithSubPrefab(int id)
+
+    //ëª¨ë¸ë§ ì—†ëŠ” ê¸°ì´ˆ ë² ì´ìŠ¤ëª¨ë¸ ë°˜í™˜, ê²Œì„ì„ ì‹œì‘í•  ë•Œ ë¯¸ë¦¬ ìƒì„±
+    GameObject GetBasePrefab()
     {
-
-        string address = string.Format(defaultPath, "Warrior");
-        Debug.Log(address);
-
-        //    if (cachedSubPrefabs.ContainsKey(address))
-        //    {
-        //        // Ä³½ÃµÈ ¿¡¼Â »ç¿ë
-        //        GameObject subPrefab = Instantiate(cachedSubPrefabs[address]);
-        //        AttachSubPrefabToUnit(subPrefab);
-        //    }
-        //    else
-        //    {
-        //        // ¿¡¼ÂÀ» ·ÎµåÇÏ°í Ä³½Ã¿¡ ÀúÀå
-        //        Addressables.LoadAssetAsync<GameObject>(address).Completed += handle =>
-        //        {
-        //            if (handle.Status == AsyncOperationStatus.Succeeded)
-        //            {
-        //                cachedSubPrefabs[address] = handle.Result;
-        //                GameObject subPrefab = Instantiate(handle.Result);
-        //                AttachSubPrefabToUnit(subPrefab);
-        //            }
-        //            else
-        //            {
-        //                Debug.LogError("Failed to load sub-prefab.");
-        //            }
-        //        };
-        //    }
-        //}
+        if(Stack_BaseUnit.TryPop(out GameObject result))
+        {
+            return result;
+        }
+        else
+        {
+            return Instantiate(unit_Base_Prefab);
+        }
     }
+    GameObject GetCacheSubPrefabModel(int id)
+    {
+        if (cachedSubPrefabs.ContainsKey(id))
+        {
+            // ìºì‹œëœ ì—ì…‹ ì‚¬ìš©
+            GameObject subPrefab = Instantiate(cachedSubPrefabs[id]);
+        }
+        else
+        {
+            string address = string.Format(defaultPath, id);
+            Debug.Log(address);
+            // ì—ì…‹ì„ ë¡œë“œí•˜ê³  ìºì‹œì— ì €ì¥
+            Addressables.LoadAssetAsync<GameObject>(address).Completed += handle =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    //ë¡œë“œëœ í”„ë¦¬íŒ¹ì„ ë”•ì…”ë„ˆë¦¬ì— ì¶”ê°€
+                    cachedSubPrefabs[id] = handle.Result;
+                }
+                else
+                {
+                    Debug.LogError("Failed to load sub-prefab.");
+                }
+            };
+        }
+        return cachedSubPrefabs[id];
+
+    }
+
     #endregion
 
-    //void AttachSubPrefabToUnit(GameObject subPrefab)
-    //{
-    //    GameObject unit = Instantiate(unitPrefab); // Å« ÇÁ¸®ÆÕ ÀÎ½ºÅÏ½ºÈ­
-    //    subPrefab.transform.SetParent(unit.transform); // ÇÏÀ§ ÇÁ¸®ÆÕÀ» Å« ÇÁ¸®ÆÕÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
+    #region ObjectPooling
+    Stack<GameObject>[] StackSpawnUnitObject = new Stack<GameObject>[12];
 
-    //    // ÇÊ¿äÇÑ ÃÊ±âÈ­ ÀÛ¾÷ ¼öÇà
-    //    unit.GetComponent<Unit>().InitAwake();
-    //}
+    //ì¹´ë“œë¥¼ ë“±ë¡í•  ë•Œ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜, 10ì´ˆì— ê±¸ì³ ìƒì„±
+    void ObjectPoolingSlot(int index, int id)
+    {
+        Stack<GameObject> poolStack = StackSpawnUnitObject[0];
+        poolStack = new Stack<GameObject>();
+        GameObject subPrefab = GetCacheSubPrefabModel(id);
+        StartCoroutine(PoolingForTerm(poolStack, subPrefab));
+    }
+
+    IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab)
+    {
+        for(int i = 0; i < 50; i++)
+        {
+            //ë² ì´ìŠ¤ í”„ë¦¬íŒ¹ ê°€ì ¸ì˜¤ê¸°
+            GameObject baseUnit = GetBasePrefab();
+            //í•˜ìœ„ í”„ë¦¬íŒ¹ ë² ì´ìŠ¤ í”„ë¦¬íŒ¹ì— ìƒì„±í•´ì£¼ê¸°
+            GameObject mergedUnit = Instantiate(subPrefab,baseUnit.transform);
+
+            //í’€ì— ë‹´ì•„ë‘ê¸°
+            poolStack.Push(mergedUnit);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    #endregion
 }
