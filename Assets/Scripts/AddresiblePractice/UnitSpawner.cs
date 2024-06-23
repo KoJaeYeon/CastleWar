@@ -24,11 +24,23 @@ public class UnitSpawner : MonoBehaviour
         //}
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Debug.Log("escape");
+            foreach (GameObject cachedSubPrefabs in cachedSubPrefabs.Values)
+            {
+                Debug.Log(cachedSubPrefabs);
+            }
+        }
+    }
+
     void SpawnUnitWithSubPrefab(int index)
     {
         if (index >= 0 && index < subPrefabAddresses.Count)
         {
-            string address = subPrefabAddresses[index];
+            string address = "Assets/Resources_moved/Prefabs/Model_0.prefab";
 
             if (cachedSubPrefabs.ContainsKey(address))
             {

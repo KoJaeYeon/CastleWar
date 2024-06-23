@@ -23,15 +23,39 @@ public class SpawnManager : MonoBehaviour
 
     private string defaultPath = "Assets/Resources_moved/Prefabs/Model_{0}.prefab";
 
-    private Dictionary<int, GameObject> cachedSubPrefabs = new Dictionary<int, GameObject>(); // 캐싱용 딕셔너리
-
     private Stack<GameObject> Stack_BaseUnit = new Stack<GameObject>(); // 베이스 유닛 담아주는 스택 풀
+
+    private Dictionary<int, GameObject> cachedSubPrefabs = new Dictionary<int, GameObject>(); // 캐싱용 딕셔너리
 
     private void Awake()
     {
         unit_Base_Prefab = Resources.Load("Prefabs/Unit_Base") as GameObject;
-        GetCacheSubPrefabModel(0);
+
+        GameObject root = new GameObject("UnitPrefabRoot");
+        for (int i = 0; i < 200; i++)
+        {
+            GameObject prefab = Instantiate(unit_Base_Prefab, root.transform);
+            prefab.SetActive(false);
+        }
     }
+
+    public void OnClick_AddSlot1()
+    {        
+        ObjectPoolingSlot(0,0);
+    }
+
+    public void Update()
+    {
+        if(Input.GetKeyUp(KeyCode.Escape))
+        {
+            Debug.Log("escape");
+            foreach (GameObject cachedSubPrefabs in cachedSubPrefabs.Values)
+            {
+                Debug.Log(cachedSubPrefabs);
+            }
+        }
+    }
+
 
     //모델링 없는 기초 베이스모델 반환, 게임을 시작할 때 미리 생성
     GameObject GetBasePrefab()
@@ -45,12 +69,12 @@ public class SpawnManager : MonoBehaviour
             return Instantiate(unit_Base_Prefab);
         }
     }
-    GameObject GetCacheSubPrefabModel(int id)
+    void GetCacheSubPrefabModel(int id, System.Action<GameObject> onLoaded)
     {
         if (cachedSubPrefabs.ContainsKey(id))
         {
             // 캐시된 에셋 사용
-            GameObject subPrefab = Instantiate(cachedSubPrefabs[id]);
+            onLoaded?.Invoke(cachedSubPrefabs[id]);
         }
         else
         {
@@ -61,8 +85,9 @@ public class SpawnManager : MonoBehaviour
             {
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    //로드된 프리팹을 딕셔너리에 추가
+                    // 로드된 프리팹을 딕셔너리에 추가
                     cachedSubPrefabs[id] = handle.Result;
+                    onLoaded?.Invoke(handle.Result);
                 }
                 else
                 {
@@ -70,8 +95,6 @@ public class SpawnManager : MonoBehaviour
                 }
             };
         }
-        return cachedSubPrefabs[id];
-
     }
 
     #endregion
@@ -82,10 +105,12 @@ public class SpawnManager : MonoBehaviour
     //카드를 등록할 때 실행하는 함수, 10초에 걸쳐 생성
     void ObjectPoolingSlot(int index, int id)
     {
-        Stack<GameObject> poolStack = StackSpawnUnitObject[0];
+        Stack<GameObject> poolStack = StackSpawnUnitObject[index];
         poolStack = new Stack<GameObject>();
-        GameObject subPrefab = GetCacheSubPrefabModel(id);
-        StartCoroutine(PoolingForTerm(poolStack, subPrefab));
+        GetCacheSubPrefabModel(id, subPrefab =>
+        {
+            StartCoroutine(PoolingForTerm(poolStack, subPrefab));
+        });
     }
 
     IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab)
