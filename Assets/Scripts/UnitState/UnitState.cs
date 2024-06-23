@@ -495,13 +495,14 @@ public class UnitDeadState : UnitState
 
     public override void ExecuteFixedUpdate()
     {
+
     }
 
     public override void ExecuteUpdate() { }
 
     public override void Exit()
     {
-
+        SpawnManager.Instance.OnCalled_ReturnUnit(_unit.SpwanSlotIndex, _unit.gameObject);
     }
 
 }

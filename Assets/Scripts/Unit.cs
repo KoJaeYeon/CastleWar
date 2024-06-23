@@ -34,6 +34,7 @@ public class Unit : MonoBehaviour, IAttack
     Rigidbody _rigidbody;
 
     float _searchRadius = 12f;
+    int _spawnSlotIndex = 0;
 
     public float Helath
     {
@@ -51,6 +52,11 @@ public class Unit : MonoBehaviour, IAttack
         {
             _unitId = value;
         }
+    }
+
+    public int SpwanSlotIndex
+    {
+        get => _spawnSlotIndex;
     }
 
     
@@ -71,10 +77,11 @@ public class Unit : MonoBehaviour, IAttack
     {
         get => _animator;
     }
-    public void InitAwake()
+    public void InitAwake(int index)
     {
         _animator = GetComponentInChildren<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
+        _spawnSlotIndex = index;
     }
     
     private void OnEnable()
