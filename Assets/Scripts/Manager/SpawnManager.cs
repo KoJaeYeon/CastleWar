@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
     Transform _root;
 
     #region Addressible
-    [SerializeField] GameObject unit_Base_Prefab;
+    GameObject unit_Base_Prefab;
 
     private string defaultPath = "Assets/Resources_moved/Prefabs/Model_{0}.prefab";
 
@@ -38,7 +38,7 @@ public class SpawnManager : MonoBehaviour
         GameObject baseRoot = new GameObject("BaseRoot");
         baseRoot.transform.SetParent(_root);
 
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < 500; i++)
         {
             GameObject prefab = Instantiate(unit_Base_Prefab, baseRoot.transform);
             prefab.SetActive(false);
@@ -111,12 +111,14 @@ public class SpawnManager : MonoBehaviour
     Stack<GameObject>[] StackSpawnUnitObject = new Stack<GameObject>[12];
 
     //카드를 등록할 때 실행하는 함수, 10초에 걸쳐 생성
-    void ObjectPoolingSlot(int index, int id)
+    void ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
     {
         Stack<GameObject> poolStack = StackSpawnUnitObject[index];
         poolStack = new Stack<GameObject>();
         GameObject slot = new GameObject($"slot[{index}]");
         slot.transform.SetParent(_root);
+
+        //subPrefab의 비동기 작업이 완료된 후 콜백
         GetCacheSubPrefabModel(id, subPrefab =>
         {
             StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform));
