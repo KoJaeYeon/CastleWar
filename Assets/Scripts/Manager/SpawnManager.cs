@@ -120,7 +120,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     //카드를 등록할 때 실행하는 함수, 10초에 걸쳐 생성
-    void ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
+    public void OnAdd_ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
     {
         Stack<GameObject> poolStack = StackSpawnUnitObject[index];
         poolStack = new Stack<GameObject>();
@@ -131,10 +131,9 @@ public class SpawnManager : MonoBehaviour
         GetCacheSubPrefabModel(id, subPrefab =>
         {
             StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, index));
+            //숫자가 부족하면 추가생성을 위한 프리팹 저장
+            mergedPrefab.Add(index, Instantiate(poolStack.Peek(),slot.transform));
         });
-
-        //숫자가 부족하면 추가생성을 위한 프리팹 저장
-        mergedPrefab.Add(index,Instantiate(poolStack.Peek()));
     }
 
     IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root, int index)
@@ -145,7 +144,7 @@ public class SpawnManager : MonoBehaviour
             GameObject baseUnit = GetBasePrefab();
             //하위 프리팹 베이스 프리팹에 생성해주기
             GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
-            baseUnit.GetComponent<Unit>().InitAwake(index);
+            baseUnit.GetComponent<Unit>().SetSpawnSlotIndex(index);
 
             //풀에 담아두기
             poolStack.Push(baseUnit);
@@ -165,7 +164,9 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
-            return Instantiate(mergedPrefab[index]);
+            GameObject newPrefab = Instantiate(mergedPrefab[index]);
+            newPrefab.SetActive(false);
+            return newPrefab;
         }
     }
 

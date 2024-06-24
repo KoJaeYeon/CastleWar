@@ -28,4 +28,14 @@ public class AddPanel : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void OnClick_AddButton()
+    {
+        AddSlot(0);
+    }
+
+    private void AddSlot(int index)
+    {
+        SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, 0);
+    }
 }

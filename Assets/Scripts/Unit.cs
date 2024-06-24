@@ -75,12 +75,17 @@ public class Unit : MonoBehaviour, IAttack
 
     public Animator Animator
     {
-        get => _animator;
+        get
+        {
+            if(_animator == null)
+            {
+                _animator = GetComponentInChildren<Animator>();
+            }
+            return _animator;
+        }
     }
-    public void InitAwake(int index)
+    public void SetSpawnSlotIndex(int index)
     {
-        _animator = GetComponentInChildren<Animator>();
-        _rigidbody = GetComponent<Rigidbody>();
         _spawnSlotIndex = index;
     }
     
@@ -227,6 +232,10 @@ public class Unit : MonoBehaviour, IAttack
 
     public void OnCollisionExit(Collision collision)
     {
+        if(_rigidbody == null)
+        {
+            _rigidbody = GetComponent<Rigidbody>();
+        }
         // 충돌 시에도 속도를 0으로 유지
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
