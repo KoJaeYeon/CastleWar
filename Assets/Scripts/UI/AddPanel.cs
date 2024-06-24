@@ -5,11 +5,17 @@ using UnityEngine;
 public class AddPanel : MonoBehaviour
 {
     Animator _animator;
+    [SerializeField] GameObject ChoicePanel;
     int _index = -1;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        ChoicePanel.SetActive(false);
     }
 
     public void OnClick_ActivePanel(int index)
