@@ -81,10 +81,15 @@ public class DatabaseManager : MonoBehaviour
     private static MySqlConnection _dbConnection;
 
     Dictionary<int, UnitData> unitDataDic = new Dictionary<int, UnitData>();
+    Dictionary<int, Sprite> unitSpriteDic = new Dictionary<int, Sprite>();
 
     public UnitData GetTroopData(int id)
     {
         return unitDataDic[id];
+    }
+    public Sprite GetSpriteData(int id)
+    {
+        return unitSpriteDic[id];
     }
 
     private void Awake()
@@ -161,7 +166,7 @@ public class DatabaseManager : MonoBehaviour
                         cardType = (CardType)Enum.Parse(typeof(CardType), columns[11]);
                     }
 
-                    unitDataDic[id] = new UnitData(
+                    unitDataDic.Add(id,new UnitData(
                         id,
                         name,
                         cost,
@@ -174,7 +179,13 @@ public class DatabaseManager : MonoBehaviour
                         attackType,
                         population,
                         cardType
-                    );
+                    ));
+                    if(id == 5 || id == 6)
+                    {
+                        Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
+                        unitSpriteDic.Add(id, unitSprite);
+                    }
+
                 }
                 catch
                 {

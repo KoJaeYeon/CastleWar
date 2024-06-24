@@ -60,10 +60,6 @@ public class UnitMoveState : UnitState
         Debug.Log("Entering Move State");
     }
 
-    public override void ExecuteUpdate()
-    {
-    }
-
     public override void ExecuteFixedUpdate()
     {
         SearchEnemy();
@@ -304,9 +300,6 @@ public class UnitAttackState : UnitState
     {
         CheckEnemy();
     }
-
-    public override void ExecuteUpdate() { }
-
     public override void Exit()
     {
         SetAnimationisAttack(false);
@@ -358,11 +351,6 @@ public class UnitRetreatState : UnitState
         _castleSearched =false;
         UnitManager.Instance.RegisterCancelCallback(_unit.HandleOnMoveState);
     }
-
-    public override void ExecuteUpdate()
-    {
-    }
-
     public override void ExecuteFixedUpdate()
     {
         if(_castleSearched)
@@ -492,13 +480,6 @@ public class UnitDeadState : UnitState
         _unit.Animator.SetTrigger("Death");
         UnitManager.Instance.UnRegisterRetreatCallback(_unit.HandleOnRetreatState);
     }
-
-    public override void ExecuteFixedUpdate()
-    {
-
-    }
-
-    public override void ExecuteUpdate() { }
 
     public override void Exit()
     {
