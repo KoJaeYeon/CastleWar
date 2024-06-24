@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class AddPanel : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    Animator _animator;
+    int _index = -1;
+
+    private void Awake()
     {
-        
+        _animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnClick_ActivePanel(int index)
     {
-        
+        gameObject.SetActive(true);
+        _animator.SetBool("isActive", true);
+        _index = index;
+    }
+
+    public void OnClick_DeactivePanel()
+    {
+        _animator.SetBool("isActive",false);
+    }
+
+    public void OnCalled_SetActiveFalse()
+    {
+        gameObject.SetActive(false);
     }
 }
