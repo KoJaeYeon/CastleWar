@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class AddPanel : MonoBehaviour
 {
     Animator _animator;
     [SerializeField] GameObject ChoicePanel;
-    int _index = -1;
+    int _index = 0;
+
+    UnitSelectSlot _slot;
 
     private void Awake()
     {
@@ -18,7 +21,7 @@ public class AddPanel : MonoBehaviour
         ChoicePanel.SetActive(false);
     }
 
-    public void OnClick_ActivePanel(int index)
+    public void OnClick_ActivePanel(int index, Transform brnTrans)
     {
         gameObject.SetActive(true);
         _animator.SetBool("isActive", true);
@@ -35,13 +38,38 @@ public class AddPanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void OnCalled_UnitSelctSlot(UnitSelectSlot unitSelectSlot)
+    {
+        _slot = unitSelectSlot;
+        ChoicePanel.SetActive(true);
+        Renew_ChoicePanel();
+    }
+
     public void OnClick_AddButton()
     {
-        AddSlot(0);
+        AddSlot(_index++);
     }
 
     private void AddSlot(int index)
     {
-        SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, 0);
+        if (_slot != null)
+        {
+            SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, _slot.id);
+            ChoicePanel.SetActive(false);
+            _slot.OnCalled_Add();
+        }
     }
+
+    #region ChoicePanel
+    [SerializeField] TextMeshProUGUI Text_Population;
+    [SerializeField] TextMeshProUGUI Text_SelectUnitName;
+    [SerializeField] TextMeshProUGUI Text_SpawnTimer;
+    void Renew_ChoicePanel()
+    {
+        UnitData unitData = DatabaseManager.Instance.GetUnitData(_slot.id);
+        Text_SelectUnitName.text = unitData.name;
+        Text_Population.text = unitData.Population.ToString();
+        Text_SpawnTimer.text = "10";
+    }
+    #endregion
 }

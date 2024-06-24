@@ -50,16 +50,6 @@ public class SpawnManager : MonoBehaviour
         _root = new GameObject("UnitPrefabRoot").transform;
     }
 
-    //public void OnClick_AddSlot1()
-    //{        
-    //    ObjectPoolingSlot(0,0);
-    //}
-
-    //public void OnClick_AddSlot2()
-    //{
-    //    ObjectPoolingSlot(1, 1);
-    //}
-
     //모델링 없는 기초 베이스모델 반환, 게임을 시작할 때 미리 생성
     GameObject GetBasePrefab()
     {
@@ -119,7 +109,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    //카드를 등록할 때 실행하는 함수, 10초에 걸쳐 생성
+    //카드를 등록할 때 실행하는 함수, 9초에 걸쳐 생성
     public void OnAdd_ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
     {
         Stack<GameObject> poolStack = StackSpawnUnitObject[index];
@@ -151,7 +141,7 @@ public class SpawnManager : MonoBehaviour
 
             //루트 위치 옮겨주기
             baseUnit.transform.SetParent(root);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
     #endregion

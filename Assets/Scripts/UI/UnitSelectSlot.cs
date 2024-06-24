@@ -5,21 +5,39 @@ using UnityEngine.UI;
 
 public class UnitSelectSlot : MonoBehaviour
 {
-    [SerializeField] int id;
-    Image image;
-    Button button;
+    public int id { get; private set; }
 
     private void Awake()
     {
-        image = GetComponent<Image>();
-        button = GetComponent<Button>();
+        id = 4;
+        Button button = GetComponent<Button>();
+        button.onClick.AddListener(OnClicked_Slot);
     }
 
     private void OnEnable()
     {
-        if(image.sprite == null)
+        Image image = GetComponent<Image>();
+        if (image.sprite == null)
         {
             image.sprite = DatabaseManager.Instance.GetSpriteData(id);
         }
     }
+
+    public void OnCalled_Add()
+    {
+        transform.GetChild(0).gameObject.SetActive(true);
+        Button button = GetComponent<Button> ();
+        button.interactable =false;
+    }
+    void OnClicked_Slot()
+    {
+        SearchAddPanel().GetComponent<AddPanel>().OnCalled_UnitSelctSlot(this);
+    }
+
+    Transform SearchAddPanel()
+    {
+        return transform.parent.parent.parent;
+    }
+
+
 }

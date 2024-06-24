@@ -83,7 +83,7 @@ public class DatabaseManager : MonoBehaviour
     Dictionary<int, UnitData> unitDataDic = new Dictionary<int, UnitData>();
     Dictionary<int, Sprite> unitSpriteDic = new Dictionary<int, Sprite>();
 
-    public UnitData GetTroopData(int id)
+    public UnitData GetUnitData(int id)
     {
         return unitDataDic[id];
     }
@@ -180,7 +180,7 @@ public class DatabaseManager : MonoBehaviour
                         population,
                         cardType
                     ));
-                    if(id == 5 || id == 6)
+                    if(id == 5 || id == 4)
                     {
                         Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
                         unitSpriteDic.Add(id, unitSprite);
