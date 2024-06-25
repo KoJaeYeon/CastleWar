@@ -1,0 +1,40 @@
+﻿Id,Name,Cost,UnitType,Health,AttackDamage,AttackSpeed,AttackRange,MoveSpeed,AttackType,Population,CardType
+0,궁수탑,50,Building,1650,45,0.4,7,0,Ground,5,Common
+1,포탑,50,Building,1650,296,1.7,6,0,Ground,5,Common
+2,대공포탑,50,Building,1650,130,0.8,9,0,Air,5,Common
+3,코볼트,8,Ground,120,52,0.7,3,7,Ground,1,Common
+4,전열보병,25,Ground,730,106,1.3,3,7,Ground,3,Common
+5,헌터,15,Ground,195,45,0.8,5,5,Both,2,Common
+6,트릭스터,18,Ground,366,45,0.9,2,5,Both,2,Common
+7,방패 펭귄병,15,Ground,400,52,1.5,3,5,Ground,2,Common
+8,리자드 투창병,15,Ground,240,106,2.6,6,5,Ground,2,Common
+9,꼬마 바이킹,25,Ground,1288,256,2.2,3,7,Building,3,Epic
+10,마나 캐논,75,Building,3660,685,2.8,8,5,Ground,6,Rare
+11,발리스타,75,Building,3660,1021,2.6,7,5,Ground,6,Rare
+12,글레이셔,40,Ground,926,259,2,5,5,Both,4,Legendary
+13,해칠링,40,Air,133,121,1.2,3,7,Both,4,Rare
+14,그리즐리,60,Ground,3594,253,1.5,3,3,Building,5,Rare
+15,요술사,48,Ground,1048,511,2,5,5,Both,4,Rare
+16,스매셔,50,Ground,1617,572,2.1,3,5,Ground,5,Rare
+17,용인,50,Ground,1487,201,1.1,3,5,Ground,5,Rare
+18,소총 아울베어,45,Ground,925,237,2.3,7,5,Both,4,Rare
+19,모스레이디,40,Air,938,180,1.6,2,7,Both,4,Rare
+20,전투 코끼리,50,Ground,2641,237,1.4,7,7,Building,5,Rare
+21,인터셉터,35,Air,532,157,1.4,2,7,Ground,3,Rare
+22,전투 고릴라,45,Ground,1158,615,2.8,10,3,Building,5,Rare
+23,샐러맨더,50,Ground,1138,526,2.3,6,3,Ground,5,Rare
+24,순교자,40,Ground,1019,243,1.5,4,5,Both,4,Epic
+25,비행선,35,Air,2407,195,3,1,7,Building,3,Legendary
+26,초월의 탑,150,Building,7015,5456,1,99,7,Both,8,Legendary
+27,아케인 블래스터,100,Building,6442,324,4,7,5,Both,7,Epic
+28,그리폰 라이더,70,Air,1683,354,1.5,8,5,Ground,5,Legendary
+29,대포 거북,85,Ground,1772,672,2.9,8,7,Ground,6,Epic
+30,강철 거인,100,Ground,7972,1047,2.4,3,3,Building,8,Legendary
+31,드래곤,100,Air,5047,448,2.3,4,3,Both,8,Epic
+32,대공포병,80,Ground,2206,934,2.1,6,7,Both,6,Epic
+33,엑스 버팔로,90,Ground,3704,1517,2.7,3,3,Ground,7,Legendary
+34,이블리스,80,Air,3293,522,4,5,3,Both,6,Legendary
+35,사령여제,70,Ground,1890,495,1.3,6,7,Both,5,Legendary
+36,열기구 펭귄병,40,Air,720,128,2.2,2,5,Both,4,Rare
+37,저격수,100,Ground,1198,1091,2.9,10,3,Both,6,Legendary
+38,켄타우루스,80,Ground,2738,730,1.6,3,7,Ground,6,Epic
