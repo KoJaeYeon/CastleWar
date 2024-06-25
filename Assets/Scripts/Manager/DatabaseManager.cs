@@ -11,7 +11,8 @@ public enum UnitType
     Ground,
     Air,
     Building,
-    Both
+    Both,
+    Skill
 }
 public enum CardType
 {

@@ -46,7 +46,6 @@ public class PlayerPanel : MonoBehaviour
 
     public void OnCalled_Added(int index, Vector3 slotInitPos, int id)
     {
-        Debug.Log(slotInitPos);
         Transform targetObjTrans = Content.GetChild(index);
         StartCoroutine(CardAnimation(slotInitPos, targetObjTrans, id, index)); //카드 등록 코루틴 실행
         SetSlotButtonIneractable(index, false);
@@ -157,8 +156,8 @@ public class PlayerPanel : MonoBehaviour
 
             Action spawnAction = () =>
             {
-                //[TODO] 클릭하면 소환대기상태로 변경해야함
-                SpawnManager.Instance.OnCalled_GetUnit(index).SetActive(true);
+                ISelectable selectable = spawnButton.transform.GetComponent<ISelectable>();
+                TouchManager.Instance.ChangeSelectalble(selectable);
             };
             spawnButton.onClick.AddListener(new UnityAction(spawnAction)); // 새 액션 리스너 추가
 

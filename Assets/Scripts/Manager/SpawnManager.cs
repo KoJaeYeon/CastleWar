@@ -73,7 +73,6 @@ public class SpawnManager : MonoBehaviour
         else
         {
             string address = string.Format(defaultPath, id);
-            Debug.Log(address);
             // 에셋을 로드하고 캐시에 저장
             Addressables.LoadAssetAsync<GameObject>(address).Completed += handle =>
             {
@@ -129,9 +128,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root, int index)
     {
-        Debug.Log(StackSpawnUnitObject.Length);
-
-        for(int i = 0; i < 30; i++)
+        for (int i = 0; i < 30; i++)
         {
             //베이스 프리팹 가져오기
             GameObject baseUnit = GetBasePrefab();
