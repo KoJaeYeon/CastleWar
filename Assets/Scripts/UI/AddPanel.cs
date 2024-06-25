@@ -34,9 +34,9 @@ public class AddPanel : MonoBehaviour
         _animator.SetBool("isActive",false);
     }
 
-    public void OnCalled_SetActive(bool isActive)
+    public void m_OnCalled_SetActiveFalse() //애니메이션에서 호출하는 함수
     {
-        gameObject.SetActive(isActive);
+        gameObject.SetActive(false);
     }
 
     //유닛 초상화를 클릭 했을 때
