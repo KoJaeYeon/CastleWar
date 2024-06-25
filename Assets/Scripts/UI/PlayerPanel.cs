@@ -42,6 +42,7 @@ public class PlayerPanel : MonoBehaviour
     public void OnClick_AddPanel_Active()
     {
         AddPanel.OnClick_ActivePanel();
+        TouchManager.Instance.ChangeSelectalble(null);
     }
 
     public void OnCalled_Added(int index, Vector3 slotInitPos, int id)
@@ -154,9 +155,11 @@ public class PlayerPanel : MonoBehaviour
             spawnButton.interactable = true;
             spawnButton.onClick.RemoveAllListeners(); // 기존 리스너 모두 제거
 
+            Btn_UnitAdd btn_UnitAdd = spawnButton.GetComponent<Btn_UnitAdd>();
+            ISelectable selectable = btn_UnitAdd.GetComponent<ISelectable>();
+
             Action spawnAction = () =>
-            {
-                ISelectable selectable = spawnButton.transform.GetComponent<ISelectable>();
+            {                
                 TouchManager.Instance.ChangeSelectalble(selectable);
             };
             spawnButton.onClick.AddListener(new UnityAction(spawnAction)); // 새 액션 리스너 추가

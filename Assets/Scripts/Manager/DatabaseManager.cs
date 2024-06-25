@@ -95,12 +95,13 @@ public class DatabaseManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance == null)
+        if (_instance == null || _instance == this)
         {
             _instance = this;
         }
         else
         {
+            Debug.Log("Destroy");
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this.gameObject);

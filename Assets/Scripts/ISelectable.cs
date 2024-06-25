@@ -9,4 +9,6 @@ public interface ISelectable
 
     public void OnPointerDown();
     public void OnPointerUp();
+
+    public void ExecuteUpdate(Vector3 vector3);
 }

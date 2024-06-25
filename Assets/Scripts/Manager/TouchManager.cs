@@ -35,16 +35,46 @@ public class TouchManager : MonoBehaviour
 
     public void ChangeSelectalble(ISelectable selectable)
     {
+        if (_selectable == selectable)
+        {
+            return;
+        }
+
         Debug.Log(selectable);
-        if(_selectable != null)
+        if (_selectable != null)
         {
             _selectable.Canceled();
-        }        
+        }
         _selectable = selectable;
-        if(_selectable != null)
+        if (_selectable != null)
         {
             _selectable.Selected();
         }
+
+    }
+
+    public void OnPointerUpSelectable()
+    {
+        if ( _selectable != null )
+        {
+            _selectable.OnPointerUp();
+        }
         
+    }
+
+    public void OnPointerDownSelectable()
+    {
+        if (_selectable != null)
+        {
+            _selectable.OnPointerDown();
+        }
+    }
+
+    public void UpdateSelectable(Vector3 touchPoint)
+    {
+        if (_selectable != null)
+        {
+            _selectable.ExecuteUpdate(touchPoint);
+        }
     }
 }

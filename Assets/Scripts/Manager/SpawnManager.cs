@@ -143,7 +143,6 @@ public class SpawnManager : MonoBehaviour
             baseUnit.transform.SetParent(root);
             yield return new WaitForSeconds(0.3f);
         }
-        Debug.Log(StackSpawnUnitObject.Length);
     }
     #endregion
 

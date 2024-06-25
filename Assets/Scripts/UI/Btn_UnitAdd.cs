@@ -2,8 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TouchType
+{
+    Unit, NotUnit, Mana
+}
 public class Btn_UnitAdd : MonoBehaviour,ISelectable
 {
+    TouchType touchType = TouchType.Unit;
+    bool isDown = false;
+    public void SetInit()
+    {
+
+    }
     public void Canceled()
     {
         Debug.Log($"{name} Canceled");
@@ -14,23 +24,21 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
         Debug.Log($"{name} Selected");
     }
 
-    void ISelectable.Canceled()
+    public void OnPointerDown()
     {
-        throw new System.NotImplementedException();
+        isDown = true;
     }
 
-    void ISelectable.OnPointerDown()
+    public void OnPointerUp()
     {
-        throw new System.NotImplementedException();
+        isDown = false;
     }
 
-    void ISelectable.OnPointerUp()
+    public void ExecuteUpdate(Vector3 touchPos)
     {
-        throw new System.NotImplementedException();
-    }
-
-    void ISelectable.Selected()
-    {
-        throw new System.NotImplementedException();
+        if(isDown )
+        {
+            Debug.Log($"Spawn : {touchPos}");
+        }
     }
 }
