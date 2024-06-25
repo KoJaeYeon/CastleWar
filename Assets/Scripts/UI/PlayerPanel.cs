@@ -92,7 +92,7 @@ public class PlayerPanel : MonoBehaviour
         cardPrefab.transform.position = InitPos; // 초기 위치 설정
 
         Image image = cardPrefab.GetComponent<Image>();
-        image.sprite = DatabaseManager.Instance.GetSpriteData(id); // 스프라이트 적용하기
+        image.sprite = DatabaseManager.Instance.OnGetSpriteData(id); // 스프라이트 적용하기
 
         while (elapsedTime <= duration) // 카드 등록 애니메이션(날라오기)
         {
@@ -125,7 +125,7 @@ public class PlayerPanel : MonoBehaviour
             }
             else
             {
-                ActiveButtonOnCoolDown(targetTrans,index);
+                ActiveButtonOnCoolDown(targetTrans,index,id);
                 break; // elapsedTime이 10초에 도달하면 루프 종료
             }
             yield return null; // 다음 프레임까지 대기
@@ -136,7 +136,7 @@ public class PlayerPanel : MonoBehaviour
     void ActiveButtonImageWithMask(Transform targetTrans, int id)
     {
         Image buttonImage = targetTrans.GetComponent<Image>();
-        buttonImage.sprite = DatabaseManager.Instance.GetSpriteData(id);
+        buttonImage.sprite = DatabaseManager.Instance.OnGetSpriteData(id);
 
         var plusImage = targetTrans.GetChild(0).gameObject;
         var maskImage = targetTrans.GetChild(1).gameObject;
@@ -147,7 +147,7 @@ public class PlayerPanel : MonoBehaviour
         targetTrans.localScale = Vector3.one;
     }
 
-    void ActiveButtonOnCoolDown(Transform targetTrans, int index)
+    void ActiveButtonOnCoolDown(Transform targetTrans, int index, int id)
     {
         Button spawnButton = targetTrans.GetComponent<Button>();
         if (spawnButton != null)
@@ -157,6 +157,8 @@ public class PlayerPanel : MonoBehaviour
 
             Btn_UnitAdd btn_UnitAdd = spawnButton.GetComponent<Btn_UnitAdd>();
             ISelectable selectable = btn_UnitAdd.GetComponent<ISelectable>();
+
+            btn_UnitAdd.SetInit(index, id);
 
             Action spawnAction = () =>
             {                

@@ -69,7 +69,7 @@ public class AddPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI Text_SpawnTimer;
     void Renew_ChoicePanel()
     {
-        UnitData unitData = DatabaseManager.Instance.GetUnitData(_slot.id);
+        UnitData unitData = DatabaseManager.Instance.OnGetUnitData(_slot.id);
         Text_SelectUnitName.text = unitData.name;
         Text_Population.text = unitData.Population.ToString();
         Text_SpawnTimer.text = "10";

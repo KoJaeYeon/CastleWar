@@ -19,7 +19,7 @@ public class UnitSelectSlot : MonoBehaviour
         Image image = GetComponent<Image>();
         if (image.sprite == null)
         {
-            image.sprite = DatabaseManager.Instance.GetSpriteData(id);
+            image.sprite = DatabaseManager.Instance.OnGetSpriteData(id);
         }
     }
 

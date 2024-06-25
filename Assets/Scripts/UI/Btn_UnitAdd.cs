@@ -10,9 +10,21 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
 {
     TouchType touchType = TouchType.Unit;
     bool isDown = false;
-    public void SetInit()
+    int _index;
+    public void SetInit(int index, int id)
     {
-
+        _index = index;
+        var unitData = DatabaseManager.Instance.OnGetUnitData(id);
+        switch(unitData.unitType)
+        {
+            case UnitType.Ground:
+            case UnitType.Air:
+                touchType = TouchType.Unit;
+                break;
+            default:
+                touchType = TouchType.NotUnit;
+                break;
+        }
     }
     public void Canceled()
     {
@@ -38,7 +50,14 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     {
         if(isDown )
         {
-            Debug.Log($"Spawn : {touchPos}");
+            if(touchType == TouchType.Unit)
+            {
+                var spawnUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);
+                spawnUnit.SetActive(true);
+                touchPos.y = 0;
+                spawnUnit.transform.position = touchPos;
+                Debug.Log($"Spawn : {touchPos}");
+            }
         }
     }
 }
