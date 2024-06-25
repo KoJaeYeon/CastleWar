@@ -88,13 +88,20 @@ public class Unit : MonoBehaviour, IAttack
     {
         _spawnSlotIndex = index;
     }
-    
-    private void OnEnable()
-    {        
+
+    public void StartState()
+    {
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
-        CheckHealthBar();        
+        CheckHealthBar();
     }
+    
+    //private void OnEnable()
+    //{        
+    //    _currentState = new UnitIdleState(this);
+    //    _currentState.Enter();
+    //    CheckHealthBar();        
+    //}
 
     private void OnDisable()
     {
@@ -103,12 +110,20 @@ public class Unit : MonoBehaviour, IAttack
 
     private void Update()
     {
-        _currentState.ExecuteUpdate();
+        if(_currentState != null)
+        {
+            _currentState.ExecuteUpdate();
+        }
+        
     }
 
     void FixedUpdate()
     {
-        _currentState.ExecuteFixedUpdate();
+        if(_currentState != null)
+        {
+            _currentState.ExecuteFixedUpdate();
+        }
+        
     }
 
     public void CheckHealthBar()

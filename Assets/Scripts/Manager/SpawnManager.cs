@@ -73,7 +73,6 @@ public class SpawnManager : MonoBehaviour
         else
         {
             string address = string.Format(defaultPath, id);
-            Debug.Log(address);
             // 에셋을 로드하고 캐시에 저장
             Addressables.LoadAssetAsync<GameObject>(address).Completed += handle =>
             {
@@ -112,8 +111,8 @@ public class SpawnManager : MonoBehaviour
     //카드를 등록할 때 실행하는 함수, 9초에 걸쳐 생성
     public void OnAdd_ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
     {
+        StackSpawnUnitObject[index] = new Stack<GameObject>();
         Stack<GameObject> poolStack = StackSpawnUnitObject[index];
-        poolStack = new Stack<GameObject>();
         GameObject slot = new GameObject($"slot[{index}]");
         slot.transform.SetParent(_root);
 
@@ -122,13 +121,14 @@ public class SpawnManager : MonoBehaviour
         {
             StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, index));
             //숫자가 부족하면 추가생성을 위한 프리팹 저장
-            mergedPrefab.Add(index, Instantiate(poolStack.Peek(),slot.transform));
+            mergedPrefab.Add(index, Instantiate(poolStack.Peek(),slot.transform));            
         });
+        
     }
 
     IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root, int index)
     {
-        for(int i = 0; i < 30; i++)
+        for (int i = 0; i < 30; i++)
         {
             //베이스 프리팹 가져오기
             GameObject baseUnit = GetBasePrefab();
@@ -148,6 +148,8 @@ public class SpawnManager : MonoBehaviour
 
     public GameObject OnCalled_GetUnit(int index)
     {
+        Debug.Log(StackSpawnUnitObject[index].Count);
+        Debug.Log(index);
         if(StackSpawnUnitObject[index].TryPop(out GameObject result))
         {
             return result;
@@ -160,7 +162,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void OnCalled_ReturnUnit(int index, GameObject returnUnit)
+    public void OnCalled_ReturnUnit(int index, GameObject returnUnit) //유닛 복귀할때 또는 죽을 때
     {
         StackSpawnUnitObject[index].Push(returnUnit);
     }

@@ -11,7 +11,8 @@ public enum UnitType
     Ground,
     Air,
     Building,
-    Both
+    Both,
+    Skill
 }
 public enum CardType
 {
@@ -25,7 +26,7 @@ public struct UnitData
     public int id;
     public string name;
     public int cost;
-    public UnitType Attack;
+    public UnitType unitType;
     public float health;
     public float AttackDamage;
     public float AttackSpeed;
@@ -35,12 +36,12 @@ public struct UnitData
     public int Population;
     public CardType cardType;
 
-    public UnitData(int id, string name, int cost, UnitType attack, float health, float attackDamage, float attackSpeed, float attackRange, int moveSpeed, UnitType attackType, int population, CardType cardType)
+    public UnitData(int id, string name, int cost, UnitType unitType, float health, float attackDamage, float attackSpeed, float attackRange, int moveSpeed, UnitType attackType, int population, CardType cardType)
     {
         this.id = id;
         this.name = name;
         this.cost = cost;
-        this.Attack = attack;
+        this.unitType = unitType;
         this.health = health;
         this.AttackDamage = attackDamage;
         this.AttackSpeed = attackSpeed;
@@ -83,23 +84,24 @@ public class DatabaseManager : MonoBehaviour
     Dictionary<int, UnitData> unitDataDic = new Dictionary<int, UnitData>();
     Dictionary<int, Sprite> unitSpriteDic = new Dictionary<int, Sprite>();
 
-    public UnitData GetUnitData(int id)
+    public UnitData OnGetUnitData(int id)
     {
         return unitDataDic[id];
     }
-    public Sprite GetSpriteData(int id)
+    public Sprite OnGetSpriteData(int id)
     {
         return unitSpriteDic[id];
     }
 
     private void Awake()
     {
-        if (_instance == null)
+        if (_instance == null || _instance == this)
         {
             _instance = this;
         }
         else
         {
+            Debug.Log("Destroy");
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
@@ -121,8 +123,6 @@ public class DatabaseManager : MonoBehaviour
             string result = DeformatResult(dataSet);
         }
     }
-
-
     private string DeformatResult(DataSet dataSet)
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -197,9 +197,6 @@ public class DatabaseManager : MonoBehaviour
         }
         return stringBuilder.ToString();
     }
-
-
-
 
     public static DataSet OnSelectRequest(string queryStr, string tableName)
     {
