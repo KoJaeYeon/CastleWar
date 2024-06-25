@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -22,7 +22,7 @@ public class PlayerPanel : MonoBehaviour
             if (i != 0)
             {
                 var plusImage = Content.GetChild(i).GetChild(0).gameObject;
-                plusImage.SetActive(false); //ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
+                plusImage.SetActive(false); //ì´ë¯¸ì§€ ë¹„í™œì„±í™”
                 button.interactable = false;
             }
 
@@ -48,11 +48,11 @@ public class PlayerPanel : MonoBehaviour
     {
         Debug.Log(slotInitPos);
         Transform targetObjTrans = Content.GetChild(index);
-        StartCoroutine(CardAnimation(slotInitPos, targetObjTrans, id, index)); //Ä«µå µî·Ï ÄÚ·çÆ¾ ½ÇÇà
+        StartCoroutine(CardAnimation(slotInitPos, targetObjTrans, id, index)); //ì¹´ë“œ ë“±ë¡ ì½”ë£¨í‹´ ì‹¤í–‰
         SetSlotButtonIneractable(index, false);
-        if(index != 5) // ¸¶Áö¸·½½·Ô Á¦¿Ü
+        if(index != 5) // ë§ˆì§€ë§‰ìŠ¬ë¡¯ ì œì™¸
         {
-            EnableNextSlot(index + 1); // ´ÙÀ½½½·Ô ´ë±â È°¼ºÈ­
+            EnableNextSlot(index + 1); // ë‹¤ìŒìŠ¬ë¡¯ ëŒ€ê¸° í™œì„±í™”
         }
         else
         {
@@ -65,14 +65,14 @@ public class PlayerPanel : MonoBehaviour
     void EnableNextSlot(int index)
     {
         var nextButtonSlot = Content.GetChild(index).GetChild(0).gameObject;
-        nextButtonSlot.SetActive(true); //ÀÌ¹ÌÁö È°¼ºÈ­
+        nextButtonSlot.SetActive(true); //ì´ë¯¸ì§€ í™œì„±í™”
         SetSlotButtonIneractable(index, true);
     }
 
     void SetSlotButtonIneractable(int index, bool ineractable)
     {
         Button targetBtn = Content.GetChild(index).GetComponent<Button>();
-        targetBtn.interactable = ineractable; //¹öÆ° È°¼ºÈ­
+        targetBtn.interactable = ineractable; //ë²„íŠ¼ í™œì„±í™”
     }
 
 
@@ -81,42 +81,42 @@ public class PlayerPanel : MonoBehaviour
         Vector3 targetPos = targetTrans.position;
         targetTrans.localScale = Vector3.one * 1.2f;
 
-        float duration = 1.0f; // ÀÌµ¿ ½Ã°£ 1ÃÊ
-        float elapsedTime = 0.0f; // °æ°ú ½Ã°£
+        float duration = 1.0f; // ì´ë™ ì‹œê°„ 1ì´ˆ
+        float elapsedTime = 0.0f; // ê²½ê³¼ ì‹œê°„
 
-        // °è¼ö °è»ê
+        // ê³„ìˆ˜ ê³„ì‚°
         float a = (targetPos.y - InitPos.y) / 0.4f;
         float b = InitPos.y - 0.09f * a;
 
-        GameObject cardPrefab = Instantiate(CardPrefab, transform); // Ä«µå ÇÁ¸®ÆÕ ÀÎ½ºÅÏ½ºÈ­
-        cardPrefab.transform.position = InitPos; // ÃÊ±â À§Ä¡ ¼³Á¤
+        GameObject cardPrefab = Instantiate(CardPrefab, transform); // ì¹´ë“œ í”„ë¦¬íŒ¹ ì¸ìŠ¤í„´ìŠ¤í™”
+        cardPrefab.transform.position = InitPos; // ì´ˆê¸° ìœ„ì¹˜ ì„¤ì •
 
         Image image = cardPrefab.GetComponent<Image>();
-        image.sprite = DatabaseManager.Instance.GetSpriteData(id); // ½ºÇÁ¶óÀÌÆ® Àû¿ëÇÏ±â
+        image.sprite = DatabaseManager.Instance.GetSpriteData(id); // ìŠ¤í”„ë¼ì´íŠ¸ ì ìš©í•˜ê¸°
 
-        while (elapsedTime <= duration) // Ä«µå µî·Ï ¾Ö´Ï¸ŞÀÌ¼Ç(³¯¶ó¿À±â)
+        while (elapsedTime <= duration) // ì¹´ë“œ ë“±ë¡ ì• ë‹ˆë©”ì´ì…˜(ë‚ ë¼ì˜¤ê¸°)
         {
-            elapsedTime += Time.deltaTime; // °æ°ú ½Ã°£ ¾÷µ¥ÀÌÆ®
-            float t = elapsedTime / duration; // Á¤±ÔÈ­µÈ ½Ã°£ t °è»ê
+            elapsedTime += Time.deltaTime; // ê²½ê³¼ ì‹œê°„ ì—…ë°ì´íŠ¸
+            float t = elapsedTime / duration; // ì •ê·œí™”ëœ ì‹œê°„ t ê³„ì‚°
 
-            float x = Mathf.Lerp(InitPos.x, targetPos.x, t); // x À§Ä¡ ¼±Çü º¸°£
-            float y = a * Mathf.Pow(t - 0.3f, 2) + b; // y À§Ä¡ Æ÷¹°¼± °è»ê
-            cardPrefab.transform.position = new Vector3(x, y, 0); // ÀÌ¹ÌÁö À§Ä¡ ¾÷µ¥ÀÌÆ®
+            float x = Mathf.Lerp(InitPos.x, targetPos.x, t); // x ìœ„ì¹˜ ì„ í˜• ë³´ê°„
+            float y = a * Mathf.Pow(t - 0.3f, 2) + b; // y ìœ„ì¹˜ í¬ë¬¼ì„  ê³„ì‚°
+            cardPrefab.transform.position = new Vector3(x, y, 0); // ì´ë¯¸ì§€ ìœ„ì¹˜ ì—…ë°ì´íŠ¸
 
             if (t >= 1.0f)
             {
                 ActiveButtonImageWithMask(targetTrans, id);
                 Destroy(cardPrefab);
-                break; // t°¡ 1¿¡ µµ´ŞÇÏ¸é ·çÇÁ Á¾·á
+                break; // tê°€ 1ì— ë„ë‹¬í•˜ë©´ ë£¨í”„ ì¢…ë£Œ
             }
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ±îÁö ´ë±â
+            yield return null; // ë‹¤ìŒ í”„ë ˆì„ê¹Œì§€ ëŒ€ê¸°
         }
 
         TextMeshProUGUI maskText = targetTrans.GetComponentInChildren<TextMeshProUGUI>();
 
-        while (elapsedTime <= 10f) // Ä«µå µî·Ï ´ë±â½Ã°£
+        while (elapsedTime <= 10f) // ì¹´ë“œ ë“±ë¡ ëŒ€ê¸°ì‹œê°„
         {
-            elapsedTime += Time.deltaTime; // °æ°ú ½Ã°£ ¾÷µ¥ÀÌÆ®
+            elapsedTime += Time.deltaTime; // ê²½ê³¼ ì‹œê°„ ì—…ë°ì´íŠ¸
 
 
             if (elapsedTime <= 10f)
@@ -126,9 +126,9 @@ public class PlayerPanel : MonoBehaviour
             else
             {
                 ActiveButtonOnCoolDown(targetTrans,index);
-                break; // elapsedTimeÀÌ 10ÃÊ¿¡ µµ´ŞÇÏ¸é ·çÇÁ Á¾·á
+                break; // elapsedTimeì´ 10ì´ˆì— ë„ë‹¬í•˜ë©´ ë£¨í”„ ì¢…ë£Œ
             }
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ±îÁö ´ë±â
+            yield return null; // ë‹¤ìŒ í”„ë ˆì„ê¹Œì§€ ëŒ€ê¸°
         }
     }
 
@@ -141,8 +141,8 @@ public class PlayerPanel : MonoBehaviour
         var plusImage = targetTrans.GetChild(0).gameObject;
         var maskImage = targetTrans.GetChild(1).gameObject;
 
-        plusImage.SetActive(false); // ÇÃ·¯½º ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
-        maskImage.SetActive(true); // ¸¶½ºÅ© ÀÌ¹ÌÁö È°¼ºÈ­
+        plusImage.SetActive(false); // í”ŒëŸ¬ìŠ¤ ì´ë¯¸ì§€ ë¹„í™œì„±í™”
+        maskImage.SetActive(true); // ë§ˆìŠ¤í¬ ì´ë¯¸ì§€ í™œì„±í™”
 
         targetTrans.localScale = Vector3.one;
     }
@@ -153,14 +153,14 @@ public class PlayerPanel : MonoBehaviour
         if (spawnButton != null)
         {
             spawnButton.interactable = true;
-            spawnButton.onClick.RemoveAllListeners(); // ±âÁ¸ ¸®½º³Ê ¸ğµÎ Á¦°Å
+            spawnButton.onClick.RemoveAllListeners(); // ê¸°ì¡´ ë¦¬ìŠ¤ë„ˆ ëª¨ë‘ ì œê±°
 
             Action spawnAction = () =>
             {
-                //[TODO] Å¬¸¯ÇÏ¸é ¼ÒÈ¯´ë±â»óÅÂ·Î º¯°æÇØ¾ßÇÔ
+                //[TODO] í´ë¦­í•˜ë©´ ì†Œí™˜ëŒ€ê¸°ìƒíƒœë¡œ ë³€ê²½í•´ì•¼í•¨
                 SpawnManager.Instance.OnCalled_GetUnit(index).SetActive(true);
             };
-            spawnButton.onClick.AddListener(new UnityAction(spawnAction)); // »õ ¾×¼Ç ¸®½º³Ê Ãß°¡
+            spawnButton.onClick.AddListener(new UnityAction(spawnAction)); // ìƒˆ ì•¡ì…˜ ë¦¬ìŠ¤ë„ˆ ì¶”ê°€
 
             var maskImage = targetTrans.GetChild(1).gameObject;
             maskImage.SetActive(false);

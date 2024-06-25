@@ -121,8 +121,6 @@ public class DatabaseManager : MonoBehaviour
             string result = DeformatResult(dataSet);
         }
     }
-
-
     private string DeformatResult(DataSet dataSet)
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -197,9 +195,6 @@ public class DatabaseManager : MonoBehaviour
         }
         return stringBuilder.ToString();
     }
-
-
-
 
     public static DataSet OnSelectRequest(string queryStr, string tableName)
     {

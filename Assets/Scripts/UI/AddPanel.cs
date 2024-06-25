@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -34,12 +34,12 @@ public class AddPanel : MonoBehaviour
         _animator.SetBool("isActive",false);
     }
 
-    public void m_OnCalled_SetActiveFalse() //¾Ö´Ï¸ŞÀÌ¼Ç¿¡¼­ È£ÃâÇÏ´Â ÇÔ¼ö
+    public void m_OnCalled_SetActiveFalse() //ì• ë‹ˆë©”ì´ì…˜ì—ì„œ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜
     {
         gameObject.SetActive(false);
     }
 
-    //À¯´Ö ÃÊ»óÈ­¸¦ Å¬¸¯ ÇßÀ» ¶§
+    //ìœ ë‹› ì´ˆìƒí™”ë¥¼ í´ë¦­ í–ˆì„ ë•Œ
     public void OnCalled_UnitSelctSlot(UnitSelectSlot unitSelectSlot)
     {
         _slot = unitSelectSlot;
