@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AddPanel : MonoBehaviour
 {
+    PlayerPanel _playerPanel;
     Animator _animator;
     [SerializeField] GameObject ChoicePanel;
     int _index = 0;
@@ -14,6 +15,7 @@ public class AddPanel : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _playerPanel = transform.parent.GetComponent<PlayerPanel>();
     }
 
     private void OnEnable()
@@ -21,11 +23,10 @@ public class AddPanel : MonoBehaviour
         ChoicePanel.SetActive(false);
     }
 
-    public void OnClick_ActivePanel(int index, Transform brnTrans)
+    public void OnClick_ActivePanel()
     {
         gameObject.SetActive(true);
         _animator.SetBool("isActive", true);
-        _index = index;
     }
 
     public void OnClick_DeactivePanel()
@@ -33,11 +34,12 @@ public class AddPanel : MonoBehaviour
         _animator.SetBool("isActive",false);
     }
 
-    public void OnCalled_SetActiveFalse()
+    public void OnCalled_SetActive(bool isActive)
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(isActive);
     }
 
+    //유닛 초상화를 클릭 했을 때
     public void OnCalled_UnitSelctSlot(UnitSelectSlot unitSelectSlot)
     {
         _slot = unitSelectSlot;
@@ -57,6 +59,7 @@ public class AddPanel : MonoBehaviour
             SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, _slot.id);
             ChoicePanel.SetActive(false);
             _slot.OnCalled_Add();
+            _playerPanel.OnCalled_Added(index,_slot.transform.position, _slot.id);
         }
     }
 

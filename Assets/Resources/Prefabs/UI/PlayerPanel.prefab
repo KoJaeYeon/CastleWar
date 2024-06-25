@@ -1666,6 +1666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AddPanel: {fileID: 2646687182191674671}
   Content: {fileID: 3964719677020995363}
+  CardPrefab: {fileID: 6261510951692857630, guid: 64daac007465d084e8ab5f233ad5db40, type: 3}
 --- !u!1 &8857419860497719303
 GameObject:
   m_ObjectHideFlags: 0
