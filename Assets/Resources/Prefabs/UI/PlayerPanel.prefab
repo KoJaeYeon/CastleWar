@@ -1534,7 +1534,6 @@ MonoBehaviour:
   AddPanel: {fileID: 2646687182191674671}
   Content: {fileID: 3964719677020995363}
   CardPrefab: {fileID: 6261510951692857630, guid: 64daac007465d084e8ab5f233ad5db40, type: 3}
-  RetreatButton: {fileID: 2594233408795447096}
 --- !u!1 &8857419860497719303
 GameObject:
   m_ObjectHideFlags: 0
@@ -3335,22 +3334,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Btn_Return
       objectReference: {fileID: 0}
+    - target: {fileID: 7367245511945739995, guid: 7f39ffc8c15038f48b41d8bcff22fa0a, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f39ffc8c15038f48b41d8bcff22fa0a, type: 3}
---- !u!114 &2594233408795447096 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5523953814075065206, guid: 7f39ffc8c15038f48b41d8bcff22fa0a, type: 3}
-  m_PrefabInstance: {fileID: 7541725284768140366}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &7482260205539534271 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1116825860517030385, guid: 7f39ffc8c15038f48b41d8bcff22fa0a, type: 3}

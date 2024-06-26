@@ -31,6 +31,7 @@ public class TouchPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerExit(PointerEventData eventData)
     {
         //Debug.Log("Pointer exited from screen position: " + eventData.position);
+        TouchManager.Instance.OnPointerExitSelcetable();
     }
 
     public void OnPointerMove(PointerEventData eventData)

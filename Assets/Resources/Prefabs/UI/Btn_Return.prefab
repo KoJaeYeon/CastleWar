@@ -345,6 +345,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0f41665c30f14144afa0d49f630d822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RetreatBtn: {fileID: 9022258812269915556}
+  CancelBtn: {fileID: 15276684705160429}
+  ReturnTimer: {fileID: 5444653270588574500}
+  maskImg: {fileID: 7367245511945739995}
+  ReturnTimeText: {fileID: 6755736431898857530}
 --- !u!1 &3311863045593161014
 GameObject:
   m_ObjectHideFlags: 0

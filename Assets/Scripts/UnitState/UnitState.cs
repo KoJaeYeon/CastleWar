@@ -43,7 +43,8 @@ public class UnitIdleState : UnitState
         // 타워나 건물이 후퇴영향 안받도록
         if (_unit.CanMove)
         {
-            UnitManager.Instance.RegisterRetreatCallback(_unit.HandleOnRetreatState);
+            UnitManager.Instance.RegisterRetreatCallback(isTagAlly:_unit.IsTagAlly(), _unit.HandleOnRetreatState);
+            //UnitManager.Instance.RegisterRetreatCallback(_unit.HandleOnRetreatState);
         }
     }
 }
@@ -372,7 +373,8 @@ public class UnitRetreatState : UnitState
         GameObject castle = CastleManager.Instance.GetCastleGameObj(_unit.IsTagAlly());
         _castleTrans = castle.transform;
         _castleSearched =false;
-        UnitManager.Instance.RegisterCancelCallback(_unit.HandleOnMoveState);
+        UnitManager.Instance.RegisterCancelCallback(isTagAlly:_unit.IsTagAlly(), _unit.HandleOnMoveState);
+        //UnitManager.Instance.RegisterCancelCallback(_unit.HandleOnMoveState);
     }
     public override void ExecuteFixedUpdate()
     {
@@ -391,7 +393,7 @@ public class UnitRetreatState : UnitState
     public override void Exit()
     {
         Debug.Log("Exiting Retreat State");
-        UnitManager.Instance.UnRegisterCancelCallback(_unit.HandleOnMoveState);
+        UnitManager.Instance.UnRegisterCancelCallback(_unit.IsTagAlly(),_unit.HandleOnMoveState);
     }
 
     #region Move
@@ -501,7 +503,7 @@ public class UnitDeadState : UnitState
     {
         _unit.gameObject.layer = LayerMask.NameToLayer("DeadUnit");
         _unit.Animator.SetTrigger("Death");
-        UnitManager.Instance.UnRegisterRetreatCallback(_unit.HandleOnRetreatState);
+        UnitManager.Instance.UnRegisterRetreatCallback(_unit.IsTagAlly(), _unit.HandleOnRetreatState);
     }
 
     public override void Exit()

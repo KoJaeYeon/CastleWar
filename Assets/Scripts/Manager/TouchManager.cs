@@ -70,6 +70,14 @@ public class TouchManager : MonoBehaviour
         }
     }
 
+    public void OnPointerExitSelcetable()
+    {
+        if (_selectable != null)
+        {
+            _selectable.OnPointerExit();
+        }
+    }
+
     public void UpdateSelectable(Vector3 touchPoint)
     {
         if (_selectable != null)

@@ -203,21 +203,31 @@ public class Unit : MonoBehaviour, IAttack
         _currentState.Enter();
     }
 
-    public void HandleOnRetreatState(bool Ally)
+    public void HandleOnRetreatState()
     {
-        if(IsTagAlly() == Ally) // 같은 진영 명령이면
-        {
-            OnChangeState(new UnitRetreatState(this));
-        }        
+        OnChangeState(new UnitRetreatState(this));
     }
 
-    public void HandleOnMoveState(bool Ally)
+    public void HandleOnMoveState()
     {
-        if (IsTagAlly() == Ally) // 같은 진영 명령이면
-        {
-            OnChangeState(new UnitMoveState(this));
-        }
+        OnChangeState(new UnitMoveState(this));
     }
+
+    //public void HandleOnRetreatState(bool Ally)
+    //{
+    //    if(IsTagAlly() == Ally) // 같은 진영 명령이면
+    //    {
+    //        OnChangeState(new UnitRetreatState(this));
+    //    }        
+    //}
+
+    //public void HandleOnMoveState(bool Ally)
+    //{
+    //    if (IsTagAlly() == Ally) // 같은 진영 명령이면
+    //    {
+    //        OnChangeState(new UnitMoveState(this));
+    //    }
+    //}
 
     public bool IsTagAlly()
     {
@@ -298,8 +308,13 @@ public class Unit : MonoBehaviour, IAttack
         {
             _rigidbody = GetComponent<Rigidbody>();
         }
-        // 충돌 시에도 속도를 0으로 유지
-        _rigidbody.velocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
+        if(_rigidbody.isKinematic != true)
+        {
+            // 충돌 시에도 속도를 0으로 유지
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+        
+
     }
 }

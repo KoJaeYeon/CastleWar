@@ -51,11 +51,13 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     public void OnPointerUp()
     {
         isDown = false;
+        if (_spawnedUnit == null) return;
         if(touchType == TouchType.Unit)
         {
             //안쓰는 유닛 반환
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
+            _spawnedUnit = null;
         }
         else
         {
@@ -103,6 +105,19 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
                 Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
                 _spawnedUnit.transform.position = roundedVector;
             }
+        }
+    }
+
+    public void OnPointerExit()
+    {
+        if(_spawnedUnit != null )
+        {
+            isDown = false;
+
+            //안쓰는 유닛 반환
+            SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
+            _spawnedUnit.SetActive(false);
+            _spawnedUnit = null;
         }
     }
 }
