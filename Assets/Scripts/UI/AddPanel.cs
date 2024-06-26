@@ -56,10 +56,10 @@ public class AddPanel : MonoBehaviour
     {
         if (_slot != null)
         {
-            SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, _slot.id);
+            SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, _slot.Id);
             ChoicePanel.SetActive(false);
             _slot.OnCalled_Add();
-            _playerPanel.OnCalled_Added(index,_slot.transform.position, _slot.id);
+            _playerPanel.OnCalled_Added(index,_slot.transform.position, _slot.Id);
         }
     }
 
@@ -69,7 +69,7 @@ public class AddPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI Text_SpawnTimer;
     void Renew_ChoicePanel()
     {
-        UnitData unitData = DatabaseManager.Instance.OnGetUnitData(_slot.id);
+        UnitData unitData = DatabaseManager.Instance.OnGetUnitData(_slot.Id);
         Text_SelectUnitName.text = unitData.name;
         Text_Population.text = unitData.Population.ToString();
         Text_SpawnTimer.text = "10";

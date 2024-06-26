@@ -148,8 +148,6 @@ public class SpawnManager : MonoBehaviour
 
     public GameObject OnCalled_GetUnit(int index)
     {
-        Debug.Log(StackSpawnUnitObject[index].Count);
-        Debug.Log(index);
         if(StackSpawnUnitObject[index].TryPop(out GameObject result))
         {
             return result;

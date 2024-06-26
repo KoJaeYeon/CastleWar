@@ -4,7 +4,6 @@ using System;
 using System.Data;
 using System.Text;
 using System.Collections.Generic;
-using UnityEditor.Build.Pipeline.Utilities;
 
 
 public enum UnitType

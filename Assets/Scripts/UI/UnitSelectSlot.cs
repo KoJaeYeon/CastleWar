@@ -5,11 +5,17 @@ using UnityEngine.UI;
 
 public class UnitSelectSlot : MonoBehaviour
 {
-    public int id { get; private set; }
+    [SerializeField]
+    int _id;
+
+    public int Id
+    {
+        get { return _id; }
+        private set { _id = value; }
+    }
 
     private void Awake()
     {
-        id = 4;
         Button button = GetComponent<Button>();
         button.onClick.AddListener(OnClicked_Slot);
     }
@@ -19,7 +25,7 @@ public class UnitSelectSlot : MonoBehaviour
         Image image = GetComponent<Image>();
         if (image.sprite == null)
         {
-            image.sprite = DatabaseManager.Instance.OnGetSpriteData(id);
+            image.sprite = DatabaseManager.Instance.OnGetSpriteData(_id);
         }
     }
 

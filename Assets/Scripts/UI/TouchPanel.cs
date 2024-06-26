@@ -1,17 +1,17 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class TouchPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler,IPointerDownHandler,IPointerUpHandler
 {
-    private Camera mainCamera; // ¸ŞÀÎ Ä«¸Ş¶ó
+    private Camera mainCamera; // ë©”ì¸ ì¹´ë©”ë¼
     Vector3 mapPoint;
 
     bool isDown = false;
     void Start()
     {
-        // Ä«¸Ş¶ó ÄÄÆ÷³ÍÆ® Ä³½Ì
+        // ì¹´ë©”ë¼ ì»´í¬ë„ŒíŠ¸ ìºì‹±
         mainCamera = Camera.main;
     }
 
@@ -36,7 +36,7 @@ public class TouchPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerMove(PointerEventData eventData)
     {
         //Debug.Log("Pointer moving at screen position: " + eventData.position);
-        RaycastToWorld(eventData.position); // ¿ùµå ÁÂÇ¥ º¯È¯ ¹× ·¹ÀÌÄ³½ºÆ® È£Ãâ
+        RaycastToWorld(eventData.position); // ì›”ë“œ ì¢Œí‘œ ë³€í™˜ ë° ë ˆì´ìºìŠ¤íŠ¸ í˜¸ì¶œ
     }
 
     void RaycastToWorld(Vector2 screenPosition)
@@ -48,13 +48,13 @@ public class TouchPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
-            // ·¹ÀÌ°¡ ¿ÀºêÁ§Æ®¿Í Ãæµ¹ÇßÀ» ¶§
+            // ë ˆì´ê°€ ì˜¤ë¸Œì íŠ¸ì™€ ì¶©ëŒí–ˆì„ ë•Œ
             //Debug.Log("Ray hit " + hit.collider.gameObject.name + " at position " + hit.point);
             mapPoint = hit.point;
         }
         else
         {
-            // ·¹ÀÌ°¡ ¾Æ¹«°Íµµ Ãæµ¹ÇÏÁö ¾Ê¾ÒÀ» ¶§
+            // ë ˆì´ê°€ ì•„ë¬´ê²ƒë„ ì¶©ëŒí•˜ì§€ ì•Šì•˜ì„ ë•Œ
             //Debug.Log("Ray did not hit any object on the Map layer.");
         }
     }
