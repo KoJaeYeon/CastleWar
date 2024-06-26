@@ -119,22 +119,27 @@ public class SpawnManager : MonoBehaviour
         //subPrefab의 비동기 작업이 완료된 후 콜백
         GetCacheSubPrefabModel(id, subPrefab =>
         {
-            StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, index));
+            StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, id, index));
             //숫자가 부족하면 추가생성을 위한 프리팹 저장
-            mergedPrefab.Add(index, Instantiate(poolStack.Peek(),slot.transform));            
+            mergedPrefab.Add(index, Instantiate(poolStack.Peek(), slot.transform));
         });
-        
+
     }
 
-    IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root, int index)
+    IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root, int id, int index)
     {
         for (int i = 0; i < 30; i++)
         {
             //베이스 프리팹 가져오기
             GameObject baseUnit = GetBasePrefab();
+
             //하위 프리팹 베이스 프리팹에 생성해주기
             GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
-            baseUnit.GetComponent<Unit>().SetSpawnSlotIndex(index);
+
+            //초기 데이터 부여
+            var unit = baseUnit.GetComponent<Unit>();
+            UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
+            unit.InitData(unitData);
 
             //풀에 담아두기
             poolStack.Push(baseUnit);

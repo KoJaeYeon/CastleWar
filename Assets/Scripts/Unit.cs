@@ -16,6 +16,8 @@ public class Unit : MonoBehaviour, IAttack
     Animator _animator;
 
     [SerializeField] int _unitId;
+    [SerializeField] int _cost;
+    [SerializeField] int _populaltion;
     [SerializeField] float _health;
     [SerializeField] float _maxHealth;
     [SerializeField] float _attackDamage;
@@ -23,6 +25,7 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] float _attackRange;
     [SerializeField] bool _isMelee;
     [SerializeField] float _moveSpeed;
+    [SerializeField] UnitType _attackType;
     [SerializeField] Slider HpSlider;
     [SerializeField] Image SpawnTimerImage;
 
@@ -30,7 +33,7 @@ public class Unit : MonoBehaviour, IAttack
         
     GameObject _attackTargerEnemy; // 공격해야하는 적
     GameObject _targetEnemy; // 탐색되는 적
-    UnitAttackDelegate _unitAttack;
+    UnitAttackDelegate _unitAttack; // 유닛마다 다르게 부여되는 공격 메서드
     Rigidbody _rigidbody;
 
     float _searchRadius = 12f;
@@ -89,19 +92,35 @@ public class Unit : MonoBehaviour, IAttack
         _spawnSlotIndex = index;
     }
 
+    public void InitData(UnitData unitData)
+    {
+        _unitId = unitData.id;
+        _cost = unitData.cost;
+        _populaltion = unitData.Population;
+        _health = unitData.health;
+        _maxHealth = unitData.health;
+        _attackDamage = unitData.AttackDamage;
+        _attackSpeed = unitData.AttackSpeed;
+        _attackRange = unitData.AttackRange;
+        _moveSpeed = unitData.MoveSpeed;
+        _attackType = unitData.AttackType;
+    }
+
+    private void ResetData()
+    {
+        _health = _maxHealth;
+        _targetEnemy = null;
+        _attackTargerEnemy = null;
+    }
+
     public void StartState()
     {
+        ResetData();
+
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
         CheckHealthBar();
     }
-    
-    //private void OnEnable()
-    //{        
-    //    _currentState = new UnitIdleState(this);
-    //    _currentState.Enter();
-    //    CheckHealthBar();        
-    //}
 
     private void OnDisable()
     {

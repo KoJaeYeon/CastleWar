@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     bool isDown = false;
     int _index;
 
-    private float _spawnInterval = 0.1f; // ¼ÒÈ¯ ÁÖ±â (0.1ÃÊ)
+    private float _spawnInterval = 0.1f; // ì†Œí™˜ ì£¼ê¸° (0.1ì´ˆ)
     private float _lastSpawnTime = 0f;
 
     GameObject _spawnedUnit;
@@ -55,7 +55,7 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
         isDown = false;
         if(touchType == TouchType.Unit)
         {
-            //¾È¾²´Â À¯´Ö ¹ÝÈ¯
+            //ì•ˆì“°ëŠ” ìœ ë‹› ë°˜í™˜
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
         }
@@ -65,7 +65,7 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     {
         if(isDown )
         {
-            // À¯´Ö µå·¡±×
+            // ìœ ë‹› ë“œëž˜ê·¸
             if(_spawnedUnit != null)
             {
                 touchPos.y = 0;
@@ -74,16 +74,16 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
 
             if (touchType == TouchType.Unit)
             {
-                if (Time.time - _lastSpawnTime<_spawnInterval) return; // ¼ÒÈ¯ ÁÖ±â°¡ µÇÁö ¾ÊÀ¸¸é ¹ÝÈ¯
+                if (Time.time - _lastSpawnTime<_spawnInterval) return; // ì†Œí™˜ ì£¼ê¸°ê°€ ë˜ì§€ ì•Šìœ¼ë©´ ë°˜í™˜
                 _lastSpawnTime = Time.time;
 
                 Debug.Log("entered");
-                //[TODO]
-                //Á¶°Ç ÃæÁ·½Ã À¯´Ö ¼ÒÈ¯
+                //ì¡°ê±´ ì¶©ì¡±ì‹œ ìœ ë‹› ì†Œí™˜
+                var unit = _spawnedUnit.GetComponent<Unit>();
+                unit?.StartState();
 
 
-
-                //´ë±â À¯´Ö Ä¡È¯
+                //ëŒ€ê¸° ìœ ë‹› ì¹˜í™˜
                 _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);            
                 _spawnedUnit.SetActive(true);
                 touchPos.y = 0;
