@@ -64,6 +64,7 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
             //[TODO]조건 충족시 유닛 소환
             var unit = _spawnedUnit.GetComponent<Unit>();
             unit?.StartState();
+            _spawnedUnit = null;
         }
     }
 

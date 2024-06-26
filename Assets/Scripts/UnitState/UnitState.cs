@@ -312,8 +312,12 @@ public class UnitAttackState : UnitState
     {
         CheckEnemy();
 
-        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
-        UnitRotateOnAttack(direction);
+        if(_unit.TargetEnemy != null)
+        {
+            Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+            UnitRotateOnAttack(direction);
+        }
+
 
     }
     public override void Exit()
