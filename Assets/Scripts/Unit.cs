@@ -101,9 +101,19 @@ public class Unit : MonoBehaviour, IAttack
         _maxHealth = unitData.health;
         _attackDamage = unitData.AttackDamage;
         _attackSpeed = unitData.AttackSpeed;
-        _attackRange = unitData.AttackRange;
+        _attackRange = unitData.AttackRange * 2;
         _moveSpeed = unitData.MoveSpeed;
         _attackType = unitData.AttackType;
+        _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
+
+        if(unitData.unitType == UnitType.Building)
+        {
+            if (_rigidbody == null)
+            {
+                _rigidbody = GetComponent<Rigidbody>();
+            }
+            _rigidbody.isKinematic = true;
+        }
     }
 
     private void ResetData()

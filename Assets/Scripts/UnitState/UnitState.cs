@@ -289,7 +289,7 @@ public class UnitMoveState : UnitState
 public class UnitAttackState : UnitState
 {
     public UnitAttackState(Unit unit) : base(unit) { }
-       
+    float _rotationSpeed = 3f;
 
     public override void Enter()
     {
@@ -299,10 +299,16 @@ public class UnitAttackState : UnitState
     public override void ExecuteFixedUpdate()
     {
         CheckEnemy();
+
+        Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
+        UnitRotateOnAttack(direction);
+
     }
     public override void Exit()
     {
         SetAnimationisAttack(false);
+
+
     }
 
     public void CheckEnemy()
@@ -324,6 +330,12 @@ public class UnitAttackState : UnitState
             }
             return;
         }
+    }
+
+    public void UnitRotateOnAttack(Vector3 direction)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
     }
 
     public void SetAnimationisAttack(bool isAttack)

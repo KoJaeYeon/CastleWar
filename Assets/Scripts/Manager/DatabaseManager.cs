@@ -180,7 +180,7 @@ public class DatabaseManager : MonoBehaviour
                         population,
                         cardType
                     ));
-                    if(id == 5 || id == 4)
+                    if(id < 6)
                     {
                         Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
                         unitSpriteDic.Add(id, unitSprite);
@@ -301,16 +301,15 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Add(36, new UnitData(36, "¿­±â±¸ Æë±Ïº´", 40, UnitType.Air, 720, 128, 2.2f, 2, 5, UnitType.Both, 4, CardType.Rare));
         unitDataDic.Add(37, new UnitData(37, "Àú°Ý¼ö", 100, UnitType.Ground, 1198, 1091, 2.9f, 10, 3, UnitType.Both, 6, CardType.Legendary));
         unitDataDic.Add(38, new UnitData(38, "ÄËÅ¸¿ì·ç½º", 80, UnitType.Ground, 2738, 730, 1.6f, 3, 7, UnitType.Ground, 6, CardType.Epic));
-    
-        for (int id = 4; id < 6 ; id++)
+
+        for (int id = 0; id < 6; id++)
         {
-            if (id == 5 || id == 4)
-            {
-                Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
-                unitSpriteDic.Add(id, unitSprite);
-            }
+
+            Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
+            unitSpriteDic.Add(id, unitSprite);
+
         }
     }
 
-    
+
 }

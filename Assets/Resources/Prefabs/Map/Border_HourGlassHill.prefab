@@ -1005,7 +1005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4161c64aeec444390a267320df7699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapCornerPoint: 0
+  MapCornerPoint: 6
 --- !u!1 &5998472719435004798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,7 +1173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4161c64aeec444390a267320df7699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapCornerPoint: 0
+  MapCornerPoint: 8
 --- !u!1 &6368328325381845965
 GameObject:
   m_ObjectHideFlags: 0

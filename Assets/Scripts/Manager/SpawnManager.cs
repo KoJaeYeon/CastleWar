@@ -141,6 +141,39 @@ public class SpawnManager : MonoBehaviour
             UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
             unit.InitData(unitData);
 
+            if(index < 6)
+            {
+                baseUnit.tag = "Ally";
+                switch(unitData.unitType)
+                {
+                    case UnitType.Ground:
+                        baseUnit.layer = LayerMask.NameToLayer("AllyGroundUnit");
+                        break;
+                    case UnitType.Air:
+                        baseUnit.layer = LayerMask.NameToLayer("AllyAirUnit");
+                        break;
+                    case UnitType.Building:
+                        baseUnit.layer = LayerMask.NameToLayer("AllyBuilding");
+                        break;
+                }
+            }
+            else
+            {
+                baseUnit.tag = "Enemy";
+                switch (unitData.unitType)
+                {
+                    case UnitType.Ground:
+                        baseUnit.layer = LayerMask.NameToLayer("EnemyGroundUnit");
+                        break;
+                    case UnitType.Air:
+                        baseUnit.layer = LayerMask.NameToLayer("EnemyAirUnit");
+                        break;
+                    case UnitType.Building:
+                        baseUnit.layer = LayerMask.NameToLayer("EnemyBuilding");
+                        break;
+                }
+            }
+
             //풀에 담아두기
             poolStack.Push(baseUnit);
 

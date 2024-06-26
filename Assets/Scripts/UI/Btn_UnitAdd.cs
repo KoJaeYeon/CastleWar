@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum TouchType
 {
@@ -59,26 +57,35 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
         }
+        else
+        {
+            //[TODO]조건 충족시 유닛 소환
+            var unit = _spawnedUnit.GetComponent<Unit>();
+            unit?.StartState();
+        }
     }
 
     public void ExecuteUpdate(Vector3 touchPos)
     {
-        if(isDown )
+        if (isDown)
         {
             // 유닛 드래그
-            if(_spawnedUnit != null)
+            if (_spawnedUnit == null)
             {
-                touchPos.y = 0;
-                _spawnedUnit.transform.position = touchPos;
+                return;
             }
 
             if (touchType == TouchType.Unit)
             {
+                // 유닛 드래그
+                touchPos.y = 0;
+                _spawnedUnit.transform.position = touchPos;
+
                 if (Time.time - _lastSpawnTime<_spawnInterval) return; // 소환 주기가 되지 않으면 반환
                 _lastSpawnTime = Time.time;
 
                 Debug.Log("entered");
-                //조건 충족시 유닛 소환
+                //[TODO]조건 충족시 유닛 소환
                 var unit = _spawnedUnit.GetComponent<Unit>();
                 unit?.StartState();
 
@@ -90,6 +97,11 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
                 _spawnedUnit.transform.position = touchPos;
 
                 Debug.Log($"Spawn : {touchPos}");
+            }
+            else if (touchType == TouchType.NotUnit)
+            {
+                Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
+                _spawnedUnit.transform.position = roundedVector;
             }
         }
     }

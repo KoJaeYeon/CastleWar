@@ -31,8 +31,9 @@ public class UnitAttackManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        RegisterAttackMethod(1, Attack_Vanguard);
-        RegisterAttackMethod(2, Attack_Archer);
+        RegisterAttackMethod(1, Attack_Cannon);
+        RegisterAttackMethod(4, Attack_Vanguard);
+        RegisterAttackMethod(5, Attack_Archer);
     }
 
     public void RegisterAttackMethod(int id, UnitAttackDelegate attackMethod)
@@ -54,6 +55,12 @@ public class UnitAttackManager : MonoBehaviour
             Debug.LogError($"ID :{id}의 공격 메서드가 없음");
             return null;
         }
+    }
+
+    public void Attack_Cannon(GameObject targetObject, Unit attackStartUnit)
+    {
+        //[TODO] 풀매니저 추가해야함
+        GameObject arrow = Instantiate(new GameObject());
     }
 
     public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
