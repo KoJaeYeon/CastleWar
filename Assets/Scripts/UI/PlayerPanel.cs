@@ -12,43 +12,22 @@ public class PlayerPanel : MonoBehaviour
     [SerializeField] AddPanel AddPanel;
     [SerializeField] Transform Content;
     [SerializeField] GameObject CardPrefab;
-    [SerializeField] Button RetreatButton;
 
     private void Awake()
     {
         for (int i = 0; i< 6; i++)
         {
-            Button button = Content.GetChild(i).GetComponent<Button>();
+            Button SelectButton = Content.GetChild(i).GetComponent<Button>();
 
             if (i != 0)
             {
                 var plusImage = Content.GetChild(i).GetChild(0).gameObject;
                 plusImage.SetActive(false); //이미지 비활성화
-                button.interactable = false;
+                SelectButton.interactable = false;
             }
 
-            button.onClick.AddListener(OnClick_AddPanel_Active);
-        }
-        UnitManager.Instance.ChangeCancelButtonCallback(OnClick_Btn_Cancel);
-        RetreatButton.onClick.AddListener(OnClick_Btn_Retreat);
-    }
-    public void OnClick_Btn_Retreat()
-    {
-        //버튼 메서드 변경
-        RetreatButton.onClick.RemoveAllListeners();
-        RetreatButton.onClick.AddListener(OnClick_Btn_Cancel);
-
-        //후퇴명령
-        UnitManager.Instance.OnCalled_Retreat(isAlly: true);
-    }
-    public void OnClick_Btn_Cancel()
-    {
-        //버튼 메서드 변경
-        RetreatButton.onClick.RemoveAllListeners();
-        RetreatButton.onClick.AddListener(OnClick_Btn_Retreat);
-
-        //취소명령
-        UnitManager.Instance.OnCalled_Cancel(isAlly: true);
+            SelectButton.onClick.AddListener(OnClick_AddPanel_Active);
+        }        
     }
 
     public void OnClick_AddPanel_Active()
@@ -195,7 +174,6 @@ public class PlayerPanel : MonoBehaviour
         }
         
     }
-
     #endregion
 
 }
