@@ -205,7 +205,7 @@ public class Unit : MonoBehaviour, IAttack
 
     public void HandleOnRetreatState(bool Ally)
     {
-        if(IsTagAlly() == Ally) // 같은 명령이면
+        if(IsTagAlly() == Ally) // 같은 진영 명령이면
         {
             OnChangeState(new UnitRetreatState(this));
         }        
@@ -213,7 +213,7 @@ public class Unit : MonoBehaviour, IAttack
 
     public void HandleOnMoveState(bool Ally)
     {
-        if (IsTagAlly() == Ally) // 같은 명령이면
+        if (IsTagAlly() == Ally) // 같은 진영 명령이면
         {
             OnChangeState(new UnitMoveState(this));
         }

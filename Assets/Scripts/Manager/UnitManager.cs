@@ -24,13 +24,15 @@ public class UnitManager : MonoBehaviour
     Dictionary<int, Unit> _frinedUnitDic = new Dictionary<int, Unit>();
     Dictionary<int, Unit> _enemyUnitDic = new Dictionary<int, Unit>();
 
-    public event Action<bool> _RetreatCallback;
-    public event Action<bool> _CanelCallback;
+    event Action<bool> _RetreatCallback;
+    event Action<bool> _CanelCallback;
+
+    event Action ChangeCancelButton;
 
     public void AddDictionaryUnit(Unit unit, bool isTagAlly)
     {
         unit.GetInstanceID();
-        if(isTagAlly)
+        if (isTagAlly)
         {
             _frinedUnitDic.Add(unit.GetInstanceID(), unit);
         }
@@ -41,25 +43,42 @@ public class UnitManager : MonoBehaviour
 
     }
 
+    //유닛 움직이기 시작할 때
     public void RegisterRetreatCallback(Action<bool> retreatCallback)
     {
         _RetreatCallback += retreatCallback;
     }
 
+    //유닛이 후퇴버튼이 눌렸을 때
     public void RegisterCancelCallback(Action<bool> moveCallback)
     {
         _CanelCallback += moveCallback;
     }
 
+    //유닛이 죽을 때 또는 [TODO] 유닛이 복귀할 때
     public void UnRegisterRetreatCallback(Action<bool> retreatCallback)
     {
         _RetreatCallback -= retreatCallback;
     }
 
+    //유닛이 취소버튼이 눌렸을 때
     public void UnRegisterCancelCallback(Action<bool> moveCallback)
     {
         _CanelCallback -= moveCallback;
+        if(_CanelCallback == null)
+        {
+            Debug.Log("ReteratEnd");
+            ChangeCancelButton.Invoke();
+        }
     }  
+
+    public void ChangeCancelButtonCallback(Action changeCancelButtonCallback)
+    {
+        ChangeCancelButton = changeCancelButtonCallback;
+    }
+
+
+
 
     public void OnCalled_Retreat(bool isAlly)
     {
@@ -71,33 +90,5 @@ public class UnitManager : MonoBehaviour
         _CanelCallback?.Invoke(isAlly);
     }
 
-    #region Addresible
-
-    List<string> subPrefabAddresses = new List<string>(); // 하위 프리팹의 주소 리스트
-    void SpawnUnitWithSubPrefab(int index)
-    {
-        subPrefabAddresses.Add("Assets/Resources_moved/Prefabs/Warrior/Model_Warrior.prefab");
-        if (index >= 0 && index < subPrefabAddresses.Count)
-        {
-            Addressables.LoadAssetAsync<GameObject>(subPrefabAddresses[index]).Completed += OnSubPrefabLoaded;
-        }
-    }
-
-    void OnSubPrefabLoaded(AsyncOperationHandle<GameObject> obj)
-    {
-        if (obj.Status == AsyncOperationStatus.Succeeded)
-        {
-            GameObject subPrefab = Instantiate(obj.Result); // 하위 프리팹 인스턴스화
-
-            // 하위 프리팹을 큰 프리팹의 자식으로 설정
-            subPrefab.transform.SetParent(transform);
-
-            // 필요한 초기화 작업 수행
-        }
-        else
-        {
-            Debug.LogError("Failed to load sub-prefab.");
-        }
-    }
-    #endregion
+   
 }

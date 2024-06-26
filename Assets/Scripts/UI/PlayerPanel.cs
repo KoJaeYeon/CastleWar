@@ -12,6 +12,7 @@ public class PlayerPanel : MonoBehaviour
     [SerializeField] AddPanel AddPanel;
     [SerializeField] Transform Content;
     [SerializeField] GameObject CardPrefab;
+    [SerializeField] Button RetreatButton;
 
     private void Awake()
     {
@@ -28,14 +29,25 @@ public class PlayerPanel : MonoBehaviour
 
             button.onClick.AddListener(OnClick_AddPanel_Active);
         }
+        UnitManager.Instance.ChangeCancelButtonCallback(OnClick_Btn_Cancel);
+        RetreatButton.onClick.AddListener(OnClick_Btn_Retreat);
     }
     public void OnClick_Btn_Retreat()
     {
+        //버튼 메서드 변경
+        RetreatButton.onClick.RemoveAllListeners();
+        RetreatButton.onClick.AddListener(OnClick_Btn_Cancel);
+
+        //후퇴명령
         UnitManager.Instance.OnCalled_Retreat(isAlly: true);
     }
-
     public void OnClick_Btn_Cancel()
     {
+        //버튼 메서드 변경
+        RetreatButton.onClick.RemoveAllListeners();
+        RetreatButton.onClick.AddListener(OnClick_Btn_Retreat);
+
+        //취소명령
         UnitManager.Instance.OnCalled_Cancel(isAlly: true);
     }
 
