@@ -12,7 +12,7 @@ public enum UnitStateEnum
 public class Unit : MonoBehaviour, IAttack
 {
     private IState _currentState;
-    private readonly float _spawnTime = 1f;
+    private float _spawnTime = 1f;
     Animator _animator;
 
     [SerializeField] int _unitId;
@@ -38,6 +38,8 @@ public class Unit : MonoBehaviour, IAttack
 
     float _searchRadius = 12f;
     int _spawnSlotIndex = 0;
+    bool _canAttack = true;
+    bool _canMove = true;
 
     public float Helath
     {
@@ -62,7 +64,7 @@ public class Unit : MonoBehaviour, IAttack
         get => _spawnSlotIndex;
     }
 
-    
+    public float SpawnTime => _spawnTime;
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
@@ -87,6 +89,19 @@ public class Unit : MonoBehaviour, IAttack
             return _animator;
         }
     }
+
+    public bool CanAttack
+    {
+        get => _canAttack;
+        set { _canAttack = value; }
+    }
+
+    public bool CanMove
+    {
+        get => _canMove;
+        set { _canMove = value; }
+    }
+
     public void SetSpawnSlotIndex(int index)
     {
         _spawnSlotIndex = index;
@@ -113,6 +128,8 @@ public class Unit : MonoBehaviour, IAttack
                 _rigidbody = GetComponent<Rigidbody>();
             }
             _rigidbody.isKinematic = true;
+            _canMove =false;
+            _spawnTime = 10f;
         }
     }
 
@@ -246,15 +263,16 @@ public class Unit : MonoBehaviour, IAttack
 
     public IEnumerator Spawn_Init()
     {
-        if (SpawnTimerImage != null)
-        {
-            SpawnTimerImage.transform.parent.gameObject.SetActive(true);
-            SpawnTimerImage.fillAmount = 0;
-        }
-        yield return new WaitForSeconds(_spawnTime);
+        if (SpawnTimerImage == null) yield break;
+        var parentObject = SpawnTimerImage.transform.parent.gameObject;
 
-        SpawnTimerImage?.transform.parent.gameObject.SetActive(false);
+        parentObject.SetActive(true);
+        SpawnTimerImage.fillAmount = 0;
+
+        yield return new WaitForSeconds(_spawnTime);
+        parentObject.SetActive(false);
         OnChangeState(new UnitMoveState(this));
+
         yield break;
     }
 

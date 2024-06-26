@@ -32,14 +32,19 @@ public class UnitIdleState : UnitState
 
     public override void ExecuteUpdate()
     {
-        _unit.OnValueChanged_SpawnSlider(Time.deltaTime);
+        _unit.OnValueChanged_SpawnSlider(Time.deltaTime / _unit.SpawnTime);
     }
 
     public override void Exit()
     {
         Debug.Log("Exiting Idle State");
         _unit.Animator.SetTrigger("StartMove");
-        UnitManager.Instance.RegisterRetreatCallback(_unit.HandleOnRetreatState);
+
+        // 타워나 건물이 후퇴영향 안받도록
+        if (_unit.CanMove)
+        {
+            UnitManager.Instance.RegisterRetreatCallback(_unit.HandleOnRetreatState);
+        }
     }
 }
 
@@ -62,6 +67,7 @@ public class UnitMoveState : UnitState
 
     public override void ExecuteFixedUpdate()
     {
+        if (!_unit.CanAttack) return;
         SearchEnemy();
         if (_targetChanged)
         {
@@ -82,6 +88,11 @@ public class UnitMoveState : UnitState
             {
                 path = null;
             }
+        }
+
+        if(!_unit.CanMove)
+        {
+            return;
         }
 
         if (path != null && currentPathIndex < path.Count)
