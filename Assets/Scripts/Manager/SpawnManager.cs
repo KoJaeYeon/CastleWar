@@ -120,65 +120,68 @@ public class SpawnManager : MonoBehaviour
         GetCacheSubPrefabModel(id, subPrefab =>
         {
             StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, id, index));
-            //숫자가 부족하면 추가생성을 위한 프리팹 저장
-            mergedPrefab.Add(index, Instantiate(poolStack.Peek(), slot.transform));
         });
 
     }
 
     IEnumerator PoolingForTerm(Stack<GameObject> poolStack, GameObject subPrefab, Transform root, int id, int index)
     {
+        //베이스 프리팹 가져오기
+        GameObject baseUnit = GetBasePrefab();
+
+        //하위 프리팹 베이스 프리팹에 생성해주기
+        GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
+
+        //초기 데이터 부여
+        var unit = baseUnit.GetComponent<Unit>();
+        UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
+        unit.InitData(unitData);
+
+        if (index < 6)
+        {
+            baseUnit.tag = "Ally";
+            switch (unitData.unitType)
+            {
+                case UnitType.Ground:
+                    baseUnit.layer = LayerMask.NameToLayer("AllyGroundUnit");
+                    break;
+                case UnitType.Air:
+                    baseUnit.layer = LayerMask.NameToLayer("AllyAirUnit");
+                    break;
+                case UnitType.Building:
+                    baseUnit.layer = LayerMask.NameToLayer("AllyBuilding");
+                    break;
+            }
+        }
+        else
+        {
+            baseUnit.tag = "Enemy";
+            switch (unitData.unitType)
+            {
+                case UnitType.Ground:
+                    baseUnit.layer = LayerMask.NameToLayer("EnemyGroundUnit");
+                    break;
+                case UnitType.Air:
+                    baseUnit.layer = LayerMask.NameToLayer("EnemyAirUnit");
+                    break;
+                case UnitType.Building:
+                    baseUnit.layer = LayerMask.NameToLayer("EnemyBuilding");
+                    break;
+            }
+        }
+
+        //숫자가 부족하면 추가생성을 위한 프리팹 저장
+        mergedPrefab.Add(index, baseUnit);
+
+        //만들어진 프리팹을 복사해서 풀에 저장
         for (int i = 0; i < 30; i++)
         {
-            //베이스 프리팹 가져오기
-            GameObject baseUnit = GetBasePrefab();
-
-            //하위 프리팹 베이스 프리팹에 생성해주기
-            GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
-
-            //초기 데이터 부여
-            var unit = baseUnit.GetComponent<Unit>();
-            UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
-            unit.InitData(unitData);
-
-            if(index < 6)
-            {
-                baseUnit.tag = "Ally";
-                switch(unitData.unitType)
-                {
-                    case UnitType.Ground:
-                        baseUnit.layer = LayerMask.NameToLayer("AllyGroundUnit");
-                        break;
-                    case UnitType.Air:
-                        baseUnit.layer = LayerMask.NameToLayer("AllyAirUnit");
-                        break;
-                    case UnitType.Building:
-                        baseUnit.layer = LayerMask.NameToLayer("AllyBuilding");
-                        break;
-                }
-            }
-            else
-            {
-                baseUnit.tag = "Enemy";
-                switch (unitData.unitType)
-                {
-                    case UnitType.Ground:
-                        baseUnit.layer = LayerMask.NameToLayer("EnemyGroundUnit");
-                        break;
-                    case UnitType.Air:
-                        baseUnit.layer = LayerMask.NameToLayer("EnemyAirUnit");
-                        break;
-                    case UnitType.Building:
-                        baseUnit.layer = LayerMask.NameToLayer("EnemyBuilding");
-                        break;
-                }
-            }
+            //프리팹 복사
+            var SpawnPrefab = Instantiate(baseUnit, root);
 
             //풀에 담아두기
-            poolStack.Push(baseUnit);
+            poolStack.Push(SpawnPrefab);
 
-            //루트 위치 옮겨주기
-            baseUnit.transform.SetParent(root);
             yield return new WaitForSeconds(0.3f);
         }
     }
