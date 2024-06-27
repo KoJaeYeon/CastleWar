@@ -149,7 +149,7 @@ public class PlayerPanel : MonoBehaviour
             Btn_UnitAdd btn_UnitAdd = spawnButton.GetComponent<Btn_UnitAdd>();
             ISelectable selectable = btn_UnitAdd.GetComponent<ISelectable>();
 
-            btn_UnitAdd.SetInit(index, id);
+            btn_UnitAdd.SetInit(index, id); // 버튼에 유닛 할당
 
             Action spawnAction = () =>
             {                

@@ -428,6 +428,7 @@ public class UnitRetreatState : UnitState
 
         if (distance < 8f)
         {
+            //[TODO] 귀환 마나 적용
             SpawnManager.Instance.OnCalled_ReturnUnit(_unit.SpwanSlotIndex, _unit.gameObject);
             Exit();
         }
