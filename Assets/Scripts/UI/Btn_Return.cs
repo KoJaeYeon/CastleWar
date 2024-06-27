@@ -45,6 +45,9 @@ public class Btn_Return : MonoBehaviour
 
     public void OnClick_Btn_Retreat()
     {
+        //귀환할 유닛이 없으면 행동취소
+        if (UnitManager.Instance.CheckCanRetreat()) return;
+
         //버튼 메서드 변경
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnClick_Btn_Cancel);

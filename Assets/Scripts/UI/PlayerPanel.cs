@@ -166,7 +166,7 @@ public class PlayerPanel : MonoBehaviour
     {
         if(maskText != null)
         {
-            maskText.text =  (10-elapsedTime).ToString("0");
+            maskText.text =  (Mathf.Ceil(10-elapsedTime)).ToString("0");
         }
         else
         {

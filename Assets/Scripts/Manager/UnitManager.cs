@@ -135,5 +135,9 @@ public class UnitManager : MonoBehaviour
         }
     }
 
+    public bool CheckCanRetreat()
+    {
+        return _AllyRetreatCallback == null;
+    }
 
 }
