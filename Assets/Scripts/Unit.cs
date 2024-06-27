@@ -160,6 +160,8 @@ public class Unit : MonoBehaviour, IAttack
             {
                 _rigidbody = GetComponent<Rigidbody>();
             }
+            var collider = GetComponent<SphereCollider>();
+            collider.radius = 2.9f;
             _rigidbody.isKinematic = true;
             _canMove = false;
             _spawnTime = 10f;

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Btn_Camp : MonoBehaviour, ISelectable
 {
@@ -6,7 +6,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     bool isDown = false;
     int _index;
 
-    private float _spawnInterval = 0.1f; // ¼ÒÈ¯ ÁÖ±â (0.1ÃÊ)
+    private float _spawnInterval = 0.1f; // ì†Œí™˜ ì£¼ê¸° (0.1ì´ˆ)
     private float _lastSpawnTime = 0f;
 
     GameObject _spawnedUnit;
@@ -40,14 +40,14 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         if (_spawnedUnit == null) return;
         if (touchType == TouchType.Unit)
         {
-            //¾È¾²´Â À¯´Ö ¹ÝÈ¯
+            //ì•ˆì“°ëŠ” ìœ ë‹› ë°˜í™˜
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
             _spawnedUnit = null;
         }
         else
         {
-            //[TODO]Á¶°Ç ÃæÁ·½Ã À¯´Ö ¼ÒÈ¯
+            //[TODO]ì¡°ê±´ ì¶©ì¡±ì‹œ ìœ ë‹› ì†Œí™˜
             var unit = _spawnedUnit.GetComponent<Unit>();
             unit?.StartState();
             _spawnedUnit = null;
@@ -58,7 +58,6 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     {
         if (isDown)
         {
-            // À¯´Ö µå·¡±×
             if (_spawnedUnit == null)
             {
                 return;
@@ -66,20 +65,20 @@ public class Btn_Camp : MonoBehaviour, ISelectable
 
             if (touchType == TouchType.Unit)
             {
-                // À¯´Ö µå·¡±×
+                // ìœ ë‹› ë“œëž˜ê·¸
                 touchPos.y = 0;
                 _spawnedUnit.transform.position = touchPos;
 
-                if (Time.time - _lastSpawnTime < _spawnInterval) return; // ¼ÒÈ¯ ÁÖ±â°¡ µÇÁö ¾ÊÀ¸¸é ¹ÝÈ¯
+                if (Time.time - _lastSpawnTime < _spawnInterval) return; // ì†Œí™˜ ì£¼ê¸°ê°€ ë˜ì§€ ì•Šìœ¼ë©´ ë°˜í™˜
                 _lastSpawnTime = Time.time;
 
                 Debug.Log("entered");
-                //[TODO]Á¶°Ç ÃæÁ·½Ã À¯´Ö ¼ÒÈ¯
+                //[TODO]ì¡°ê±´ ì¶©ì¡±ì‹œ ìœ ë‹› ì†Œí™˜
                 var unit = _spawnedUnit.GetComponent<Unit>();
                 unit?.StartState();
 
 
-                //´ë±â À¯´Ö Ä¡È¯
+                //ëŒ€ê¸° ìœ ë‹› ì¹˜í™˜
                 _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);
                 _spawnedUnit.SetActive(true);
                 touchPos.y = 0;
@@ -90,6 +89,8 @@ public class Btn_Camp : MonoBehaviour, ISelectable
             else if (touchType == TouchType.NotUnit)
             {
                 Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
+
+
                 _spawnedUnit.transform.position = roundedVector;
             }
         }
@@ -101,7 +102,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         {
             isDown = false;
 
-            //¾È¾²´Â À¯´Ö ¹ÝÈ¯
+            //ì•ˆì“°ëŠ” ìœ ë‹› ë°˜í™˜
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
             _spawnedUnit = null;

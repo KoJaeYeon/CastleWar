@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public enum TouchType
 {
@@ -14,6 +15,9 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     private float _lastSpawnTime = 0f;
 
     GameObject _spawnedUnit;
+    Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
+
+    int tempLayer;
 
     public void SetInit(int index, int id)
     {
@@ -46,12 +50,21 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
         _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);
         _spawnedUnit.SetActive(true);
 
+        if(touchType == TouchType.NotUnit)
+        {
+            tempLayer = _spawnedUnit.layer;
+            _spawnedUnit.layer = LayerMask.NameToLayer("Default");
+        }
+
     }
 
     public void OnPointerUp()
     {
         isDown = false;
         if (_spawnedUnit == null) return;
+
+        _spawnedUnit.layer = tempLayer;
+        
         if(touchType == TouchType.Unit)
         {
             //안쓰는 유닛 반환
@@ -104,7 +117,16 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
             else if (touchType == TouchType.NotUnit)
             {
                 Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
-                _spawnedUnit.transform.position = roundedVector;
+
+                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border" };
+                int layerMask = LayerMask.GetMask(targetLayers);
+
+                int hitCount = Physics.OverlapSphereNonAlloc(roundedVector, 3f, hitColliders, layerMask);
+
+                if (hitCount == 0)
+                {
+                    _spawnedUnit.transform.position = roundedVector;
+                }
             }
         }
     }

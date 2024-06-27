@@ -401,41 +401,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3129587582033375996, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_Size.z
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 4383099337448245134, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -51
-      objectReference: {fileID: 0}
-    - target: {fileID: 5812802700834736813, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -51
-      objectReference: {fileID: 0}
     - target: {fileID: 6321032377536401464, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
       propertyPath: m_Name
       value: Border_HourGlassHill
-      objectReference: {fileID: 0}
-    - target: {fileID: 6666145649403873481, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_Size.z
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7020547267330468179, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_Size.z
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7235844557300091394, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_Size.z
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8472751356040121219, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 51
-      objectReference: {fileID: 0}
-    - target: {fileID: 8592583092314888512, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 51
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -175,13 +175,13 @@ public class SpawnManager : MonoBehaviour
         //만들어진 프리팹을 복사해서 풀에 저장
         for (int i = 0; i < 30; i++)
         {
-            Debug.Log(baseUnit.GetComponent<Unit>().SpawnTime);
             //프리팹 복사
             var SpawnPrefab = Instantiate(baseUnit, root);
 
             //데이터 초기화
             var spawnUnit = SpawnPrefab.GetComponent<Unit>();
             spawnUnit.InitData(unitData);
+            SpawnPrefab.name = $"{unitData.name}_{i}";
 
             //풀에 담아두기
             poolStack.Push(SpawnPrefab);
