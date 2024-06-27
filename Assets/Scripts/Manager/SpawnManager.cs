@@ -120,6 +120,7 @@ public class SpawnManager : MonoBehaviour
         GetCacheSubPrefabModel(id, subPrefab =>
         {
             StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, id, index));
+            
         });
 
     }
@@ -136,7 +137,6 @@ public class SpawnManager : MonoBehaviour
         var unit = baseUnit.GetComponent<Unit>();
         UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
         unit.InitData(unitData);
-
         if (index < 6)
         {
             baseUnit.tag = "Ally";
@@ -169,15 +169,19 @@ public class SpawnManager : MonoBehaviour
                     break;
             }
         }
-
         //숫자가 부족하면 추가생성을 위한 프리팹 저장
         mergedPrefab.Add(index, baseUnit);
 
         //만들어진 프리팹을 복사해서 풀에 저장
         for (int i = 0; i < 30; i++)
         {
+            Debug.Log(baseUnit.GetComponent<Unit>().SpawnTime);
             //프리팹 복사
             var SpawnPrefab = Instantiate(baseUnit, root);
+
+            //데이터 초기화
+            var spawnUnit = SpawnPrefab.GetComponent<Unit>();
+            spawnUnit.InitData(unitData);
 
             //풀에 담아두기
             poolStack.Push(SpawnPrefab);
