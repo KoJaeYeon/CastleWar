@@ -385,6 +385,7 @@ public class UnitRetreatState : UnitState
         if(_castleSearched)
         {
             MoveTowardsTarget_Retreat();
+            ReturnCastle(); // 가까이가면 회수되는 함수
         }
         else
         {
@@ -414,6 +415,21 @@ public class UnitRetreatState : UnitState
         if(distance < _retreatDistance)
         {
             _castleSearched=true;
+        }
+    }
+
+    private void ReturnCastle()
+    {
+        Vector3 origin = _unit.transform.position;
+
+        float distance = Vector3.Distance(_castleTrans.position, origin);
+
+        Debug.Log(distance);
+
+        if (distance < 8f)
+        {
+            SpawnManager.Instance.OnCalled_ReturnUnit(_unit.SpwanSlotIndex, _unit.gameObject);
+            Exit();
         }
     }
 
@@ -485,7 +501,7 @@ public class UnitRetreatState : UnitState
             case MapCornerPoint.TopRightCenter:
                 return Vector3.right;
             default:
-                return Vector3.forward;
+                return Vector3.back;
         }
     }
     #endregion

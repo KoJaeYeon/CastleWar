@@ -203,6 +203,7 @@ public class SpawnManager : MonoBehaviour
 
     public void OnCalled_ReturnUnit(int index, GameObject returnUnit) //유닛 복귀할때 또는 죽을 때
     {
+        returnUnit.SetActive(false);
         StackSpawnUnitObject[index].Push(returnUnit);
     }
 }
