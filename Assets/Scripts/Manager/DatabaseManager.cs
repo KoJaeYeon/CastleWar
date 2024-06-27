@@ -110,7 +110,8 @@ public class DatabaseManager : MonoBehaviour
 
     public void ConnectToDB()
     {
-        _isConnectTestCompolete = ConnetTest();
+        //[TODO : 최종 빌드때 제거]
+        //_isConnectTestCompolete = ConnetTest();
         SendQuery();
     }
 

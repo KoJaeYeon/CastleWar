@@ -28,6 +28,7 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] UnitType _attackType;
     [SerializeField] Slider HpSlider;
     [SerializeField] Image SpawnTimerImage;
+    [SerializeField] GameObject AttackRange_Img;
 
     public MapCornerPoint MapCornerPoint { get; set; }
         
@@ -102,6 +103,34 @@ public class Unit : MonoBehaviour, IAttack
         set { _canMove = value; }
     }
 
+
+    private void OnDisable()
+    {
+        _currentState = null;
+        AttackRange_Img.SetActive(true);
+
+        var SpawnTimerObject = SpawnTimerImage.transform.parent;
+        SpawnTimerObject.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if(_currentState != null)
+        {
+            _currentState.ExecuteUpdate();
+        }
+        
+    }
+
+    void FixedUpdate()
+    {
+        if(_currentState != null)
+        {
+            _currentState.ExecuteFixedUpdate();
+        }
+        
+    }
+
     public void SetSpawnSlotIndex(int index)
     {
         _spawnSlotIndex = index;
@@ -121,20 +150,27 @@ public class Unit : MonoBehaviour, IAttack
         _attackType = unitData.AttackType;
         _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
 
-        if(unitData.unitType == UnitType.Building)
+        //캐릭터 공격범위 표시 이미지
+        RectTransform rectAtkRangeImg = AttackRange_Img.GetComponent<RectTransform>();
+        rectAtkRangeImg.sizeDelta = new Vector2(_attackRange*2, _attackRange*2);
+              
+        if (unitData.unitType == UnitType.Building)
         {
             if (_rigidbody == null)
             {
                 _rigidbody = GetComponent<Rigidbody>();
             }
             _rigidbody.isKinematic = true;
-            _canMove =false;
+            _canMove = false;
             _spawnTime = 10f;
+            var SpawnTimerObject = SpawnTimerImage.transform.parent;
+            SpawnTimerObject.localScale = Vector3.one * 2;
         }
     }
 
     private void ResetData()
     {
+        AttackRange_Img.SetActive(false);
         _health = _maxHealth;
         _targetEnemy = null;
         _attackTargerEnemy = null;
@@ -143,33 +179,12 @@ public class Unit : MonoBehaviour, IAttack
     public void StartState()
     {
         ResetData();
+        var SpawnTimerObject = SpawnTimerImage.transform.parent;
+        SpawnTimerObject.gameObject.SetActive(true);
 
         _currentState = new UnitIdleState(this);
         _currentState.Enter();
         CheckHealthBar();
-    }
-
-    private void OnDisable()
-    {
-        _currentState = null;        
-    }
-
-    private void Update()
-    {
-        if(_currentState != null)
-        {
-            _currentState.ExecuteUpdate();
-        }
-        
-    }
-
-    void FixedUpdate()
-    {
-        if(_currentState != null)
-        {
-            _currentState.ExecuteFixedUpdate();
-        }
-        
     }
 
     public void CheckHealthBar()

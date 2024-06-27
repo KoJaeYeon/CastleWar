@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitId: 1
+  _cost: 0
+  _populaltion: 0
   _health: 40
   _maxHealth: 40
   _attackDamage: 10
@@ -104,8 +106,10 @@ MonoBehaviour:
   _attackRange: 3
   _isMelee: 0
   _moveSpeed: 3
+  _attackType: 0
   HpSlider: {fileID: 984105411847109694}
   SpawnTimerImage: {fileID: 8144584290176240963}
+  AttackRange_Img: {fileID: 7126131749343993872}
 --- !u!114 &7359319466707416099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +248,11 @@ MonoBehaviour:
 --- !u!224 &3379749781036406109 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6756448966213384194, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
+  m_PrefabInstance: {fileID: 8297022553157086559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7126131749343993872 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1279560077767675215, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
   m_PrefabInstance: {fileID: 8297022553157086559}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8144584290176240963 stripped

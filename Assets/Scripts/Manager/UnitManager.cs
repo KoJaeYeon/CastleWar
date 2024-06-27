@@ -29,8 +29,8 @@ public class UnitManager : MonoBehaviour
     event Action _EnemyRetreatCallback;
     event Action _EnemyCanceltCallback;
 
-    event Action<bool> _RetreatCallback;
-    event Action<bool> _CanelCallback;
+    //event Action<bool> _RetreatCallback;
+    //event Action<bool> _CanelCallback;
 
     event Action ChangeCancelButton;
 
