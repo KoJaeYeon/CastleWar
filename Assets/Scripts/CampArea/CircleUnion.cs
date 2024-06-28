@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class CircleUnion3D : MonoBehaviour
+public class CircleUnionManager : MonoBehaviour
 {
     public List<Transform> circles = new List<Transform>(); // 원 리스트
 
@@ -16,10 +16,10 @@ public class CircleUnion3D : MonoBehaviour
 
     GameObject unionObject;
 
-    private float minX = -10f;
-    private float maxX = 10f;
-    private float minZ = -10f;
-    private float maxZ = 10f;
+    private float minX = -28f;
+    private float maxX = 28f;
+    private float minZ = -57f;
+    private float maxZ = 57f;
 
     void Start()
     {
@@ -32,26 +32,15 @@ public class CircleUnion3D : MonoBehaviour
 
         meshFilter.mesh = unionMesh;
         meshRenderer.material = new Material(Shader.Find("Standard"));
-
-        // 테스트를 위해 초기 원들을 추가합니다.
-        AddCircle(new Vector3(0, 0, 0), 1.0f); // (위치: (0, 0, 0), 반지름: 1.0)
-        AddCircle(new Vector3(2, 0, 0), 1.0f); // (위치: (2, 0, 0), 반지름: 1.0)
     }
 
-    void Update()
+    private void Update()
     {
-        // 특정 조건에서 새로운 원을 추가할 수 있습니다.
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AddCircle(new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Random.Range(0.5f, 1.5f));
-        }
+        CheckMeshOnValueChanged();
+    }
 
-        // 특정 조건에서 원을 제거할 수 있습니다. 예: 첫 번째 원을 제거
-        if (Input.GetKeyDown(KeyCode.R) && circles.Count > 0)
-        {
-            RemoveCircle(circles[0]);
-        }
-
+    void CheckMeshOnValueChanged()
+    {
         if (circles.Count < 2)
         {
             return; // 원이 두 개 이상일 때만 합집합 계산
@@ -100,10 +89,11 @@ public class CircleUnion3D : MonoBehaviour
         unionObject.transform.position = Vector3.zero;
     }
 
-    public void AddCircle(Vector3 position, float radius)
+    public void AddCircle(Transform transform, float radius = 15f)
     {
         GameObject newCircle = new GameObject("Circle");
-        newCircle.transform.position = position;
+        newCircle.transform.SetParent(transform);
+        newCircle.transform.position = transform.position;
         newCircle.transform.localScale = new Vector3(1, 1, 1); // 기본 스케일로 설정
         circles.Add(newCircle.transform);
 
@@ -122,11 +112,15 @@ public class CircleUnion3D : MonoBehaviour
         circleRenderers.Add(meshRenderer);
         circleDataList.Add(circleData);
 
-        UpdateCircleMesh(circleMesh, new Vector2(position.x, position.z), radius);
+        UpdateCircleMesh(circleMesh, new Vector2(transform.position.x,transform. position.z), circleData.radius);
+
+        CheckMeshOnValueChanged();
     }
 
-    public void RemoveCircle(Transform circle)
+    public void RemoveCircle(Transform circleParent)
     {
+        Transform circle = circleParent.GetComponentInChildren<CircleData>().transform;
+        
         int index = circles.IndexOf(circle);
         if (index != -1)
         {
@@ -139,6 +133,8 @@ public class CircleUnion3D : MonoBehaviour
             circleFilters.RemoveAt(index);
             circleDataList.RemoveAt(index);
         }
+
+        CheckMeshOnValueChanged();
     }
 
     void UpdateUnionMesh(Vector2 center1, float radius1, Vector2 center2, float radius2, Vector2 intersection1, Vector2 intersection2, List<Vector3> vertices, List<int> triangles)
