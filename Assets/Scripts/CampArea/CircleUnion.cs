@@ -16,6 +16,11 @@ public class CircleUnion3D : MonoBehaviour
 
     GameObject unionObject;
 
+    private float minX = -10f;
+    private float maxX = 10f;
+    private float minZ = -10f;
+    private float maxZ = 10f;
+
     void Start()
     {
         // 합집합 메쉬 초기화
@@ -39,6 +44,12 @@ public class CircleUnion3D : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             AddCircle(new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Random.Range(0.5f, 1.5f));
+        }
+
+        // 특정 조건에서 원을 제거할 수 있습니다. 예: 첫 번째 원을 제거
+        if (Input.GetKeyDown(KeyCode.R) && circles.Count > 0)
+        {
+            RemoveCircle(circles[0]);
         }
 
         if (circles.Count < 2)
@@ -114,14 +125,30 @@ public class CircleUnion3D : MonoBehaviour
         UpdateCircleMesh(circleMesh, new Vector2(position.x, position.z), radius);
     }
 
+    public void RemoveCircle(Transform circle)
+    {
+        int index = circles.IndexOf(circle);
+        if (index != -1)
+        {
+            // 리스트에서 제거
+            circles.RemoveAt(index);
+            Destroy(circle.gameObject);
+
+            circleMeshes.RemoveAt(index);
+            circleRenderers.RemoveAt(index);
+            circleFilters.RemoveAt(index);
+            circleDataList.RemoveAt(index);
+        }
+    }
+
     void UpdateUnionMesh(Vector2 center1, float radius1, Vector2 center2, float radius2, Vector2 intersection1, Vector2 intersection2, List<Vector3> vertices, List<int> triangles)
     {
         int initialVertexCount = vertices.Count;
 
-        vertices.Add(new Vector3(center1.x, 0, center1.y));
-        vertices.Add(new Vector3(intersection1.x, 0, intersection1.y));
-        vertices.Add(new Vector3(center2.x, 0, center2.y));
-        vertices.Add(new Vector3(intersection2.x, 0, intersection2.y));
+        vertices.Add(ClampVertex(new Vector3(center1.x, 0, center1.y)));
+        vertices.Add(ClampVertex(new Vector3(intersection1.x, 0, intersection1.y)));
+        vertices.Add(ClampVertex(new Vector3(center2.x, 0, center2.y)));
+        vertices.Add(ClampVertex(new Vector3(intersection2.x, 0, intersection2.y)));
 
         // 원1의 점들을 추가
         float angle1 = Mathf.Atan2(intersection1.y - center1.y, intersection1.x - center1.x);
@@ -132,7 +159,7 @@ public class CircleUnion3D : MonoBehaviour
         for (float angle = angle1; angle < angle2; angle += Mathf.PI / 16)
         {
             Vector2 point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius1;
-            vertices.Add(new Vector3(center1.x + point.x, 0, center1.y + point.y));
+            vertices.Add(ClampVertex(new Vector3(center1.x + point.x, 0, center1.y + point.y)));
         }
 
         // 원2의 점들을 추가
@@ -144,7 +171,7 @@ public class CircleUnion3D : MonoBehaviour
         for (float angle = angle1; angle < angle2; angle += Mathf.PI / 16)
         {
             Vector2 point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius2;
-            vertices.Add(new Vector3(center2.x + point.x, 0, center2.y + point.y));
+            vertices.Add(ClampVertex(new Vector3(center2.x + point.x, 0, center2.y + point.y)));
         }
 
         // 삼각형을 생성
@@ -172,15 +199,15 @@ public class CircleUnion3D : MonoBehaviour
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
 
-        vertices.Add(new Vector3(0, 0, 0)); // 중심점 추가
+        vertices.Add(Vector3.zero); // 중심점 추가
         int segments = 32;
         float angleIncrement = 2 * Mathf.PI / segments;
 
         for (int i = 0; i <= segments; i++)
         {
             float angle = i * angleIncrement;
-            Vector2 point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-            vertices.Add(new Vector3(point.x, 0, point.y)); // 점을 중심점에 더하지 않습니다.
+            Vector2 point = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            vertices.Add(ClampVertex(new Vector3(point.x, 0, point.y)) - new Vector3(center.x, 0, center.y)); // 점을 중심점에 더하지 않습니다.
             if (i > 0)
             {
                 triangles.Add(0);
@@ -195,6 +222,10 @@ public class CircleUnion3D : MonoBehaviour
         triangles.Add(segments);
 
         mesh.Clear();
+        foreach (var vec in vertices)
+        {
+            Debug.Log(vec);
+        }
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
@@ -202,6 +233,13 @@ public class CircleUnion3D : MonoBehaviour
         // Mesh를 중앙에 배치
         var meshObject = meshFilter.gameObject;
         meshObject.transform.position = new Vector3(center.x, 0, center.y);
+    }
+
+    Vector3 ClampVertex(Vector3 vertex)
+    {
+        vertex.x = Mathf.Clamp(vertex.x, minX, maxX);
+        vertex.z = Mathf.Clamp(vertex.z, minZ, maxZ);
+        return vertex;
     }
 
     void SetCircleMeshesActive(bool isActive, HashSet<int> overlappingCircles)
