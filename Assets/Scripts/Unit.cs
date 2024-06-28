@@ -195,6 +195,7 @@ public class Unit : MonoBehaviour, IAttack
         CheckHealthBar();
     }
 
+
     public void CheckHealthBar()
     {
         if (_health == _maxHealth)
