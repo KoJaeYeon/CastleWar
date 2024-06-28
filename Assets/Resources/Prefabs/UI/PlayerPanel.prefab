@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 3467235411148315438}
   - component: {fileID: 4018682365219281267}
   - component: {fileID: 8942646064635949681}
+  - component: {fileID: 765093789896841890}
   m_Layer: 5
   m_Name: Btn_Camp
   m_TagString: Untagged
@@ -279,6 +280,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &765093789896841890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012439374141179878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a67e2e6e2cd7e6f4ab3d9c12dbdaf731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1920936475958916966
 GameObject:
   m_ObjectHideFlags: 0

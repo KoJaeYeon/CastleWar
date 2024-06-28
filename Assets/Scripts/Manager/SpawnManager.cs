@@ -32,6 +32,7 @@ public class SpawnManager : MonoBehaviour
 
         Load_BasePrefab_OnAwake();
         ObjectPooling_BasePrefab_OnAwake();
+        ObjectPooling_Camp_OnAwake();
     }
 
     #region Addressible
@@ -94,6 +95,7 @@ public class SpawnManager : MonoBehaviour
     #region ObjectPooling
     Stack<GameObject>[] StackSpawnUnitObject = new Stack<GameObject>[12];
     Dictionary<int, GameObject> mergedPrefab = new Dictionary<int, GameObject>();
+    Stack<GameObject> StackCampObject = new Stack<GameObject>();
 
     void ObjectPooling_BasePrefab_OnAwake()
     {
@@ -107,6 +109,27 @@ public class SpawnManager : MonoBehaviour
             Stack_BaseUnit.Push(prefab);
         }
     }
+    void ObjectPooling_Camp_OnAwake()
+    {
+        GameObject campPrefab = Resources.Load("Prefabs/Camp") as GameObject;
+        mergedPrefab.Add(-1, campPrefab);
+        GameObject campRoot = new GameObject("CampRoot");
+        campRoot.transform.SetParent(_root);
+
+        for(int i = 0; i < 30; i++)
+        {
+            GameObject campPrefabClone = Instantiate(campPrefab, campRoot.transform);
+            campPrefabClone.SetActive(false);
+            //데이터 초기화
+            var spawnUnit = campPrefabClone.GetComponent<Unit>();
+            UnitData unitData = DatabaseManager.Instance.OnGetUnitData(-1);
+            spawnUnit.InitData(unitData);
+            campPrefabClone.layer = LayerMask.NameToLayer("AllyBuilding");
+            campPrefabClone.name = $"Camp_{i}";
+            StackCampObject.Push(campPrefabClone);
+        }
+
+    }
 
     //카드를 등록할 때 실행하는 함수, 9초에 걸쳐 생성
     public void OnAdd_ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
@@ -119,8 +142,7 @@ public class SpawnManager : MonoBehaviour
         //subPrefab의 비동기 작업이 완료된 후 콜백
         GetCacheSubPrefabModel(id, subPrefab =>
         {
-            StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, id, index));
-            
+            StartCoroutine(PoolingForTerm(poolStack, subPrefab, slot.transform, id, index));            
         });
 
     }
@@ -200,6 +222,13 @@ public class SpawnManager : MonoBehaviour
         else
         {
             GameObject newPrefab = Instantiate(mergedPrefab[index]);
+
+            //데이터 초기화
+            Unit newPrefabUnit = newPrefab.GetComponent<Unit>();
+            UnitData unitData = DatabaseManager.Instance.OnGetUnitData(newPrefabUnit.UnitId);
+            newPrefabUnit.InitData(unitData);
+
+            //반환
             newPrefab.SetActive(false);
             return newPrefab;
         }
@@ -209,5 +238,25 @@ public class SpawnManager : MonoBehaviour
     {
         returnUnit.SetActive(false);
         StackSpawnUnitObject[index].Push(returnUnit);
+    }
+
+    public GameObject OnCalled_GetCamp()
+    {
+        if (StackCampObject.TryPop(out GameObject result))
+        {
+            return result;
+        }
+        else
+        {
+            GameObject newPrefab = Instantiate(mergedPrefab[-1]);
+            newPrefab.SetActive(false);
+            return newPrefab;
+        }
+    }
+
+    public void OnCalled_ReturnCamp(GameObject returnUnit) //막사가 파괴될 때
+    {
+        returnUnit.SetActive(false);
+        StackCampObject.Push(returnUnit);
     }
 }

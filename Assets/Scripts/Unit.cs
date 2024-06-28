@@ -167,6 +167,12 @@ public class Unit : MonoBehaviour, IAttack
             _spawnTime = 10f;
             var SpawnTimerObject = SpawnTimerImage.transform.parent;
             SpawnTimerObject.localScale = Vector3.one * 2;
+
+            //막사
+            if(_unitId == -1)
+            {
+                _canAttack =false;
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
@@ -110,14 +110,14 @@ public class DatabaseManager : MonoBehaviour
 
     public void ConnectToDB()
     {
-        //[TODO : ÃÖÁ¾ ºôµå¶§ Á¦°Å]
+        //[TODO : ìµœì¢… ë¹Œë“œë•Œ ì œê±°]
         //_isConnectTestCompolete = ConnetTest();
         SendQuery();
     }
 
     private void SendQuery(string queryStr, string tableName)
     {
-        //SELECT°ü·Ã ÇÔ¼ö È£Ãâ
+        //SELECTê´€ë ¨ í•¨ìˆ˜ í˜¸ì¶œ
         if (queryStr.Contains("SELECT"))
         {
             DataSet dataSet = OnSelectRequest(queryStr, tableName);
@@ -146,7 +146,7 @@ public class DatabaseManager : MonoBehaviour
                     continue;
                 }
 
-                // Dictionary¿¡ ³Ö±âÀü µ¥ÀÌÅÍ ÆÄ½Ì
+                // Dictionaryì— ë„£ê¸°ì „ ë°ì´í„° íŒŒì‹±
                 try
                 {
                     int id = int.Parse(columns[0]);
@@ -235,12 +235,12 @@ public class DatabaseManager : MonoBehaviour
                 conn.Open();
             }
 
-            Debug.Log("DB ¿¬°áÀ» ¼º°øÇß½À´Ï´Ù!");
+            Debug.Log("DB ì—°ê²°ì„ ì„±ê³µí–ˆìŠµë‹ˆë‹¤!");
             return true;
         }
         catch
         {
-            Debug.Log("DB ¿¬°áÀ» ½ÇÆĞÇß½À´Ï´Ù!");
+            Debug.Log("DB ì—°ê²°ì„ ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤!");
             return false;
         }
     }
@@ -249,7 +249,7 @@ public class DatabaseManager : MonoBehaviour
     {
         if (_isConnectTestCompolete == false)
         {
-            Debug.Log("DB ¿¬°á¿¡ ½ÇÆĞÇß½À´Ï´Ù. ¼öµ¿À¸·Î µ¥ÀÌÅÍ¸¦ ÀĞ¾î¿É´Ï´Ù.");
+            Debug.Log("DB ì—°ê²°ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ìˆ˜ë™ìœ¼ë¡œ ë°ì´í„°ë¥¼ ì½ì–´ì˜µë‹ˆë‹¤.");
             ReadDataManually();
             return;
         }
@@ -262,46 +262,47 @@ public class DatabaseManager : MonoBehaviour
     {
         unitDataDic.Clear();
 
-        // µ¥ÀÌÅÍ¸¦ Ãß°¡
-        unitDataDic.Add(0, new UnitData(0, "±Ã¼öÅ¾", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Ground, 5, CardType.Common));
-        unitDataDic.Add(1, new UnitData(1, "Æ÷Å¾", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common));
-        unitDataDic.Add(2, new UnitData(2, "´ë°øÆ÷Å¾", 50, UnitType.Building, 1650, 130, 0.8f, 9, 0, UnitType.Air, 5, CardType.Common));
-        unitDataDic.Add(3, new UnitData(3, "ÄÚº¼Æ®", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common));
-        unitDataDic.Add(4, new UnitData(4, "Àü¿­º¸º´", 25, UnitType.Ground, 730, 106, 1.3f, 3, 7, UnitType.Ground, 3, CardType.Common));
-        unitDataDic.Add(5, new UnitData(5, "ÇåÅÍ", 15, UnitType.Ground, 195, 45, 0.8f, 5, 5, UnitType.Both, 2, CardType.Common));
-        unitDataDic.Add(6, new UnitData(6, "Æ®¸¯½ºÅÍ", 18, UnitType.Ground, 366, 45, 0.9f, 2, 5, UnitType.Both, 2, CardType.Common));
-        unitDataDic.Add(7, new UnitData(7, "¹æÆĞ Æë±Ïº´", 15, UnitType.Ground, 400, 52, 1.5f, 3, 5, UnitType.Ground, 2, CardType.Common));
-        unitDataDic.Add(8, new UnitData(8, "¸®ÀÚµå ÅõÃ¢º´", 15, UnitType.Ground, 240, 106, 2.6f, 6, 5, UnitType.Ground, 2, CardType.Common));
-        unitDataDic.Add(9, new UnitData(9, "²¿¸¶ ¹ÙÀÌÅ·", 25, UnitType.Ground, 1288, 256, 2.2f, 3, 7, UnitType.Building, 3, CardType.Epic));
-        unitDataDic.Add(10, new UnitData(10, "¸¶³ª Ä³³í", 75, UnitType.Building, 3660, 685, 2.8f, 8, 5, UnitType.Ground, 6, CardType.Rare));
-        unitDataDic.Add(11, new UnitData(11, "¹ß¸®½ºÅ¸", 75, UnitType.Building, 3660, 1021, 2.6f, 7, 5, UnitType.Ground, 6, CardType.Rare));
-        unitDataDic.Add(12, new UnitData(12, "±Û·¹ÀÌ¼Å", 40, UnitType.Ground, 926, 259, 2.0f, 5, 5, UnitType.Both, 4, CardType.Legendary));
-        unitDataDic.Add(13, new UnitData(13, "ÇØÄ¥¸µ", 40, UnitType.Air, 133, 121, 1.2f, 3, 7, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(14, new UnitData(14, "±×¸®Áñ¸®", 60, UnitType.Ground, 3594, 253, 1.5f, 3, 3, UnitType.Building, 5, CardType.Rare));
-        unitDataDic.Add(15, new UnitData(15, "¿ä¼ú»ç", 48, UnitType.Ground, 1048, 511, 2.0f, 5, 5, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(16, new UnitData(16, "½º¸Å¼Å", 50, UnitType.Ground, 1617, 572, 2.1f, 3, 5, UnitType.Ground, 5, CardType.Rare));
-        unitDataDic.Add(17, new UnitData(17, "¿ëÀÎ", 50, UnitType.Ground, 1487, 201, 1.1f, 3, 5, UnitType.Ground, 5, CardType.Rare));
-        unitDataDic.Add(18, new UnitData(18, "¼ÒÃÑ ¾Æ¿ïº£¾î", 45, UnitType.Ground, 925, 237, 2.3f, 7, 5, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(19, new UnitData(19, "¸ğ½º·¹ÀÌµğ", 40, UnitType.Air, 938, 180, 1.6f, 2, 7, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(20, new UnitData(20, "ÀüÅõ ÄÚ³¢¸®", 50, UnitType.Ground, 2641, 237, 1.4f, 7, 7, UnitType.Building, 5, CardType.Rare));
-        unitDataDic.Add(21, new UnitData(21, "ÀÎÅÍ¼ÁÅÍ", 35, UnitType.Air, 532, 157, 1.4f, 2, 7, UnitType.Ground, 3, CardType.Rare));
-        unitDataDic.Add(22, new UnitData(22, "ÀüÅõ °í¸±¶ó", 45, UnitType.Ground, 1158, 615, 2.8f, 10, 3, UnitType.Building, 5, CardType.Rare));
-        unitDataDic.Add(23, new UnitData(23, "»ø·¯¸Ç´õ", 50, UnitType.Ground, 1138, 526, 2.3f, 6, 3, UnitType.Ground, 5, CardType.Rare));
-        unitDataDic.Add(24, new UnitData(24, "¼ø±³ÀÚ", 40, UnitType.Ground, 1019, 243, 1.5f, 4, 5, UnitType.Both, 4, CardType.Epic));
-        unitDataDic.Add(25, new UnitData(25, "ºñÇà¼±", 35, UnitType.Air, 2407, 195, 3.0f, 1, 7, UnitType.Building, 3, CardType.Legendary));
-        unitDataDic.Add(26, new UnitData(26, "ÃÊ¿ùÀÇ Å¾", 150, UnitType.Building, 7015, 5456, 1.0f, 99, 7, UnitType.Both, 8, CardType.Legendary));
-        unitDataDic.Add(27, new UnitData(27, "¾ÆÄÉÀÎ ºí·¡½ºÅÍ", 100, UnitType.Building, 6442, 324, 4.0f, 7, 5, UnitType.Both, 7, CardType.Epic));
-        unitDataDic.Add(28, new UnitData(28, "±×¸®Æù ¶óÀÌ´õ", 70, UnitType.Air, 1683, 354, 1.5f, 8, 5, UnitType.Ground, 5, CardType.Legendary));
-        unitDataDic.Add(29, new UnitData(29, "´ëÆ÷ °ÅºÏ", 85, UnitType.Ground, 1772, 672, 2.9f, 8, 7, UnitType.Ground, 6, CardType.Epic));
-        unitDataDic.Add(30, new UnitData(30, "°­Ã¶ °ÅÀÎ", 100, UnitType.Ground, 7972, 1047, 2.4f, 3, 3, UnitType.Building, 8, CardType.Legendary));
-        unitDataDic.Add(31, new UnitData(31, "µå·¡°ï", 100, UnitType.Air, 5047, 448, 2.3f, 4, 3, UnitType.Both, 8, CardType.Epic));
-        unitDataDic.Add(32, new UnitData(32, "´ë°øÆ÷º´", 80, UnitType.Ground, 2206, 934, 2.1f, 6, 7, UnitType.Both, 6, CardType.Epic));
-        unitDataDic.Add(33, new UnitData(33, "¿¢½º ¹öÆÈ·Î", 90, UnitType.Ground, 3704, 1517, 2.7f, 3, 3, UnitType.Ground, 7, CardType.Legendary));
-        unitDataDic.Add(34, new UnitData(34, "ÀÌºí¸®½º", 80, UnitType.Air, 3293, 522, 4.0f, 5, 3, UnitType.Both, 6, CardType.Legendary));
-        unitDataDic.Add(35, new UnitData(35, "»ç·É¿©Á¦", 70, UnitType.Ground, 1890, 495, 1.3f, 6, 7, UnitType.Both, 5, CardType.Legendary));
-        unitDataDic.Add(36, new UnitData(36, "¿­±â±¸ Æë±Ïº´", 40, UnitType.Air, 720, 128, 2.2f, 2, 5, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(37, new UnitData(37, "Àú°İ¼ö", 100, UnitType.Ground, 1198, 1091, 2.9f, 10, 3, UnitType.Both, 6, CardType.Legendary));
-        unitDataDic.Add(38, new UnitData(38, "ÄËÅ¸¿ì·ç½º", 80, UnitType.Ground, 2738, 730, 1.6f, 3, 7, UnitType.Ground, 6, CardType.Epic));
+        // ë°ì´í„°ë¥¼ ì¶”ê°€
+        unitDataDic.Add(-1, new UnitData(0, "ë§‰ì‚¬", 50, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
+        unitDataDic.Add(0, new UnitData(0, "ê¶ìˆ˜íƒ‘", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common));
+        unitDataDic.Add(1, new UnitData(1, "í¬íƒ‘", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common));
+        unitDataDic.Add(2, new UnitData(2, "ëŒ€ê³µí¬íƒ‘", 50, UnitType.Building, 1650, 130, 0.8f, 9, 0, UnitType.Air, 5, CardType.Common));
+        unitDataDic.Add(3, new UnitData(3, "ì½”ë³¼íŠ¸", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common));
+        unitDataDic.Add(4, new UnitData(4, "ì „ì—´ë³´ë³‘", 25, UnitType.Ground, 730, 106, 1.3f, 3, 7, UnitType.Ground, 3, CardType.Common));
+        unitDataDic.Add(5, new UnitData(5, "í—Œí„°", 15, UnitType.Ground, 195, 45, 0.8f, 5, 5, UnitType.Both, 2, CardType.Common));
+        unitDataDic.Add(6, new UnitData(6, "íŠ¸ë¦­ìŠ¤í„°", 18, UnitType.Ground, 366, 45, 0.9f, 2, 5, UnitType.Both, 2, CardType.Common));
+        unitDataDic.Add(7, new UnitData(7, "ë°©íŒ¨ í­ê·„ë³‘", 15, UnitType.Ground, 400, 52, 1.5f, 3, 5, UnitType.Ground, 2, CardType.Common));
+        unitDataDic.Add(8, new UnitData(8, "ë¦¬ìë“œ íˆ¬ì°½ë³‘", 15, UnitType.Ground, 240, 106, 2.6f, 6, 5, UnitType.Ground, 2, CardType.Common));
+        unitDataDic.Add(9, new UnitData(9, "ê¼¬ë§ˆ ë°”ì´í‚¹", 25, UnitType.Ground, 1288, 256, 2.2f, 3, 7, UnitType.Building, 3, CardType.Epic));
+        unitDataDic.Add(10, new UnitData(10, "ë§ˆë‚˜ ìºë…¼", 75, UnitType.Building, 3660, 685, 2.8f, 8, 5, UnitType.Ground, 6, CardType.Rare));
+        unitDataDic.Add(11, new UnitData(11, "ë°œë¦¬ìŠ¤íƒ€", 75, UnitType.Building, 3660, 1021, 2.6f, 7, 5, UnitType.Ground, 6, CardType.Rare));
+        unitDataDic.Add(12, new UnitData(12, "ê¸€ë ˆì´ì…”", 40, UnitType.Ground, 926, 259, 2.0f, 5, 5, UnitType.Both, 4, CardType.Legendary));
+        unitDataDic.Add(13, new UnitData(13, "í•´ì¹ ë§", 40, UnitType.Air, 133, 121, 1.2f, 3, 7, UnitType.Both, 4, CardType.Rare));
+        unitDataDic.Add(14, new UnitData(14, "ê·¸ë¦¬ì¦ë¦¬", 60, UnitType.Ground, 3594, 253, 1.5f, 3, 3, UnitType.Building, 5, CardType.Rare));
+        unitDataDic.Add(15, new UnitData(15, "ìš”ìˆ ì‚¬", 48, UnitType.Ground, 1048, 511, 2.0f, 5, 5, UnitType.Both, 4, CardType.Rare));
+        unitDataDic.Add(16, new UnitData(16, "ìŠ¤ë§¤ì…”", 50, UnitType.Ground, 1617, 572, 2.1f, 3, 5, UnitType.Ground, 5, CardType.Rare));
+        unitDataDic.Add(17, new UnitData(17, "ìš©ì¸", 50, UnitType.Ground, 1487, 201, 1.1f, 3, 5, UnitType.Ground, 5, CardType.Rare));
+        unitDataDic.Add(18, new UnitData(18, "ì†Œì´ ì•„ìš¸ë² ì–´", 45, UnitType.Ground, 925, 237, 2.3f, 7, 5, UnitType.Both, 4, CardType.Rare));
+        unitDataDic.Add(19, new UnitData(19, "ëª¨ìŠ¤ë ˆì´ë””", 40, UnitType.Air, 938, 180, 1.6f, 2, 7, UnitType.Both, 4, CardType.Rare));
+        unitDataDic.Add(20, new UnitData(20, "ì „íˆ¬ ì½”ë¼ë¦¬", 50, UnitType.Ground, 2641, 237, 1.4f, 7, 7, UnitType.Building, 5, CardType.Rare));
+        unitDataDic.Add(21, new UnitData(21, "ì¸í„°ì…‰í„°", 35, UnitType.Air, 532, 157, 1.4f, 2, 7, UnitType.Ground, 3, CardType.Rare));
+        unitDataDic.Add(22, new UnitData(22, "ì „íˆ¬ ê³ ë¦´ë¼", 45, UnitType.Ground, 1158, 615, 2.8f, 10, 3, UnitType.Building, 5, CardType.Rare));
+        unitDataDic.Add(23, new UnitData(23, "ìƒëŸ¬ë§¨ë”", 50, UnitType.Ground, 1138, 526, 2.3f, 6, 3, UnitType.Ground, 5, CardType.Rare));
+        unitDataDic.Add(24, new UnitData(24, "ìˆœêµì", 40, UnitType.Ground, 1019, 243, 1.5f, 4, 5, UnitType.Both, 4, CardType.Epic));
+        unitDataDic.Add(25, new UnitData(25, "ë¹„í–‰ì„ ", 35, UnitType.Air, 2407, 195, 3.0f, 1, 7, UnitType.Building, 3, CardType.Legendary));
+        unitDataDic.Add(26, new UnitData(26, "ì´ˆì›”ì˜ íƒ‘", 150, UnitType.Building, 7015, 5456, 1.0f, 99, 7, UnitType.Both, 8, CardType.Legendary));
+        unitDataDic.Add(27, new UnitData(27, "ì•„ì¼€ì¸ ë¸”ë˜ìŠ¤í„°", 100, UnitType.Building, 6442, 324, 4.0f, 7, 5, UnitType.Both, 7, CardType.Epic));
+        unitDataDic.Add(28, new UnitData(28, "ê·¸ë¦¬í° ë¼ì´ë”", 70, UnitType.Air, 1683, 354, 1.5f, 8, 5, UnitType.Ground, 5, CardType.Legendary));
+        unitDataDic.Add(29, new UnitData(29, "ëŒ€í¬ ê±°ë¶", 85, UnitType.Ground, 1772, 672, 2.9f, 8, 7, UnitType.Ground, 6, CardType.Epic));
+        unitDataDic.Add(30, new UnitData(30, "ê°•ì²  ê±°ì¸", 100, UnitType.Ground, 7972, 1047, 2.4f, 3, 3, UnitType.Building, 8, CardType.Legendary));
+        unitDataDic.Add(31, new UnitData(31, "ë“œë˜ê³¤", 100, UnitType.Air, 5047, 448, 2.3f, 4, 3, UnitType.Both, 8, CardType.Epic));
+        unitDataDic.Add(32, new UnitData(32, "ëŒ€ê³µí¬ë³‘", 80, UnitType.Ground, 2206, 934, 2.1f, 6, 7, UnitType.Both, 6, CardType.Epic));
+        unitDataDic.Add(33, new UnitData(33, "ì—‘ìŠ¤ ë²„íŒ”ë¡œ", 90, UnitType.Ground, 3704, 1517, 2.7f, 3, 3, UnitType.Ground, 7, CardType.Legendary));
+        unitDataDic.Add(34, new UnitData(34, "ì´ë¸”ë¦¬ìŠ¤", 80, UnitType.Air, 3293, 522, 4.0f, 5, 3, UnitType.Both, 6, CardType.Legendary));
+        unitDataDic.Add(35, new UnitData(35, "ì‚¬ë ¹ì—¬ì œ", 70, UnitType.Ground, 1890, 495, 1.3f, 6, 7, UnitType.Both, 5, CardType.Legendary));
+        unitDataDic.Add(36, new UnitData(36, "ì—´ê¸°êµ¬ í­ê·„ë³‘", 40, UnitType.Air, 720, 128, 2.2f, 2, 5, UnitType.Both, 4, CardType.Rare));
+        unitDataDic.Add(37, new UnitData(37, "ì €ê²©ìˆ˜", 100, UnitType.Ground, 1198, 1091, 2.9f, 10, 3, UnitType.Both, 6, CardType.Legendary));
+        unitDataDic.Add(38, new UnitData(38, "ì¼„íƒ€ìš°ë£¨ìŠ¤", 80, UnitType.Ground, 2738, 730, 1.6f, 3, 7, UnitType.Ground, 6, CardType.Epic));
 
         for (int id = 0; id < 6; id++)
         {
