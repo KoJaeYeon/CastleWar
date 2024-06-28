@@ -345,6 +345,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circles: []
+  circlePrefab: {fileID: 0}
+  isTagAlly: 0
 --- !u!4 &683244009
 Transform:
   m_ObjectHideFlags: 0
@@ -1451,6 +1453,18 @@ PrefabInstance:
     - target: {fileID: 8493472048455757509, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
       propertyPath: m_Name
       value: PlayerPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901384947300168000, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.9607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901384947300168000, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.9607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901384947300168000, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.9607843
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

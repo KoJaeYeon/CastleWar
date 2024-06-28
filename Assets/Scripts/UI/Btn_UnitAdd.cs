@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public enum TouchType
 {
@@ -15,7 +16,7 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
 
     GameObject _spawnedUnit;
     Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
-
+    Coroutine coroutine;
     int tempLayer;
 
     public void SetInit(int index, int id)
@@ -36,11 +37,30 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     public void Canceled()
     {
         Debug.Log($"{name} Canceled");
+        Transform targetTrans = transform.GetChild(0);
+        if (coroutine != null) StopCoroutine(coroutine);
+        coroutine = StartCoroutine(targetGraphic(targetTrans, Vector3.zero));
     }
 
     public void Selected()
     {
         Debug.Log($"{name} Selected");
+        Transform targetTrans = transform.GetChild(0);
+        if(coroutine != null) StopCoroutine(coroutine);
+        coroutine = StartCoroutine( targetGraphic(targetTrans,  Vector3.up * 20));
+    }
+
+    IEnumerator targetGraphic(Transform targetTrans, Vector3 targetPos)
+    {
+        while(true)
+        {
+            targetTrans.localPosition = Vector3.Lerp(targetTrans.localPosition, targetPos, 0.1f);
+            yield return null;
+            if(Vector3.Distance(targetTrans.localPosition,targetPos) < 0.1f)
+            {
+                break;
+            }
+        }
     }
 
     public void OnPointerDown()

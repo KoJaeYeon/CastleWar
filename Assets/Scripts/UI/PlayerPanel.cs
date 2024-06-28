@@ -21,7 +21,7 @@ public class PlayerPanel : MonoBehaviour
 
             if (i != 0)
             {
-                var plusImage = Content.GetChild(i).GetChild(0).gameObject;
+                var plusImage = Content.GetChild(i).GetChild(0).GetChild(0).gameObject;
                 plusImage.SetActive(false); //이미지 비활성화
                 SelectButton.interactable = false;
             }
@@ -38,7 +38,7 @@ public class PlayerPanel : MonoBehaviour
 
     public void OnCalled_Added(int index, Vector3 slotInitPos, int id)
     {
-        Transform targetObjTrans = Content.GetChild(index);
+        Transform targetObjTrans = Content.GetChild(0).GetChild(index);
         StartCoroutine(CardAnimation(slotInitPos, targetObjTrans, id, index)); //카드 등록 코루틴 실행
         SetSlotButtonIneractable(index, false);
         if(index != 5) // 마지막슬롯 제외
@@ -55,7 +55,7 @@ public class PlayerPanel : MonoBehaviour
 
     void EnableNextSlot(int index)
     {
-        var nextButtonSlot = Content.GetChild(index).GetChild(0).gameObject;
+        var nextButtonSlot = Content.GetChild(index).GetChild(0).GetChild(0).gameObject;
         nextButtonSlot.SetActive(true); //이미지 활성화
         SetSlotButtonIneractable(index, true);
     }
@@ -140,7 +140,7 @@ public class PlayerPanel : MonoBehaviour
 
     void ActiveButtonOnCoolDown(Transform targetTrans, int index, int id)
     {
-        Button spawnButton = targetTrans.GetComponent<Button>();
+        Button spawnButton = targetTrans.parent.GetComponent<Button>();
         if (spawnButton != null)
         {
             spawnButton.interactable = true;

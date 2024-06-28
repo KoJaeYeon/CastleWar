@@ -94,10 +94,9 @@ public class CircleUnionManager : MonoBehaviour
         GameObject newCircle = Instantiate(circlePrefab);
         newCircle.transform.SetParent(transform);
         newCircle.transform.position = transform.position;
-        newCircle.transform.localScale = new Vector3(1, 1, 1); // 기본 스케일로 설정
         circles.Add(newCircle.transform);
 
-        newCircle.layer = LayerMask.NameToLayer("Map");
+        newCircle.layer = isTagAlly? LayerMask.NameToLayer("Map") : LayerMask.NameToLayer("Default");
 
 
         MeshFilter meshFilter = newCircle.GetComponent<MeshFilter>();

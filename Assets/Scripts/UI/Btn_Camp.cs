@@ -24,6 +24,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
             };
             button.onClick.AddListener(new UnityAction(spawnAction));
         }
+        tempLayer = LayerMask.NameToLayer("AllyBuilding");
     }
 
     public void Canceled()
@@ -40,9 +41,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     {
         isDown = true;
         _spawnedUnit = SpawnManager.Instance.OnCalled_GetCamp();
-        _spawnedUnit.SetActive(true);
 
-        tempLayer = _spawnedUnit.layer;
         _spawnedUnit.layer = LayerMask.NameToLayer("Default");
 
     }
@@ -55,9 +54,13 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         _spawnedUnit.layer = tempLayer;
 
         //[TODO]조건 충족시 유닛 소환
-        var unit = _spawnedUnit.GetComponent<Unit>();
-        unit?.StartState();
-        _spawnedUnit = null;
+        if(_spawnedUnit.activeSelf)
+        {
+            var unit = _spawnedUnit.GetComponent<Unit>();
+            unit?.StartState();
+            _spawnedUnit = null;
+        }
+
     }
 
     public void ExecuteUpdate(Vector3 touchPos)
@@ -78,6 +81,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
 
             if (hitCount == 0)
             {
+                _spawnedUnit.SetActive(true);
                 _spawnedUnit.transform.position = roundedVector;
             }
         }
