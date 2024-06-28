@@ -44,7 +44,13 @@ public class UnitIdleState : UnitState
         if (_unit.CanMove)
         {
             UnitManager.Instance.RegisterRetreatCallback(isTagAlly:_unit.IsTagAlly(), _unit.HandleOnRetreatState);
-            //UnitManager.Instance.RegisterRetreatCallback(_unit.HandleOnRetreatState);
+        }
+        else
+        {
+            if (_unit.UnitId == -1)
+            {
+                CastleManager.Instance.AddCampToUnion(_unit.transform,_unit.IsTagAlly());
+            }
         }
     }
 }

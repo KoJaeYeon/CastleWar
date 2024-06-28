@@ -1,5 +1,99 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &409736291374530148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3751380729010129460}
+  - component: {fileID: 4743866800273705528}
+  m_Layer: 0
+  m_Name: EnemyArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3751380729010129460
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409736291374530148}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2338210596322864673}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4743866800273705528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409736291374530148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe889acb20398740918e031d3939780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circles: []
+  circlePrefab: {fileID: 1347166777591431413, guid: 6c1e73828baf795479096e6d8b4b4dd1, type: 3}
+  isTagAlly: 0
+--- !u!1 &475683894971737833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5197859245232022721}
+  - component: {fileID: 8748236797288023983}
+  m_Layer: 0
+  m_Name: AllyArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5197859245232022721
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475683894971737833}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2338210596322864673}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8748236797288023983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475683894971737833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe889acb20398740918e031d3939780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circles: []
+  circlePrefab: {fileID: 1347166777591431413, guid: 6c1e73828baf795479096e6d8b4b4dd1, type: 3}
+  isTagAlly: 1
 --- !u!1 &3846625467944756919
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,6 +126,8 @@ Transform:
   m_Children:
   - {fileID: 6588845521274563638}
   - {fileID: 4712693308463669203}
+  - {fileID: 5197859245232022721}
+  - {fileID: 3751380729010129460}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1841986590812349520
@@ -48,6 +144,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AllyCastle: {fileID: 4255589036958968941}
   EnemyCastle: {fileID: 5792303259036163817}
+  AllyUnion: {fileID: 8748236797288023983}
+  EnemyUnion: {fileID: 4743866800273705528}
+  _allyMaterial: {fileID: 2100000, guid: f013902c313937142af5391cdda91bb6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: d4ea6b3db4955ea4b82661b8e33f89c6, type: 2}
 --- !u!1001 &3405127451818568462
 PrefabInstance:
   m_ObjectHideFlags: 0
