@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using UnityEditor.SceneManagement;
 
 public class CircleUnionManager : MonoBehaviour
 {
@@ -15,11 +17,13 @@ public class CircleUnionManager : MonoBehaviour
     private List<CircleData> circleDataList = new List<CircleData>();
 
     GameObject unionObject;
+    public GameObject circlePrefab;
 
     private float minX = -28f;
     private float maxX = 28f;
     private float minZ = -57f;
     private float maxZ = 57f;
+    [SerializeField] bool isTagAlly;
 
     void Start()
     {
@@ -31,12 +35,7 @@ public class CircleUnionManager : MonoBehaviour
         meshFilter = unionObject.GetComponent<MeshFilter>();
 
         meshFilter.mesh = unionMesh;
-        meshRenderer.material = new Material(Shader.Find("Standard"));
-    }
-
-    private void Update()
-    {
-        CheckMeshOnValueChanged();
+        meshRenderer.material = isTagAlly ? CastleManager.Instance.AllyMaterial : CastleManager.Instance.EnemyMaterial;
     }
 
     void CheckMeshOnValueChanged()
@@ -89,23 +88,27 @@ public class CircleUnionManager : MonoBehaviour
         unionObject.transform.position = Vector3.zero;
     }
 
-    public void AddCircle(Transform transform, float radius = 15f)
+    public void AddCircle(Transform transform, float radius = 13f)
     {
-        GameObject newCircle = new GameObject("Circle");
+        //GameObject newCircle = new GameObject("Circle");
+        GameObject newCircle = Instantiate(circlePrefab);
         newCircle.transform.SetParent(transform);
         newCircle.transform.position = transform.position;
         newCircle.transform.localScale = new Vector3(1, 1, 1); // 기본 스케일로 설정
         circles.Add(newCircle.transform);
 
-        MeshFilter meshFilter = newCircle.AddComponent<MeshFilter>();
-        MeshRenderer meshRenderer = newCircle.AddComponent<MeshRenderer>();
-        CircleData circleData = newCircle.AddComponent<CircleData>();
+        newCircle.layer = LayerMask.NameToLayer("Map");
+
+
+        MeshFilter meshFilter = newCircle.GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer = newCircle.GetComponent<MeshRenderer>();
+        CircleData circleData = newCircle.GetComponent<CircleData>();
 
         circleData.radius = radius; // 반지름 설정
 
         Mesh circleMesh = new Mesh();
         meshFilter.mesh = circleMesh;
-        meshRenderer.material = new Material(Shader.Find("Standard"));
+        meshRenderer.material = isTagAlly ? CastleManager.Instance.AllyMaterial : CastleManager.Instance.EnemyMaterial;
 
         circleMeshes.Add(circleMesh);
         circleFilters.Add(meshFilter);
@@ -115,6 +118,10 @@ public class CircleUnionManager : MonoBehaviour
         UpdateCircleMesh(circleMesh, new Vector2(transform.position.x,transform. position.z), circleData.radius);
 
         CheckMeshOnValueChanged();
+
+        MeshCollider meshCollider = newCircle.AddComponent<MeshCollider>();
+        meshCollider.convex = true;
+        meshCollider.isTrigger = true;
     }
 
     public void RemoveCircle(Transform circleParent)
