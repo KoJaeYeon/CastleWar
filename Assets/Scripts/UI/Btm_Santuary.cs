@@ -1,16 +1,16 @@
-ï»¿using System;
+using System;
 using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class Btn_Camp : MonoBehaviour, ISelectable
+public class Btm_Santuary : MonoBehaviour, ISelectable
 {
     bool isDown = false;
 
     GameObject _spawnedUnit;
-    Collider[] hitColliders = new Collider[2]; // ì¶©ëŒì„ ì €ì¥í•  ë°°ì—´
+    Collider[] hitColliders = new Collider[2]; // Ãæµ¹À» ÀúÀåÇÒ ¹è¿­
 
     int tempLayer;
     Coroutine coroutine;
@@ -78,8 +78,8 @@ public class Btn_Camp : MonoBehaviour, ISelectable
 
         _spawnedUnit.layer = tempLayer;
 
-        //[TODO]ì¡°ê±´ ì¶©ì¡±ì‹œ ìœ ë‹› ì†Œí™˜
-        if(_spawnedUnit.activeSelf)
+        //[TODO]Á¶°Ç ÃæÁ·½Ã À¯´Ö ¼ÒÈ¯
+        if (_spawnedUnit.activeSelf)
         {
             var unit = _spawnedUnit.GetComponent<Unit>();
             unit?.StartState();
@@ -92,7 +92,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     {
         if (isDown)
         {
-            // ìœ ë‹› ë“œë˜ê·¸
+            // À¯´Ö µå·¡±×
             if (_spawnedUnit == null)
             {
                 return;
@@ -118,7 +118,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         {
             isDown = false;
 
-            //ì•ˆì“°ëŠ” ìœ ë‹› ë°˜í™˜
+            //¾È¾²´Â À¯´Ö ¹İÈ¯
             SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
             _spawnedUnit.SetActive(false);
             _spawnedUnit = null;

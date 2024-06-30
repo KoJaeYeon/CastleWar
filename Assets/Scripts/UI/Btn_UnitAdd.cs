@@ -37,17 +37,21 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     public void Canceled()
     {
         Debug.Log($"{name} Canceled");
-        Transform targetTrans = transform.GetChild(0);
-        if (coroutine != null) StopCoroutine(coroutine);
-        coroutine = StartCoroutine(targetGraphic(targetTrans, Vector3.zero));
+        MoveImg(isImgUp: false);
     }
 
     public void Selected()
     {
         Debug.Log($"{name} Selected");
+        MoveImg(isImgUp: true);
+    }
+
+    void MoveImg(bool isImgUp)
+    {
         Transform targetTrans = transform.GetChild(0);
-        if(coroutine != null) StopCoroutine(coroutine);
-        coroutine = StartCoroutine( targetGraphic(targetTrans,  Vector3.up * 20));
+        if (coroutine != null) StopCoroutine(coroutine);
+        Vector3 target = isImgUp ? Vector3.up * 20 : Vector3.zero;
+        coroutine = StartCoroutine(targetGraphic(targetTrans, target));
     }
 
     IEnumerator targetGraphic(Transform targetTrans, Vector3 targetPos)
