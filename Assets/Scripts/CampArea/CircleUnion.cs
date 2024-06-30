@@ -224,10 +224,6 @@ public class CircleUnionManager : MonoBehaviour
         triangles.Add(segments);
 
         mesh.Clear();
-        foreach (var vec in vertices)
-        {
-            Debug.Log(vec);
-        }
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();

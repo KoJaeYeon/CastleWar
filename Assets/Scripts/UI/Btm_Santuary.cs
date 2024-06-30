@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class Btm_Santuary : MonoBehaviour, ISelectable
+public class Btm_Sanctuary : MonoBehaviour, ISelectable
 {
     bool isDown = false;
 
@@ -65,7 +65,7 @@ public class Btm_Santuary : MonoBehaviour, ISelectable
     public void OnPointerDown()
     {
         isDown = true;
-        _spawnedUnit = SpawnManager.Instance.OnCalled_GetCamp();
+        _spawnedUnit = SpawnManager.Instance.OnCalled_GetSanctuary();
 
         _spawnedUnit.layer = LayerMask.NameToLayer("Default");
 
@@ -92,22 +92,41 @@ public class Btm_Santuary : MonoBehaviour, ISelectable
     {
         if (isDown)
         {
-            // 유닛 드래그
-            if (_spawnedUnit == null)
-            {
-                return;
-            }
             Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
 
-            string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border" };
-            int layerMask = LayerMask.GetMask(targetLayers);
-
+            string targetLayer = "Resource";
+            int layerMask = LayerMask.GetMask(targetLayer);
             int hitCount = Physics.OverlapSphereNonAlloc(roundedVector, 3f, hitColliders, layerMask);
-
-            if (hitCount == 0)
+            Debug.Log(hitCount);
+            if (hitCount > 0)
             {
-                _spawnedUnit.SetActive(true);
-                _spawnedUnit.transform.position = roundedVector;
+                //설치된 마나성소가 있는지 추가 검사
+                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border" };
+                layerMask = LayerMask.GetMask(targetLayers);
+                Vector3 sanctuaryPos = hitColliders[0].transform.position;
+                hitCount = Physics.OverlapSphereNonAlloc(sanctuaryPos, 0.2f, hitColliders, layerMask);
+
+                if (hitCount == 0)
+                {
+                    if(_spawnedUnit == null)
+                    {
+                        OnPointerDown();
+                    }
+
+                    _spawnedUnit.SetActive(true);
+                    _spawnedUnit.transform.position = hitColliders[0].transform.position;
+                }
+
+            }
+            else
+            {
+                if (_spawnedUnit != null)
+                {
+                    //안쓰는 유닛 반환
+                    SpawnManager.Instance.OnCalled_ReturnSanc(_spawnedUnit);
+                    _spawnedUnit.SetActive(false);
+                    _spawnedUnit = null;
+                }
             }
         }
     }
@@ -119,7 +138,7 @@ public class Btm_Santuary : MonoBehaviour, ISelectable
             isDown = false;
 
             //안쓰는 유닛 반환
-            SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
+            SpawnManager.Instance.OnCalled_ReturnSanc(_spawnedUnit);
             _spawnedUnit.SetActive(false);
             _spawnedUnit = null;
         }

@@ -263,6 +263,7 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Clear();
 
         // 데이터를 추가
+        unitDataDic.Add(-2, new UnitData(-1, "성소", 75, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
         unitDataDic.Add(-1, new UnitData(-1, "막사", 50, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
         unitDataDic.Add(0, new UnitData(0, "궁수탑", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common));
         unitDataDic.Add(1, new UnitData(1, "포탑", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common));
