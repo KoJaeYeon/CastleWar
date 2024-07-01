@@ -76,7 +76,7 @@ public class UnitManager : MonoBehaviour
 
     }
 
-    //유닛이 죽을 때 또는 [TODO] 유닛이 복귀할 때
+    //유닛이 죽을 때 또는 유닛이 복귀할 때
     public void UnRegisterRetreatCallback(bool isTagAlly, Action retreatCallback)
     {
         if (isTagAlly)

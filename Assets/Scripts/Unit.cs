@@ -293,7 +293,14 @@ public class Unit : MonoBehaviour, IAttack
 
         yield return new WaitForSeconds(_spawnTime);
         parentObject_Timer.SetActive(false);
-        OnChangeState(new UnitMoveState(this));
+        if(_unitId < 0)
+        {
+            OnChangeState(new BuildingProduceState(this));
+        }
+        else
+        {
+            OnChangeState(new UnitMoveState(this));
+        }
 
         yield break;
     }

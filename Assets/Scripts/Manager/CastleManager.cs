@@ -21,7 +21,7 @@ public class CastleManager : MonoBehaviour
 
     public void Awake()
     {
-        if(_instance == null)
+        if (_instance == null || _instance == this)
         {
             _instance = this;
         }
@@ -72,6 +72,19 @@ public class CastleManager : MonoBehaviour
         else
         {
             EnemyUnion.AddCircle(transform);
+        }
+    }
+
+    public void AddSancToUnion(Transform transform, bool isTagAlly)
+    {
+        float sancRadius = 6f;
+        if (isTagAlly)
+        {
+            AllyUnion.AddCircle(transform, sancRadius);
+        }
+        else
+        {
+            EnemyUnion.AddCircle(transform, sancRadius);
         }
     }
 }

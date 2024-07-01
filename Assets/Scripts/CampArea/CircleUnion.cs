@@ -30,6 +30,7 @@ public class CircleUnionManager : MonoBehaviour
         // 합집합 메쉬 초기화
         unionMesh = new Mesh();
         unionObject = new GameObject("UnionObject", typeof(MeshRenderer), typeof(MeshFilter));
+        Debug.Log(name);
         unionObject.transform.position = Vector3.zero;  // 원점으로 초기화
         meshRenderer = unionObject.GetComponent<MeshRenderer>();
         meshFilter = unionObject.GetComponent<MeshFilter>();

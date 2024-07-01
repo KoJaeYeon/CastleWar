@@ -38,7 +38,7 @@ public class PlayerPanel : MonoBehaviour
 
     public void OnCalled_Added(int index, Vector3 slotInitPos, int id)
     {
-        Transform targetObjTrans = Content.GetChild(0).GetChild(index);
+        Transform targetObjTrans = Content.GetChild(index).GetChild(0);
         StartCoroutine(CardAnimation(slotInitPos, targetObjTrans, id, index)); //카드 등록 코루틴 실행
         SetSlotButtonIneractable(index, false);
         if(index != 5) // 마지막슬롯 제외

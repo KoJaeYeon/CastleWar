@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class BuildingIdleState : UnitState
 {
@@ -23,20 +23,40 @@ public class BuildingIdleState : UnitState
 
     public override void Exit()
     {
-        Debug.Log("Exiting Idle State");
-        _unit.Animator.SetTrigger("StartMove");
-
-        // Å¸¿ö³ª °Ç¹°ÀÌ ÈÄÅğ¿µÇâ ¾È¹Şµµ·Ï
-        if (_unit.CanMove)
+        Debug.Log("Exiting BuildingIdle State");      
+        if (_unit.UnitId == -1)
         {
-            UnitManager.Instance.RegisterRetreatCallback(isTagAlly: _unit.IsTagAlly(), _unit.HandleOnRetreatState);
+            CastleManager.Instance.AddCampToUnion(_unit.transform, _unit.IsTagAlly());
+        }
+        else if(_unit.UnitId == -2)
+        {
+            CastleManager.Instance.AddSancToUnion(_unit.transform, _unit.IsTagAlly());
         }
         else
         {
-            if (_unit.UnitId == -1)
-            {
-                CastleManager.Instance.AddCampToUnion(_unit.transform, _unit.IsTagAlly());
-            }
+            _unit.Animator.SetTrigger("StartMove");
         }
+
+    }
+}
+
+public class BuildingProduceState : UnitState
+{
+    public BuildingProduceState(Unit unit) : base(unit) { }
+
+    public override void Enter()
+    {
+        Debug.Log("Entering BuildingProduce State");
+        //[TODO]ë§‰ì‚¬ë©´ ì¸êµ¬ìˆ˜ ì¦ê°€
+    }
+
+    public override void ExecuteUpdate()
+    {
+        //ë§ˆë‚˜ ìƒì‚°
+    }
+
+    public override void Exit()
+    {
+        //ë§‰ì‚¬ë©´ ì¸êµ¬ìˆ˜ ê°ì†Œ
     }
 }
