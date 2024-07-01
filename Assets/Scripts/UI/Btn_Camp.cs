@@ -78,12 +78,25 @@ public class Btn_Camp : MonoBehaviour, ISelectable
 
         _spawnedUnit.layer = tempLayer;
 
-        //[TODO]조건 충족시 유닛 소환
-        if(_spawnedUnit.activeSelf)
+        //청사진이 적용되어 있을때
+        if (_spawnedUnit.activeSelf)
         {
-            var unit = _spawnedUnit.GetComponent<Unit>();
-            unit?.StartState();
-            _spawnedUnit = null;
+            //조건 충족시 유닛 소환
+            if (GameManager.Instance.RequestManaUse(50))
+            {
+                _spawnedUnit.layer = tempLayer;
+                var unit = _spawnedUnit.GetComponent<Unit>();
+                unit?.StartState();
+                _spawnedUnit = null;
+            }
+            else
+            {
+                if (_spawnedUnit != null)
+                {
+                    ReturnBuilding();
+                }
+                return;
+            }
         }
 
     }
@@ -117,11 +130,14 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         if (_spawnedUnit != null)
         {
             isDown = false;
-
-            //안쓰는 유닛 반환
-            SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
-            _spawnedUnit.SetActive(false);
-            _spawnedUnit = null;
         }
+    }
+
+    void ReturnBuilding()
+    {
+        //안쓰는 유닛 반환
+        SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
+        _spawnedUnit.SetActive(false);
+        _spawnedUnit = null;
     }
 }

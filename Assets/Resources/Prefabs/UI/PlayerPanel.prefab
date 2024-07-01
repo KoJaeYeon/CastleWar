@@ -1126,6 +1126,7 @@ GameObject:
   - component: {fileID: 2462919506037065342}
   - component: {fileID: 5357529540915653524}
   - component: {fileID: 3849958328545306582}
+  - component: {fileID: 324135880915191991}
   m_Layer: 5
   m_Name: PopulationPanel
   m_TagString: Untagged
@@ -1192,6 +1193,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &324135880915191991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682109032152306246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b9c4823870a0747b5e8aced6ce0d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5442992575798003738
 GameObject:
   m_ObjectHideFlags: 0
@@ -3813,7 +3826,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 766897660147051256, guid: 51b68d7f88c8cd74580589ff3b7415fa, type: 3}
       propertyPath: m_FillAmount
-      value: 0.425
+      value: 0.078
       objectReference: {fileID: 0}
     - target: {fileID: 766897660147051256, guid: 51b68d7f88c8cd74580589ff3b7415fa, type: 3}
       propertyPath: m_FillOrigin

@@ -11,7 +11,8 @@ public class ManaPanelView : MonoBehaviour
     [SerializeField] TextMeshProUGUI Text_SancNeedMana;
 
     private ManaPanelViewModel _vm;
-
+    private int targetMana;
+    private int nowLookMana;
     private void OnEnable()
     {
         if (_vm == null)
@@ -20,6 +21,15 @@ public class ManaPanelView : MonoBehaviour
             _vm.PropertyChanged += OnPropertyChanged;
             _vm.RegisterEventsOnEnable();
             _vm.RefreshViewModel();
+        }
+    }
+
+    private void Update()
+    {
+        if(targetMana != nowLookMana)
+        {
+            nowLookMana += targetMana > nowLookMana ? 1 : -1;
+            Text_Mana.text= nowLookMana.ToString();
         }
     }
 
@@ -36,14 +46,14 @@ public class ManaPanelView : MonoBehaviour
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         Debug.Log("dfs");
-        Text_Mana.text = _vm.Mana.ToString();
+        targetMana = _vm.Mana;
         if (_vm.Mana >= 75)
         {
             Text_SancNeedMana.color = Color.white;
         }
         else
         {
-            Img_ManaMask.fillAmount = (75 - _vm.Mana) / 75;
+            Img_ManaMask.fillAmount = (75 - _vm.Mana) / 75f;
             Text_SancNeedMana.color = Color.red;
         }
     }

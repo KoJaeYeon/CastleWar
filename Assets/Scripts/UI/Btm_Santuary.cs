@@ -76,14 +76,27 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
         isDown = false;
         if (_spawnedUnit == null) return;
 
-        _spawnedUnit.layer = tempLayer;
+        
 
-        //[TODO]조건 충족시 유닛 소환
+        //청사진이 적용되어 있을때
         if (_spawnedUnit.activeSelf)
         {
-            var unit = _spawnedUnit.GetComponent<Unit>();
-            unit?.StartState();
-            _spawnedUnit = null;
+            //조건 충족시 유닛 소환
+            if (GameManager.Instance.RequestManaUse(75))
+            {
+                _spawnedUnit.layer = tempLayer;
+                var unit = _spawnedUnit.GetComponent<Unit>();
+                unit?.StartState();
+                _spawnedUnit = null;
+            }
+            else
+            {
+                if (_spawnedUnit != null)
+                {
+                    ReturnSanc();
+                }
+                return;
+            }
         }
 
     }
@@ -100,7 +113,7 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
             if (hitCount > 0)
             {
                 //설치된 마나성소가 있는지 추가 검사
-                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border" };
+                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding"};
                 layerMask = LayerMask.GetMask(targetLayers);
                 Vector3 sanctuaryPos = hitColliders[0].transform.position;
                 hitCount = Physics.OverlapSphereNonAlloc(sanctuaryPos, 0.2f, hitColliders, layerMask);
@@ -121,10 +134,7 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
             {
                 if (_spawnedUnit != null)
                 {
-                    //안쓰는 유닛 반환
-                    SpawnManager.Instance.OnCalled_ReturnSanc(_spawnedUnit);
-                    _spawnedUnit.SetActive(false);
-                    _spawnedUnit = null;
+                    ReturnSanc();
                 }
             }
         }
@@ -136,10 +146,15 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
         {
             isDown = false;
 
-            //안쓰는 유닛 반환
-            SpawnManager.Instance.OnCalled_ReturnSanc(_spawnedUnit);
-            _spawnedUnit.SetActive(false);
-            _spawnedUnit = null;
+            ReturnSanc();
         }
+    }
+
+    private void ReturnSanc()
+    {
+        //안쓰는 유닛 반환
+        SpawnManager.Instance.OnCalled_ReturnSanc(_spawnedUnit);
+        _spawnedUnit.SetActive(false);
+        _spawnedUnit = null;
     }
 }

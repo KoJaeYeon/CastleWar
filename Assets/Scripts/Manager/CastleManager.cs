@@ -87,4 +87,16 @@ public class CastleManager : MonoBehaviour
             EnemyUnion.AddCircle(transform, sancRadius);
         }
     }
+
+    public void RemoveUnion(Transform transform, bool isTagAlly)
+    {
+        if(isTagAlly)
+        {
+            AllyUnion.RemoveCircle(transform);
+        }
+        else
+        {
+            EnemyUnion.RemoveCircle(transform);
+        }
+    }
 }
