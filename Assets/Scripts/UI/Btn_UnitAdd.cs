@@ -5,7 +5,7 @@ public enum TouchType
 {
     Unit, NotUnit, Mana
 }
-public class Btn_UnitAdd : MonoBehaviour,ISelectable
+public class Btn_UnitAdd : MonoBehaviour, ISelectable
 {
     TouchType touchType = TouchType.Unit;
     bool isDown = false;
@@ -17,22 +17,31 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     GameObject _spawnedUnit;
     Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
     Coroutine coroutine;
-    int tempLayer;
+    int originLayer;
+    int defaultLayer;
+    int cost;
 
     public void SetInit(int index, int id)
     {
         _index = index;
         var unitData = DatabaseManager.Instance.OnGetUnitData(id);
-        switch(unitData.unitType)
+        cost = unitData.cost;
+        switch (unitData.unitType)
         {
             case UnitType.Ground:
+                originLayer =  LayerMask.NameToLayer("AllyGroundUnit");
+                touchType = TouchType.Unit;
+                break;
             case UnitType.Air:
+                originLayer = LayerMask.NameToLayer("AllyAirUnit");
                 touchType = TouchType.Unit;
                 break;
             default:
+                originLayer = LayerMask.NameToLayer("AllyBuilding");
                 touchType = TouchType.NotUnit;
                 break;
         }
+        defaultLayer = LayerMask.NameToLayer("DeadUnit");
     }
     public void Canceled()
     {
@@ -56,11 +65,11 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
 
     IEnumerator targetGraphic(Transform targetTrans, Vector3 targetPos)
     {
-        while(true)
+        while (true)
         {
             targetTrans.localPosition = Vector3.Lerp(targetTrans.localPosition, targetPos, 0.1f);
             yield return null;
-            if(Vector3.Distance(targetTrans.localPosition,targetPos) < 0.1f)
+            if (Vector3.Distance(targetTrans.localPosition, targetPos) < 0.1f)
             {
                 break;
             }
@@ -71,14 +80,12 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
     {
         isDown = true;
         _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);
-        _spawnedUnit.SetActive(true);
 
-        if(touchType == TouchType.NotUnit)
+        _spawnedUnit.layer = defaultLayer;
+        if (touchType == TouchType.Unit)
         {
-            tempLayer = _spawnedUnit.layer;
-            _spawnedUnit.layer = LayerMask.NameToLayer("Default");
+            _spawnedUnit.SetActive(true);
         }
-
     }
 
     public void OnPointerUp()
@@ -86,21 +93,27 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
         isDown = false;
         if (_spawnedUnit == null) return;
 
-        _spawnedUnit.layer = tempLayer;
-        
-        if(touchType == TouchType.Unit)
+        if (touchType == TouchType.Unit)
         {
-            //안쓰는 유닛 반환
-            SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
-            _spawnedUnit.SetActive(false);
-            _spawnedUnit = null;
+            ReturnUnit();
         }
         else
         {
-            //[TODO]조건 충족시 유닛 소환
-            var unit = _spawnedUnit.GetComponent<Unit>();
-            unit?.StartState();
-            _spawnedUnit = null;
+            //청사진 없으면 소환 불가
+            if(_spawnedUnit.activeSelf)
+            {
+                if (GameManager.Instance.RequestManaUse(cost))
+                {
+                    _spawnedUnit.layer = originLayer;
+                    var unit = _spawnedUnit.GetComponent<Unit>();
+                    unit?.StartState();
+                    _spawnedUnit = null;
+                }
+                else
+                {
+                    ReturnUnit();
+                }
+            }
         }
     }
 
@@ -123,19 +136,19 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
                 if (Time.time - _lastSpawnTime<_spawnInterval) return; // 소환 주기가 되지 않으면 반환
                 _lastSpawnTime = Time.time;
 
-                Debug.Log("entered");
-                //[TODO]조건 충족시 유닛 소환
-                var unit = _spawnedUnit.GetComponent<Unit>();
-                unit?.StartState();
+                if(GameManager.Instance.RequestManaUse(cost) )
+                {
+                    var unit = _spawnedUnit.GetComponent<Unit>();
+                    unit?.StartState();
+                    _spawnedUnit.layer = originLayer;
 
-
-                //대기 유닛 치환
-                _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);            
-                _spawnedUnit.SetActive(true);
-                touchPos.y = 0;
-                _spawnedUnit.transform.position = touchPos;
-
-                Debug.Log($"Spawn : {touchPos}");
+                    //대기 유닛 치환
+                    _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);
+                    _spawnedUnit.layer = defaultLayer;
+                    _spawnedUnit.SetActive(true);
+                    touchPos.y = 0;
+                    _spawnedUnit.transform.position = touchPos;
+                }
             }
             else if (touchType == TouchType.NotUnit)
             {
@@ -148,6 +161,7 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
 
                 if (hitCount == 0)
                 {
+                    _spawnedUnit.SetActive(true);
                     _spawnedUnit.transform.position = roundedVector;
                 }
             }
@@ -156,10 +170,18 @@ public class Btn_UnitAdd : MonoBehaviour,ISelectable
 
     public void OnPointerExit()
     {
-        if(_spawnedUnit != null )
+        if (_spawnedUnit != null)
         {
             isDown = false;
 
+            ReturnUnit();
+        }
+    }
+
+    void ReturnUnit()
+    {
+        if(_spawnedUnit != null)
+        {
             //안쓰는 유닛 반환
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
