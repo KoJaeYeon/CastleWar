@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
         _manaChangeCallback.Invoke(_mana);
     }
 
-    public bool RequestManaUse(int mana)
+    public bool RequestManaCheck(int mana)
     {
         if(_mana <= mana )
         {
@@ -102,12 +102,27 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _mana -= mana;
-            _manaChangeCallback.Invoke(_mana);
             return true;
         }
     }
 
+    public void RequestManaUse(int mana)
+    {
+        _mana += mana;
+        _manaChangeCallback.Invoke(_mana);
+    }
+
+    public bool RequestPopulationCheck(int population)
+    {
+        if (_population + population > _maxPopulation)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     public void RequestPopulationImprove(int population)
     {
         _maxPopulation += population;

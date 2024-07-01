@@ -82,8 +82,9 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
         if (_spawnedUnit.activeSelf)
         {
             //조건 충족시 유닛 소환
-            if (GameManager.Instance.RequestManaUse(75))
+            if (GameManager.Instance.RequestManaCheck(75))
             {
+                GameManager.Instance.RequestManaUse(-75);
                 _spawnedUnit.layer = tempLayer;
                 var unit = _spawnedUnit.GetComponent<Unit>();
                 unit?.StartState();

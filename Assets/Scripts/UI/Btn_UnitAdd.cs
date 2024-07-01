@@ -17,15 +17,21 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     GameObject _spawnedUnit;
     Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
     Coroutine coroutine;
-    int originLayer;
-    int defaultLayer;
+
+    //배치 시 적용되는 레이어
+    int originLayer; // 배치 후 적용
+    int defaultLayer; // 배치 전 적용 충돌무시
+
+    //소환 시 소모되는 값
     int cost;
+    int population;
 
     public void SetInit(int index, int id)
     {
         _index = index;
         var unitData = DatabaseManager.Instance.OnGetUnitData(id);
         cost = unitData.cost;
+        population = unitData.Population;
         switch (unitData.unitType)
         {
             case UnitType.Ground:
@@ -102,8 +108,9 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
             //청사진 없으면 소환 불가
             if(_spawnedUnit.activeSelf)
             {
-                if (GameManager.Instance.RequestManaUse(cost))
+                if (GameManager.Instance.RequestManaCheck(cost) && GameManager.Instance.RequestPopulationCheck(population))
                 {
+                    GameManager.Instance.RequestPopulationUse(population);
                     _spawnedUnit.layer = originLayer;
                     var unit = _spawnedUnit.GetComponent<Unit>();
                     unit?.StartState();
@@ -144,8 +151,9 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                 if (Time.time - _lastSpawnTime<_spawnInterval) return; // 소환 주기가 되지 않으면 반환
                 _lastSpawnTime = Time.time;
 
-                if(GameManager.Instance.RequestManaUse(cost) )
+                if (GameManager.Instance.RequestManaCheck(cost) && GameManager.Instance.RequestPopulationCheck(population))
                 {
+                    GameManager.Instance.RequestPopulationUse(population);
                     var unit = _spawnedUnit.GetComponent<Unit>();
                     unit?.StartState();
                     _spawnedUnit.layer = originLayer;

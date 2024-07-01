@@ -82,8 +82,9 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         if (_spawnedUnit.activeSelf)
         {
             //조건 충족시 유닛 소환
-            if (GameManager.Instance.RequestManaUse(50))
+            if (GameManager.Instance.RequestManaCheck(50))
             {
+                GameManager.Instance.RequestManaUse(-50);
                 _spawnedUnit.layer = tempLayer;
                 var unit = _spawnedUnit.GetComponent<Unit>();
                 unit?.StartState();
