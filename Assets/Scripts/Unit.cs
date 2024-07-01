@@ -224,6 +224,15 @@ public class Unit : MonoBehaviour, IAttack
         OnChangeState(new UnitDeadState(this));
     }
 
+    public IEnumerator ProduceMana(int mana)
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(2f);
+            GameManager.Instance.RequestManaProduce(mana);
+        }
+    }
+
     public void OnChangeState(IState newState)
     {
         _currentState.Exit();

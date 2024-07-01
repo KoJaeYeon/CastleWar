@@ -23,12 +23,12 @@ public class BuildingIdleState : UnitState
 
     public override void Exit()
     {
-        Debug.Log("Exiting BuildingIdle State");      
+        Debug.Log("Exiting BuildingIdle State");
         if (_unit.UnitId == -1)
         {
             CastleManager.Instance.AddCampToUnion(_unit.transform, _unit.IsTagAlly());
         }
-        else if(_unit.UnitId == -2)
+        else if (_unit.UnitId == -2)
         {
             CastleManager.Instance.AddSancToUnion(_unit.transform, _unit.IsTagAlly());
         }
@@ -43,20 +43,35 @@ public class BuildingIdleState : UnitState
 public class BuildingProduceState : UnitState
 {
     public BuildingProduceState(Unit unit) : base(unit) { }
+    float _elapsedTime;
+    float _produceTime;
 
+    Coroutine coroutine;
     public override void Enter()
     {
         Debug.Log("Entering BuildingProduce State");
-        //[TODO]막사면 인구수 증가
-    }
-
-    public override void ExecuteUpdate()
-    {
-        //마나 생산
+        if (_unit.UnitId == -2)
+        {
+            coroutine = _unit.StartCoroutine(_unit.ProduceMana(3));
+        }
+        else if (_unit.UnitId == -1)
+        {
+            GameManager.Instance.RequestPopulationImprove(10);
+        }
     }
 
     public override void Exit()
     {
+        if (_unit.UnitId == -2)
+        {
+            _unit.StopCoroutine(coroutine);
+
+        }
         //막사면 인구수 감소
+        if(_unit.UnitId == -1)
+        {
+            GameManager.Instance.RequestPopulationImprove(-10);
+        }
+        CastleManager.Instance.RemoveUnion(_unit.transform, _unit.IsTagAlly());
     }
 }
