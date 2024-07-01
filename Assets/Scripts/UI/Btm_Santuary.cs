@@ -96,8 +96,7 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
 
             string targetLayer = "Resource";
             int layerMask = LayerMask.GetMask(targetLayer);
-            int hitCount = Physics.OverlapSphereNonAlloc(roundedVector, 3f, hitColliders, layerMask);
-            Debug.Log(hitCount);
+            int hitCount = Physics.OverlapSphereNonAlloc(roundedVector, 2f, hitColliders, layerMask);
             if (hitCount > 0)
             {
                 //설치된 마나성소가 있는지 추가 검사

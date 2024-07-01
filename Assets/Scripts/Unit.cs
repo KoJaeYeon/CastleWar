@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour, IAttack
     [SerializeField] int _unitId;
     [SerializeField] int _cost;
     [SerializeField] int _populaltion;
+    [SerializeField] UnitType _type;
     [SerializeField] float _health;
     [SerializeField] float _maxHealth;
     [SerializeField] float _attackDamage;
@@ -64,7 +65,7 @@ public class Unit : MonoBehaviour, IAttack
     {
         get => _spawnSlotIndex;
     }
-
+    public float MaxHealth => _maxHealth;
     public float SpawnTime => _spawnTime;
     public float MoveSpeed => _moveSpeed;
     public float SearchRadius => _searchRadius;
@@ -141,6 +142,7 @@ public class Unit : MonoBehaviour, IAttack
         _unitId = unitData.id;
         _cost = unitData.cost;
         _populaltion = unitData.Population;
+        _type = unitData.unitType;
         _health = unitData.health;
         _maxHealth = unitData.health;
         _attackDamage = unitData.AttackDamage;
@@ -154,7 +156,7 @@ public class Unit : MonoBehaviour, IAttack
         RectTransform rectAtkRangeImg = AttackRange_Img.GetComponent<RectTransform>();
         rectAtkRangeImg.sizeDelta = new Vector2(_attackRange*2, _attackRange*2);
               
-        if (unitData.unitType == UnitType.Building)
+        if (_type == UnitType.Building)
         {
             if (_rigidbody == null)
             {
@@ -165,6 +167,7 @@ public class Unit : MonoBehaviour, IAttack
             _rigidbody.isKinematic = true;
             _canMove = false;
             _spawnTime = 10f;
+            _health = 0f;
             var SpawnTimerObject = SpawnTimerImage.transform.parent;
             SpawnTimerObject.localScale = Vector3.one * 2;
 
@@ -179,7 +182,7 @@ public class Unit : MonoBehaviour, IAttack
     private void ResetData()
     {
         AttackRange_Img.SetActive(false);
-        _health = _maxHealth;
+        _health = _type == UnitType.Building ? 0 : _maxHealth;
         _targetEnemy = null;
         _attackTargerEnemy = null;
     }
@@ -190,7 +193,7 @@ public class Unit : MonoBehaviour, IAttack
         var SpawnTimerObject = SpawnTimerImage.transform.parent;
         SpawnTimerObject.gameObject.SetActive(true);
 
-        _currentState = new UnitIdleState(this);
+        _currentState = _type == UnitType.Building? new BuildingIdleState(this) : new UnitIdleState(this);
         _currentState.Enter();
         CheckHealthBar();
     }
@@ -198,8 +201,9 @@ public class Unit : MonoBehaviour, IAttack
 
     public void CheckHealthBar()
     {
-        if (_health == _maxHealth)
+        if (_health >= _maxHealth)
         {
+            _health = _maxHealth;
             HpSlider.gameObject.SetActive(false);
         }
         else if(_health <= 0)
@@ -236,22 +240,6 @@ public class Unit : MonoBehaviour, IAttack
     {
         OnChangeState(new UnitMoveState(this));
     }
-
-    //public void HandleOnRetreatState(bool Ally)
-    //{
-    //    if(IsTagAlly() == Ally) // 같은 진영 명령이면
-    //    {
-    //        OnChangeState(new UnitRetreatState(this));
-    //    }        
-    //}
-
-    //public void HandleOnMoveState(bool Ally)
-    //{
-    //    if (IsTagAlly() == Ally) // 같은 진영 명령이면
-    //    {
-    //        OnChangeState(new UnitMoveState(this));
-    //    }
-    //}
 
     public bool IsTagAlly()
     {
@@ -298,13 +286,13 @@ public class Unit : MonoBehaviour, IAttack
     public IEnumerator Spawn_Init()
     {
         if (SpawnTimerImage == null) yield break;
-        var parentObject = SpawnTimerImage.transform.parent.gameObject;
+        var parentObject_Timer = SpawnTimerImage.transform.parent.gameObject;
 
-        parentObject.SetActive(true);
+        parentObject_Timer.SetActive(true);
         SpawnTimerImage.fillAmount = 0;
 
         yield return new WaitForSeconds(_spawnTime);
-        parentObject.SetActive(false);
+        parentObject_Timer.SetActive(false);
         OnChangeState(new UnitMoveState(this));
 
         yield break;
