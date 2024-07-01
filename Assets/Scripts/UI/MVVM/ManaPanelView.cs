@@ -7,12 +7,13 @@ using ViewModel.Extensions;
 public class ManaPanelView : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI Text_Mana;
+    [SerializeField] Image Img_Button;
     [SerializeField] Image Img_ManaMask;
     [SerializeField] TextMeshProUGUI Text_SancNeedMana;
 
     private ManaPanelViewModel _vm;
     private int targetMana;
-    private int nowLookMana;
+    private int nowLookMana = 75;
     private void OnEnable()
     {
         if (_vm == null)
@@ -49,12 +50,16 @@ public class ManaPanelView : MonoBehaviour
         targetMana = _vm.Mana;
         if (_vm.Mana >= 75)
         {
+            Img_Button.color = Color.white;
             Text_SancNeedMana.color = Color.white;
+            Img_ManaMask.gameObject.SetActive(false);
         }
         else
         {
+            Img_Button.color = Color.gray;
             Img_ManaMask.fillAmount = (75 - _vm.Mana) / 75f;
             Text_SancNeedMana.color = Color.red;
+            Img_ManaMask.gameObject.SetActive(true);
         }
     }
 }

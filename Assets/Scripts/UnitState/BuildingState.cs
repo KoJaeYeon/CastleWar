@@ -56,8 +56,7 @@ public class BuildingProduceState : UnitState
         }
         else if (_unit.UnitId == -1)
         {
-            //[TODO]막사면 인구수 증가
-
+            GameManager.Instance.RequestPopulationImprove(10);
         }
     }
 
@@ -69,6 +68,10 @@ public class BuildingProduceState : UnitState
 
         }
         //막사면 인구수 감소
+        if(_unit.UnitId == -1)
+        {
+            GameManager.Instance.RequestPopulationImprove(-10);
+        }
         CastleManager.Instance.RemoveUnion(_unit.transform, _unit.IsTagAlly());
     }
 }

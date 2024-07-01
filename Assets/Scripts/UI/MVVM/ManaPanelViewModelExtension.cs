@@ -5,8 +5,7 @@ namespace ViewModel.Extensions
     {
         public static void RefreshViewModel(this ManaPanelViewModel vm)
         {
-            int tempId = 2;
-            GameManager.Instance.RefreshManaInfo(tempId, vm.OnRefreshViewModel);
+            GameManager.Instance.RefreshManaInfo(vm.OnRefreshViewModel);
         }
 
         public static void OnRefreshViewModel(this ManaPanelViewModel vm, int mana)
