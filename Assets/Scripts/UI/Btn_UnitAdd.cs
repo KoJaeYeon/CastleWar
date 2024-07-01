@@ -130,8 +130,16 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
             if (touchType == TouchType.Unit)
             {
                 // 유닛 드래그
+                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border", "Resource" };
+                int layerMask = LayerMask.GetMask(targetLayers);
+
                 touchPos.y = 0;
-                _spawnedUnit.transform.position = touchPos;
+                int hitCount = Physics.OverlapSphereNonAlloc(touchPos, 0.1f, hitColliders, layerMask);
+
+                if (hitCount == 0)
+                {
+                    _spawnedUnit.transform.position = touchPos;
+                }
 
                 if (Time.time - _lastSpawnTime<_spawnInterval) return; // 소환 주기가 되지 않으면 반환
                 _lastSpawnTime = Time.time;
@@ -154,7 +162,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
             {
                 Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
 
-                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border" };
+                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border","Bridge", "Resource" };
                 int layerMask = LayerMask.GetMask(targetLayers);
 
                 int hitCount = Physics.OverlapSphereNonAlloc(roundedVector, 3f, hitColliders, layerMask);

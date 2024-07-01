@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEditor.SceneManagement;
 
 public class CircleUnionManager : MonoBehaviour
 {

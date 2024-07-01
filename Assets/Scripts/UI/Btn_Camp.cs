@@ -112,7 +112,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
             }
             Vector3 roundedVector = new Vector3(2 * Mathf.Round(touchPos.x / 2), 0, 2 * Mathf.Round(touchPos.z / 2));
 
-            string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border" };
+            string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border","Bridge","Resource" };
             int layerMask = LayerMask.GetMask(targetLayers);
 
             int hitCount = Physics.OverlapSphereNonAlloc(roundedVector, 3f, hitColliders, layerMask);

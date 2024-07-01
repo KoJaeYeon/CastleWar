@@ -221,7 +221,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 1, z: 10}
+  m_Size: {x: 8, y: 1, z: 11}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7075762387351363572
 MonoBehaviour:
@@ -355,7 +355,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 14, y: 1, z: 12}
+  m_Size: {x: 14, y: 1, z: 13}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &327703368536943954
 MonoBehaviour:
@@ -815,7 +815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8993490789785283017}
   - component: {fileID: 372623531918975530}
-  m_Layer: 6
+  m_Layer: 16
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1044,7 +1044,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 14, y: 1, z: 12}
+  m_Size: {x: 14, y: 1, z: 13}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1750481604638839086
 MonoBehaviour:
@@ -1111,7 +1111,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 14, y: 1, z: 12}
+  m_Size: {x: 14, y: 1, z: 13}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &574808163765200970
 MonoBehaviour:
@@ -1212,7 +1212,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 14, y: 1, z: 12}
+  m_Size: {x: 14, y: 1, z: 13}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7089426619770800943
 MonoBehaviour:
@@ -1279,7 +1279,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 1, z: 10}
+  m_Size: {x: 8, y: 1, z: 11}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6613510100011065795
 MonoBehaviour:
@@ -1554,7 +1554,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 1, z: 10}
+  m_Size: {x: 8, y: 1, z: 11}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5594358493688800997
 MonoBehaviour:
@@ -1621,7 +1621,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 1, z: 10}
+  m_Size: {x: 8, y: 1, z: 11}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2756841719180087860
 MonoBehaviour:
