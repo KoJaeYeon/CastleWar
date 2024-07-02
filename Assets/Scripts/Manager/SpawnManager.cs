@@ -182,7 +182,7 @@ public class SpawnManager : MonoBehaviour
         //초기 데이터 부여
         var unit = baseUnit.GetComponent<Unit>();
         UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
-        unit.InitData(unitData);
+        unit.InitData(unitData, index);
         if (index < 6)
         {
             baseUnit.tag = "Ally";
@@ -226,7 +226,7 @@ public class SpawnManager : MonoBehaviour
 
             //데이터 초기화
             var spawnUnit = SpawnPrefab.GetComponent<Unit>();
-            spawnUnit.InitData(unitData);
+            spawnUnit.InitData(unitData, index);
             SpawnPrefab.name = $"{unitData.name}_{i}";
 
             //풀에 담아두기
