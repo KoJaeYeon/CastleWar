@@ -46,7 +46,6 @@ public class ManaPanelView : MonoBehaviour
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        Debug.Log("dfs");
         targetMana = _vm.Mana;
         if (_vm.Mana >= 75)
         {

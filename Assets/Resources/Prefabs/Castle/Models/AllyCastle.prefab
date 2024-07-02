@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1406017865744258952}
   - component: {fileID: 881346758846264353}
+  - component: {fileID: 1588854097524028426}
   m_Layer: 12
   m_Name: AllyCastle
   m_TagString: Untagged
@@ -47,7 +48,7 @@ Animator:
   m_GameObject: {fileID: 2091066574265295033}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: e08e1fb273103544d9f06972422f138d, type: 2}
+  m_Controller: {fileID: 9100000, guid: ca909757e7d509f428aeea347d2c1994, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -58,6 +59,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1588854097524028426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091066574265295033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4115f84f87cf9cd42b6b6353148cc7bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &49863566114838243
 PrefabInstance:
   m_ObjectHideFlags: 0

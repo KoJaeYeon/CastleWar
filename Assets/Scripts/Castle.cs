@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Castle : MonoBehaviour, IAttack
 {
     private IState _currentState;
-    private float _spawnTime = 1f;
+    private float _spawnTime = 55f;
     Animator _animator;
 
     [SerializeField] int _unitId;
@@ -24,6 +24,8 @@ public class Castle : MonoBehaviour, IAttack
     [SerializeField] Slider HpSlider;
     [SerializeField] Image SpawnTimerImage;
 
+    [SerializeField] GameObject[] CastleTierObjects;
+
     public MapCornerPoint MapCornerPoint { get; set; }
 
     GameObject _attackTargerEnemy; // 공격해야하는 적
@@ -32,9 +34,8 @@ public class Castle : MonoBehaviour, IAttack
     Rigidbody _rigidbody;
 
     float _searchRadius = 12f;
-    int _spawnSlotIndex = 0;
     bool _canAttack = true;
-    bool _canMove = true;
+    int _index = 0;
 
     public float Helath
     {
@@ -54,10 +55,6 @@ public class Castle : MonoBehaviour, IAttack
         }
     }
 
-    public int SpwanSlotIndex
-    {
-        get => _spawnSlotIndex;
-    }
     public float MaxHealth => _maxHealth;
     public float SpawnTime => _spawnTime;
     public float MoveSpeed => _moveSpeed;
@@ -117,6 +114,8 @@ public class Castle : MonoBehaviour, IAttack
 
     }
 
+
+
     public void InitData(UnitData unitData)
     {
         _unitId = unitData.id;
@@ -136,10 +135,9 @@ public class Castle : MonoBehaviour, IAttack
             _rigidbody = GetComponent<Rigidbody>();
         }
         _rigidbody.isKinematic = true;
-        _canMove = false;
         _health = _maxHealth;
         var SpawnTimerObject = SpawnTimerImage.transform.parent;
-        SpawnTimerObject.localScale = Vector3.one * 2;
+        SpawnTimerObject.localScale = Vector3.one * 3;
     }
 
     private void ResetData()
@@ -174,10 +172,52 @@ public class Castle : MonoBehaviour, IAttack
             HpSlider.value = _health / _maxHealth;
         }
     }
+
+    public void RequestTierUp()
+    {
+        StartCoroutine(Tier_Up());
+    }
+
+    public IEnumerator Tier_Up()
+    {
+        if (SpawnTimerImage == null) yield break;
+        OnChangeState(new CastleTierUpState(this));
+
+        CastleTierObjects[_index++].SetActive(false);
+        CastleTierObjects[_index].SetActive(true);
+
+        var parentObject_Timer = SpawnTimerImage.transform.parent.gameObject;
+        parentObject_Timer.SetActive(true);
+        SpawnTimerImage.fillAmount = 0;
+
+        yield return new WaitForSeconds(_spawnTime);
+        parentObject_Timer.SetActive(false);
+        OnChangeState(new CastleIdleState(this));
+
+        CastleTierObjects[_index++].SetActive(false);
+        CastleTierObjects[_index].SetActive(true);
+        yield break;
+    }
+
+    void TierUpComplete()
+    {
+        _attackDamage += 10;
+    }
+
     public bool IsTagAlly()
     {
         if (tag.Equals("Ally")) return true;
         return false;
+    }
+
+    public void OnCalled_SetEnemy_AnimationEventAttack()
+    {
+        _attackTargerEnemy = _targetEnemy;
+    }
+    public void OnCalled_Attack_AnimationEventAttack()
+    {
+        //[TODO] 풀매니저 추가해야함
+        GameObject arrow = Instantiate(new GameObject());
     }
 
     public void OnChangeState(IState newState)
@@ -187,6 +227,13 @@ public class Castle : MonoBehaviour, IAttack
         _currentState.Enter();
     }
 
+    public void OnValueChanged_SpawnSlider(float value)
+    {
+        if (SpawnTimerImage != null)
+        {
+            SpawnTimerImage.fillAmount += value;
+        }
+    }
     public void OnTakeDamaged(float damage)
     {
         throw new System.NotImplementedException();

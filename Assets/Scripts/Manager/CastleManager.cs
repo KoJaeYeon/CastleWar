@@ -64,9 +64,11 @@ public class CastleManager : MonoBehaviour
 
         Castle allyCastle = AllyCastle.GetComponent<Castle>();
         Castle enemyCastle = EnemyCastle.GetComponent<Castle>();
-        //var castleData = DatabaseManager.Instance.OnGetUnitData(-3);
-        //allyCastle.InitData(castleData);
+        var castleData = DatabaseManager.Instance.OnGetUnitData(-3);
+        allyCastle.InitData(castleData);
         //enemyCastle.InitData(castleData);
+
+        allyCastle.StartState();        
     }
 
     public void AddCampToUnion(Transform transform, bool isTagAlly)
@@ -104,5 +106,11 @@ public class CastleManager : MonoBehaviour
         {
             EnemyUnion.RemoveCircle(transform);
         }
+    }
+
+    public void AllyCastleTierUp()
+    {
+        Castle allyCastle = AllyCastle.GetComponent<Castle>();
+        allyCastle.RequestTierUp();
     }
 }

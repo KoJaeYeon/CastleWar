@@ -108,6 +108,7 @@ public class CastleAttackState : CastleState
     public override void ExecuteFixedUpdate()
     {
         CheckEnemy();
+        Debug.Log("AtkFixed");
     }
     public override void Exit()
     {
@@ -137,5 +138,29 @@ public class CastleAttackState : CastleState
     public void SetAnimationisAttack(bool isAttack)
     {
         _castle.Animator.SetBool("isAttack", isAttack);
+    }
+}
+
+public class CastleTierUpState : CastleState
+{
+    public CastleTierUpState(Castle unit) : base(unit) { }
+
+    public override void Enter()
+    {
+        _castle.CanAttack = false;
+    }
+
+    public override void ExecuteUpdate()
+    {
+        _castle.OnValueChanged_SpawnSlider(Time.deltaTime / _castle.SpawnTime);
+    }
+
+    public override void ExecuteFixedUpdate()
+    {
+
+    }
+    public override void Exit()
+    {
+        _castle.CanAttack = true;
     }
 }

@@ -306,7 +306,10 @@ public class UnitAttackState : UnitState
     public override void ExecuteFixedUpdate()
     {
         CheckEnemy();
-
+        if(!_unit.CanAttack)
+        {
+            _unit.OnChangeState(new UnitMoveState(_unit));
+        }
         if(_unit.TargetEnemy != null)
         {
             Vector3 direction = (_unit.TargetEnemy.transform.position - _unit.transform.position).normalized;
