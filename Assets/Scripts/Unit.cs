@@ -65,6 +65,8 @@ public class Unit : MonoBehaviour, IAttack
     {
         get => _spawnSlotIndex;
     }
+    public int Cost => _cost;
+    public int Population => _populaltion;
     public float MaxHealth => _maxHealth;
     public float SpawnTime => _spawnTime;
     public float MoveSpeed => _moveSpeed;

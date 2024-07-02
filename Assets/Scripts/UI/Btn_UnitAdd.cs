@@ -154,6 +154,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                 if (GameManager.Instance.RequestManaCheck(cost) && GameManager.Instance.RequestPopulationCheck(population))
                 {
                     GameManager.Instance.RequestPopulationUse(population);
+                    GameManager.Instance.RequestManaUse(cost * -1);
                     var unit = _spawnedUnit.GetComponent<Unit>();
                     unit?.StartState();
                     _spawnedUnit.layer = originLayer;
