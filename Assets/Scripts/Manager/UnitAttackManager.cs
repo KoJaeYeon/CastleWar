@@ -60,8 +60,10 @@ public class UnitAttackManager : MonoBehaviour
 
     public void Attack_Cannon(GameObject targetObject, Unit attackStartUnit)
     {
-        //[TODO] 풀매니저 추가해야함
-        GameObject arrow = Instantiate(new GameObject());
+        GameObject projectilePrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
+        projectilePrefab.SetActive(true);
+        Projectile projectile = projectilePrefab.GetComponent<Projectile>();
+        projectile.InitTargetAndShoot(attackStartUnit.transform.position, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
     }
 
     public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
@@ -75,8 +77,9 @@ public class UnitAttackManager : MonoBehaviour
 
     public void Attack_Archer(GameObject targetObject, Unit attackStartUnit)
     {
-        GameObject ArrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
-        //[TODO] 풀매니저 추가해야함
-        GameObject arrow = Instantiate(new GameObject());
+        GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
+        arrowPrefab.SetActive(true);
+        Projectile projectile = arrowPrefab.GetComponent<Projectile>();
+        projectile.InitTargetAndShoot(attackStartUnit.transform.position, targetObject, attackStartUnit.AttackDamage,attackStartUnit.SpwanSlotIndex);
     }
 }

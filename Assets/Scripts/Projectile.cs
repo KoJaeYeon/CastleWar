@@ -1,21 +1,26 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] float travelTime; // ¹ß»çÃ¼°¡ Å¸°Ù¿¡ µµ´ŞÇÏ´Â µ¥ °É¸®´Â ½Ã°£ (ÃÊ)
+    [SerializeField] float travelTime; // ë°œì‚¬ì²´ê°€ íƒ€ê²Ÿì— ë„ë‹¬í•˜ëŠ” ë° ê±¸ë¦¬ëŠ” ì‹œê°„ (ì´ˆ)
     Transform _targetTrans;
     Vector3 _startPosition;
     float _timeElapsed;
+    int _index;
+    float _attackDamage;
 
-    public void InitTargetAndShoot(GameObject target, float attackDamage)
+    public void InitTargetAndShoot(Vector3 initPos, GameObject target, float attackDamage, int slotIndex)
     {
+        transform.position = initPos;
         _targetTrans = target.transform;
         _startPosition = transform.position;
         _timeElapsed = 0f;
+        _attackDamage = attackDamage;
+        _index = slotIndex;
 
-        // ¹ß»çÃ¼°¡ Å¸°ÙÀ» ¹Ù¶óº¸µµ·Ï ¼³Á¤
+        // ë°œì‚¬ì²´ê°€ íƒ€ê²Ÿì„ ë°”ë¼ë³´ë„ë¡ ì„¤ì •
         transform.LookAt(_targetTrans);
     }
 
@@ -26,14 +31,27 @@ public class Projectile : MonoBehaviour
             _timeElapsed += Time.deltaTime;
             float journeyFraction = _timeElapsed / travelTime;
 
-            // ¹ß»çÃ¼¸¦ Å¸°ÙÀ¸·Î ÀÌµ¿
+            // ë°œì‚¬ì²´ë¥¼ íƒ€ê²Ÿìœ¼ë¡œ ì´ë™
             transform.position = Vector3.Lerp(_startPosition, _targetTrans.position, journeyFraction);
 
-            // ¹ß»çÃ¼°¡ Å¸°Ù¿¡ µµ´ŞÇÏ¸é Å¸°ÙÀÇ TransformÀ» null·Î ¼³Á¤
-            //if (journeyFraction >= 1f)
-            //{
-            //    _targetTrans.GetComponent<IAttack>().
-            //}
+            // ë°œì‚¬ì²´ê°€ íƒ€ê²Ÿì— ë„ë‹¬í•˜ë©´ íƒ€ê²Ÿì˜ Transformì„ nullë¡œ ì„¤ì •
+            if(Vector3.Distance(transform.position, _targetTrans.position) < 0.2f)
+            {
+                gameObject.SetActive(false);
+                PoolManager.Instance.ReturnPrefab(_index, gameObject);
+
+                GiveDamage();
+            }
+        }
+    }
+
+    public virtual void GiveDamage()
+    {
+        GameObject targetObject = _targetTrans.gameObject;
+        IAttack targetAttack = targetObject.GetComponent<IAttack>();
+        if (targetAttack != null)
+        {
+            targetAttack.OnTakeDamaged(_attackDamage);
         }
     }
 }
