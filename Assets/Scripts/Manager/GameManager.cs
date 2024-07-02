@@ -33,15 +33,20 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public int _mana = 75;
-    public int _population = 0;
-    public int _maxPopulation = 10;
-    public int _tier = 1;
+    int _mana = 75;
+    int _population = 0;
+    int _maxPopulation = 10;
+    int _tier = 1;
 
     private Action<int> _manaChangeCallback;
     private Action<int,int> _populationChangeCallback;
     private Action<int> _tierChangeCallback;
 
+    public int Tier
+    {
+        get { return _tier; }
+        set { _tier = value; }
+    }
     public float TierUpLeftTime { get; set; }
 
     Coroutine manaCoroutine;

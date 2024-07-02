@@ -195,6 +195,19 @@ public class Castle : MonoBehaviour, IAttack
         OnChangeState(new CastleIdleState(this));
         GameManager.Instance.RequestTierUp();
 
+        //티어업 스펙증가
+        if(GameManager.Instance.Tier == 2)
+        {
+            _maxHealth += 3000;
+            _health += 3000;            
+        }
+        else
+        {
+            _maxHealth += 3900;
+            _health += 3900;
+        }
+        _attackDamage += 10;
+
         CastleTierObjects[_index++].SetActive(false);
         CastleTierObjects[_index].SetActive(true);
         yield break;
