@@ -130,6 +130,11 @@ public class Castle : MonoBehaviour, IAttack
         _attackType = unitData.AttackType;
         _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
 
+        if (Animator != null)
+        {
+            Animator.speed = unitData.AttackAnimFrame / 60f / _attackSpeed;
+        }
+
         if (_rigidbody == null)
         {
             _rigidbody = GetComponent<Rigidbody>();
