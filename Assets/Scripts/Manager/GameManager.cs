@@ -36,9 +36,11 @@ public class GameManager : MonoBehaviour
     public int _mana = 75;
     public int _population = 0;
     public int _maxPopulation = 10;
+    public int _tier = 1;
 
     private Action<int> _manaChangeCallback;
     private Action<int,int> _populationChangeCallback;
+    private Action<int> _tierChangeCallback;
 
     Coroutine manaCoroutine;
     void Start()
@@ -66,6 +68,10 @@ public class GameManager : MonoBehaviour
     {
         callback.Invoke(_population,_maxPopulation);
     }
+    public void RefreshTierInfo(Action<int> callback)
+    {
+        callback.Invoke(_tier);
+    }
 
 
     public void RegisterManaChangeCallback(Action<int> manaChangeCallback)
@@ -81,6 +87,16 @@ public class GameManager : MonoBehaviour
     public void RegisterPopulationChangeCallback(Action<int, int> populationCallback)
     {
         _populationChangeCallback += populationCallback;
+    }
+
+    public void RegisterTierChangeCallback(Action<int> tierChangeCallback)
+    {
+        _tierChangeCallback += tierChangeCallback;
+    }
+
+    public void UnRegisterTierChangeCallback(Action<int> tierChangeCallback)
+    {
+        _tierChangeCallback -= tierChangeCallback;
     }
 
     public void UnRegisterPopulationChangeCallback(Action<int, int> populationCallback)
@@ -133,5 +149,29 @@ public class GameManager : MonoBehaviour
     {
         _population += population;
         _populationChangeCallback.Invoke(_population, _maxPopulation);
+    }
+
+    public bool RequestTierUpCheck()
+    {
+        switch(_tier)
+        {
+            case 1:
+                if (_mana >= 100)
+                {
+                    RequestManaUse(-100);
+                    return true;
+                }
+                return false;
+            case 2:
+                if (_mana >= 90)
+                {
+                    RequestManaUse(-90);
+                    return true;
+                }
+                return false;
+            default:
+                return false;
+
+        }
     }
 }

@@ -28,7 +28,6 @@ public class CastleIdleState : CastleState
     private Collider[] hitColliders = new Collider[20]; // 충돌을 저장할 배열
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
-    private bool _targetChanged = false;
     public override void Enter()
     {
         Debug.Log("Entering Idle State");
@@ -82,7 +81,6 @@ public class CastleIdleState : CastleState
 
                 if (_castle.TargetEnemy != hitColliders[i].gameObject) //타겟이 변경되었을 때
                 {
-                    _targetChanged = true;
                     _castle.TargetEnemy = hitColliders[i].gameObject;
                 }
 

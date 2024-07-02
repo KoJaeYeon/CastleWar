@@ -931,6 +931,7 @@ GameObject:
   - component: {fileID: 8618071792308239388}
   - component: {fileID: 7866386262282219085}
   - component: {fileID: 1377139670988286803}
+  - component: {fileID: 4430202301483538100}
   m_Layer: 5
   m_Name: Btn_TierUp
   m_TagString: Untagged
@@ -1010,6 +1011,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4430202301483538100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748558165375284444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0063984c51b20d4fa13014ca6a7f828, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4620560594127536982
 GameObject:
   m_ObjectHideFlags: 0

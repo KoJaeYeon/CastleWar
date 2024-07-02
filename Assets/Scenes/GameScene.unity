@@ -212,7 +212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &473039532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +228,7 @@ MonoBehaviour:
   _mana: 75
   _population: 10
   _maxPopulation: 10
+  _tier: 1
 --- !u!4 &473039533
 Transform:
   m_ObjectHideFlags: 0
@@ -456,11 +457,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &943547127 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3846625467944756919, guid: 37d73a1c6e47a5143b772f6f57bd5b2a, type: 3}
+--- !u!114 &943547128 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1841986590812349520, guid: 37d73a1c6e47a5143b772f6f57bd5b2a, type: 3}
   m_PrefabInstance: {fileID: 5107021071794173212}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ccbdd015cd928649a8c9caac63d26cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1114928634
 GameObject:
   m_ObjectHideFlags: 0
@@ -1335,10 +1342,22 @@ PrefabInstance:
     - target: {fileID: 1377139670988286803, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 943547127}
+      objectReference: {fileID: 943547128}
     - target: {fileID: 1377139670988286803, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1377139670988286803, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AllyCastleTierUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1377139670988286803, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CastleManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1377139670988286803, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1501802482008345579, guid: 13a2602235ecc2d4d8b63a4037795a1c, type: 3}
       propertyPath: m_AnchorMax.y

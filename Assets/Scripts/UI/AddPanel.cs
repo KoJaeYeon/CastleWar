@@ -1,13 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AddPanel : MonoBehaviour
 {
     PlayerPanel _playerPanel;
     Animator _animator;
     [SerializeField] GameObject ChoicePanel;
+    [SerializeField] GameObject[] Contents_TierUnit;
+    [SerializeField] Button[] Button_Tier;
     int _index = 0;
 
     UnitSelectSlot _slot;
@@ -21,6 +25,18 @@ public class AddPanel : MonoBehaviour
     private void OnEnable()
     {
         ChoicePanel.SetActive(false);
+        GameManager.Instance.RefreshTierInfo(TierUpCheck);
+        GameManager.Instance.RegisterTierChangeCallback(TierUpCheck);
+    }
+
+    public void TierUpCheck(int tier)
+    {
+        int index = 1;
+        foreach (var btn in Button_Tier)
+        {
+            btn.interactable = (index <= tier);
+            index++;
+        }
     }
 
     public void OnClick_ActivePanel()
@@ -50,6 +66,25 @@ public class AddPanel : MonoBehaviour
     public void OnClick_AddButton()
     {
         AddSlot(_index++);
+    }
+
+    public void OnClick_TierUnitSelect(int tier)
+    {
+        tier--;
+        int idx = 0;
+        foreach(var content in Contents_TierUnit)
+        {
+            if(idx == tier)
+            {
+                content.SetActive(true);
+            }
+            else
+            {
+                content.SetActive(false);
+            }
+            idx++;
+        }
+
     }
 
     private void AddSlot(int index)
