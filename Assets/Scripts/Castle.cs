@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,9 +26,9 @@ public class Castle : MonoBehaviour, IAttack
 
     public MapCornerPoint MapCornerPoint { get; set; }
 
-    GameObject _attackTargerEnemy; // °ø°ÝÇØ¾ßÇÏ´Â Àû
-    GameObject _targetEnemy; // Å½»öµÇ´Â Àû
-    UnitAttackDelegate _unitAttack; // À¯´Ö¸¶´Ù ´Ù¸£°Ô ºÎ¿©µÇ´Â °ø°Ý ¸Þ¼­µå
+    GameObject _attackTargerEnemy; // ê³µê²©í•´ì•¼í•˜ëŠ” ì 
+    GameObject _targetEnemy; // íƒìƒ‰ë˜ëŠ” ì 
+    UnitAttackDelegate _unitAttack; // ìœ ë‹›ë§ˆë‹¤ ë‹¤ë¥´ê²Œ ë¶€ì—¬ë˜ëŠ” ê³µê²© ë©”ì„œë“œ
     Rigidbody _rigidbody;
 
     float _searchRadius = 12f;
@@ -91,12 +91,6 @@ public class Castle : MonoBehaviour, IAttack
         set { _canAttack = value; }
     }
 
-    public bool CanMove
-    {
-        get => _canMove;
-        set { _canMove = value; }
-    }
-
 
     private void OnDisable()
     {
@@ -112,7 +106,6 @@ public class Castle : MonoBehaviour, IAttack
         {
             _currentState.ExecuteUpdate();
         }
-
     }
 
     void FixedUpdate()
@@ -138,24 +131,30 @@ public class Castle : MonoBehaviour, IAttack
         _attackType = unitData.AttackType;
         _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
 
-        if (_type == UnitType.Building)
+        if (_rigidbody == null)
         {
-            if (_rigidbody == null)
-            {
-                _rigidbody = GetComponent<Rigidbody>();
-            }
-            _rigidbody.isKinematic = true;
-            _canMove = false;
-            _health = 0f;
-            var SpawnTimerObject = SpawnTimerImage.transform.parent;
-            SpawnTimerObject.localScale = Vector3.one * 2;
-
-            //¸·»ç
-            if (_unitId == -1)
-            {
-                _canAttack =false;
-            }
+            _rigidbody = GetComponent<Rigidbody>();
         }
+        _rigidbody.isKinematic = true;
+        _canMove = false;
+        _health = _maxHealth;
+        var SpawnTimerObject = SpawnTimerImage.transform.parent;
+        SpawnTimerObject.localScale = Vector3.one * 2;
+    }
+
+    private void ResetData()
+    {
+        _targetEnemy = null;
+        _attackTargerEnemy = null;
+    }
+
+    public void StartState()
+    {
+        ResetData();
+
+        _currentState = new CastleIdleState(this);
+        _currentState.Enter();
+        CheckHealthBar();
     }
 
     public void CheckHealthBar()
@@ -174,6 +173,18 @@ public class Castle : MonoBehaviour, IAttack
             HpSlider.gameObject.SetActive(true);
             HpSlider.value = _health / _maxHealth;
         }
+    }
+    public bool IsTagAlly()
+    {
+        if (tag.Equals("Ally")) return true;
+        return false;
+    }
+
+    public void OnChangeState(IState newState)
+    {
+        _currentState.Exit();
+        _currentState = newState;
+        _currentState.Enter();
     }
 
     public void OnTakeDamaged(float damage)

@@ -263,8 +263,10 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Clear();
 
         // 데이터를 추가
-        unitDataDic.Add(-3, new UnitData(-3, "1티어", 100, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Both, 0, CardType.Common));
-        unitDataDic.Add(-2, new UnitData(-2, "성소", 75, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
+        unitDataDic.Add(-5, new UnitData(-5, "3티어", 0, UnitType.Building, 16900, 90, 1f, 8f, 0, UnitType.Both, 0, CardType.Common));
+        unitDataDic.Add(-4, new UnitData(-4, "2티어", 90, UnitType.Building, 13000, 80, 1f, 8f, 0, UnitType.Both, 0, CardType.Common));
+        unitDataDic.Add(-3, new UnitData(-3, "1티어", 100, UnitType.Building, 10000, 70, 1f, 8f, 0, UnitType.Both, 0, CardType.Common));
+        unitDataDic.Add(-2, new UnitData(-2, "성소", 75, UnitType.Building, 4125, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
         unitDataDic.Add(-1, new UnitData(-1, "막사", 50, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
         unitDataDic.Add(0, new UnitData(0, "궁수탑", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common));
         unitDataDic.Add(1, new UnitData(1, "포탑", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common));

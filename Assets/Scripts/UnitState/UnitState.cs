@@ -239,7 +239,7 @@ public class UnitMoveState : UnitState
         _lastSearchTime = Time.time;
 
         Vector3 origin = _unit.transform.position;
-        string[] targetLayers = _unit.tag.Equals("Ally") ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
+        string[] targetLayers = _unit.IsTagAlly() ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
         int layerMask = LayerMask.GetMask(targetLayers);
 
         int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);

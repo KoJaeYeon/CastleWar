@@ -227,10 +227,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllyCastle
       objectReference: {fileID: 0}
-    - target: {fileID: 3482671778461900589, guid: e43a4f5d0b1f4da4480df016883f5b68, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4137920904282845832, guid: e43a4f5d0b1f4da4480df016883f5b68, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -270,14 +266,6 @@ PrefabInstance:
     - target: {fileID: 4137920904282845832, guid: e43a4f5d0b1f4da4480df016883f5b68, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7591763184384638366, guid: e43a4f5d0b1f4da4480df016883f5b68, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9038569773674027143, guid: e43a4f5d0b1f4da4480df016883f5b68, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

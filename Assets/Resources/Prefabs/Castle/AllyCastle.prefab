@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4137920904282845832}
   - component: {fileID: 6893557068405838015}
-  - component: {fileID: 3306577559122403469}
-  - component: {fileID: 7359319466707416099}
+  - component: {fileID: 3646254422057249597}
   - component: {fileID: 1930300045975572269}
   m_Layer: 12
   m_Name: AllyCastle
@@ -64,7 +63,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &3306577559122403469
+--- !u!114 &3646254422057249597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,43 +72,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 3480077108692597432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa14c734bbfd1174a83ae82eb15173f8, type: 3}
+  m_Script: {fileID: 11500000, guid: d1d1b0a8761dff94bb9ee47445c7419d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitId: 1
+  _unitId: 0
   _cost: 0
   _populaltion: 0
   _type: 0
-  _health: 40
-  _maxHealth: 40
-  _attackDamage: 10
+  _health: 0
+  _maxHealth: 0
+  _attackDamage: 0
   _attackSpeed: 0
-  _attackRange: 3
+  _attackRange: 0
   _isMelee: 0
-  _moveSpeed: 3
+  _moveSpeed: 0
   _attackType: 0
-  HpSlider: {fileID: 984105411847109694}
-  SpawnTimerImage: {fileID: 8144584290176240963}
-  AttackRange_Img: {fileID: 7126131749343993872}
---- !u!114 &7359319466707416099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3480077108692597432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85b7f5b30bbcd5443ac9cbbb83a0a3c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 2
-  bottomLeft: {x: 0, y: 0}
-  topRight: {x: 0, y: 0}
-  start_Pos: {x: 0, y: 0}
-  end_Pos: {x: 0, y: 0}
-  AllowDigonal: 1
-  DontCrossCorner: 0
+  HpSlider: {fileID: 0}
+  SpawnTimerImage: {fileID: 0}
 --- !u!65 &1930300045975572269
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -183,12 +162,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllyCastle
       objectReference: {fileID: 0}
-    - target: {fileID: 2091066574265295033, guid: 46bef7713d8de4044ac39b6d851068ef, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2573278614344055008, guid: 46bef7713d8de4044ac39b6d851068ef, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -315,35 +289,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
---- !u!114 &984105411847109694 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9118888354576503137, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
-  m_PrefabInstance: {fileID: 8297022553157086559}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &3379749781036406109 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6756448966213384194, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
   m_PrefabInstance: {fileID: 8297022553157086559}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7126131749343993872 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1279560077767675215, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
-  m_PrefabInstance: {fileID: 8297022553157086559}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8144584290176240963 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154127684110884892, guid: f781273572b48af4b90896e3d71a4c47, type: 3}
-  m_PrefabInstance: {fileID: 8297022553157086559}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
