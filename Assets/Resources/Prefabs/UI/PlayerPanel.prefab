@@ -405,6 +405,7 @@ GameObject:
   - component: {fileID: 1335108668328713847}
   - component: {fileID: 7021055092111120358}
   - component: {fileID: 5509206915664978390}
+  - component: {fileID: 7901011621761662949}
   m_Layer: 5
   m_Name: Img_Sanctuary
   m_TagString: Untagged
@@ -471,6 +472,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7901011621761662949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2711931435733754269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 0
 --- !u!1 &2762048170560327484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,6 +1367,7 @@ GameObject:
   - component: {fileID: 3769475896151014141}
   - component: {fileID: 360492981598844219}
   - component: {fileID: 32791586580283729}
+  - component: {fileID: 5203221948815211466}
   m_Layer: 5
   m_Name: Img_Camp
   m_TagString: Untagged
@@ -1417,6 +1434,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5203221948815211466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6328036879277662786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &7422674949811407292
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,6 +1959,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8618071792308239388}
     m_Modifications:
+    - target: {fileID: 3020834008845485602, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}
+      propertyPath: m_text
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3020834008845485602, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}
+      propertyPath: m_fontSize
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3020834008845485602, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 24
+      objectReference: {fileID: 0}
     - target: {fileID: 6268457257889443256, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}
       propertyPath: m_Name
       value: Img_NeedMana

@@ -61,6 +61,12 @@ public class CastleManager : MonoBehaviour
         float castleRadius = 26f;
         AllyUnion.AddCircle(AllyCastle.transform, castleRadius);
         EnemyUnion.AddCircle(EnemyCastle.transform,castleRadius);
+
+        Castle allyCastle = AllyCastle.GetComponent<Castle>();
+        Castle enemyCastle = EnemyCastle.GetComponent<Castle>();
+        //var castleData = DatabaseManager.Instance.OnGetUnitData(-3);
+        //allyCastle.InitData(castleData);
+        //enemyCastle.InitData(castleData);
     }
 
     public void AddCampToUnion(Transform transform, bool isTagAlly)
