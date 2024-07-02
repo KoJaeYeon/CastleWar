@@ -39,6 +39,8 @@ public class UnitIdleState : UnitState
     {
         Debug.Log("Exiting Idle State");
         _unit.Animator.SetTrigger("StartMove");
+
+        UnitManager.Instance.RegisterRetreatCallback(isTagAlly: _unit.IsTagAlly(), _unit.HandleOnRetreatState);
     }
 }
 
@@ -371,7 +373,6 @@ public class UnitRetreatState : UnitState
         _castleTrans = castle.transform;
         _castleSearched =false;
         UnitManager.Instance.RegisterCancelCallback(isTagAlly:_unit.IsTagAlly(), _unit.HandleOnMoveState);
-        //UnitManager.Instance.RegisterCancelCallback(_unit.HandleOnMoveState);
     }
     public override void ExecuteFixedUpdate()
     {
@@ -422,8 +423,10 @@ public class UnitRetreatState : UnitState
         if (distance < 8f)
         {
             //[TODO] 귀환 마나 적용
+
             SpawnManager.Instance.OnCalled_ReturnUnit(_unit.SpwanSlotIndex, _unit.gameObject);
             Exit();
+            UnitManager.Instance.UnRegisterRetreatCallback(isTagAlly:_unit.IsTagAlly(), _unit.HandleOnRetreatState);
         }
     }
 
