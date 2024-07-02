@@ -5,7 +5,6 @@ using UnityEngine;
 public class AnimationAttack : MonoBehaviour
 {
     Unit _unit;
-
     Unit Unit
     {
         get

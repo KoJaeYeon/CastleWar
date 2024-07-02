@@ -35,8 +35,9 @@ public struct UnitData
     public UnitType AttackType;
     public int Population;
     public CardType cardType;
+    public int AttackAnimFrame;
 
-    public UnitData(int id, string name, int cost, UnitType unitType, float health, float attackDamage, float attackSpeed, float attackRange, int moveSpeed, UnitType attackType, int population, CardType cardType)
+    public UnitData(int id, string name, int cost, UnitType unitType, float health, float attackDamage, float attackSpeed, float attackRange, int moveSpeed, UnitType attackType, int population, CardType cardType, int attackAnimFrame)
     {
         this.id = id;
         this.name = name;
@@ -50,6 +51,7 @@ public struct UnitData
         this.AttackType = attackType;
         this.Population = population;
         this.cardType = cardType;
+        this.AttackAnimFrame = attackAnimFrame;
     }
 }
 
@@ -166,6 +168,7 @@ public class DatabaseManager : MonoBehaviour
                     {
                         cardType = (CardType)Enum.Parse(typeof(CardType), columns[11]);
                     }
+                    int frame = int.Parse(columns[12]);
 
                     unitDataDic.Add(id,new UnitData(
                         id,
@@ -179,7 +182,8 @@ public class DatabaseManager : MonoBehaviour
                         moveSpeed,
                         attackType,
                         population,
-                        cardType
+                        cardType,
+                        frame
                     ));
                     if(id < 6)
                     {
@@ -263,50 +267,50 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Clear();
 
         // 데이터를 추가
-        unitDataDic.Add(-5, new UnitData(-5, "3티어", 0, UnitType.Building, 16900, 90, 1f, 8f, 0, UnitType.Both, 0, CardType.Common));
-        unitDataDic.Add(-4, new UnitData(-4, "2티어", 90, UnitType.Building, 13000, 80, 1f, 8f, 0, UnitType.Both, 0, CardType.Common));
-        unitDataDic.Add(-3, new UnitData(-3, "1티어", 100, UnitType.Building, 10000, 70, 1f, 8f, 0, UnitType.Both, 0, CardType.Common));
-        unitDataDic.Add(-2, new UnitData(-2, "성소", 75, UnitType.Building, 4125, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
-        unitDataDic.Add(-1, new UnitData(-1, "막사", 50, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common));
-        unitDataDic.Add(0, new UnitData(0, "궁수탑", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common));
-        unitDataDic.Add(1, new UnitData(1, "포탑", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common));
-        unitDataDic.Add(2, new UnitData(2, "대공포탑", 50, UnitType.Building, 1650, 130, 0.8f, 9, 0, UnitType.Air, 5, CardType.Common));
-        unitDataDic.Add(3, new UnitData(3, "코볼트", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common));
-        unitDataDic.Add(4, new UnitData(4, "전열보병", 25, UnitType.Ground, 730, 106, 1.3f, 3, 7, UnitType.Ground, 3, CardType.Common));
-        unitDataDic.Add(5, new UnitData(5, "헌터", 15, UnitType.Ground, 195, 45, 0.8f, 5, 5, UnitType.Both, 2, CardType.Common));
-        unitDataDic.Add(6, new UnitData(6, "트릭스터", 18, UnitType.Ground, 366, 45, 0.9f, 2, 5, UnitType.Both, 2, CardType.Common));
-        unitDataDic.Add(7, new UnitData(7, "방패 펭귄병", 15, UnitType.Ground, 400, 52, 1.5f, 3, 5, UnitType.Ground, 2, CardType.Common));
-        unitDataDic.Add(8, new UnitData(8, "리자드 투창병", 15, UnitType.Ground, 240, 106, 2.6f, 6, 5, UnitType.Ground, 2, CardType.Common));
-        unitDataDic.Add(9, new UnitData(9, "꼬마 바이킹", 25, UnitType.Ground, 1288, 256, 2.2f, 3, 7, UnitType.Building, 3, CardType.Epic));
-        unitDataDic.Add(10, new UnitData(10, "마나 캐논", 75, UnitType.Building, 3660, 685, 2.8f, 8, 5, UnitType.Ground, 6, CardType.Rare));
-        unitDataDic.Add(11, new UnitData(11, "발리스타", 75, UnitType.Building, 3660, 1021, 2.6f, 7, 5, UnitType.Ground, 6, CardType.Rare));
-        unitDataDic.Add(12, new UnitData(12, "글레이셔", 40, UnitType.Ground, 926, 259, 2.0f, 5, 5, UnitType.Both, 4, CardType.Legendary));
-        unitDataDic.Add(13, new UnitData(13, "해칠링", 40, UnitType.Air, 133, 121, 1.2f, 3, 7, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(14, new UnitData(14, "그리즐리", 60, UnitType.Ground, 3594, 253, 1.5f, 3, 3, UnitType.Building, 5, CardType.Rare));
-        unitDataDic.Add(15, new UnitData(15, "요술사", 48, UnitType.Ground, 1048, 511, 2.0f, 5, 5, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(16, new UnitData(16, "스매셔", 50, UnitType.Ground, 1617, 572, 2.1f, 3, 5, UnitType.Ground, 5, CardType.Rare));
-        unitDataDic.Add(17, new UnitData(17, "용인", 50, UnitType.Ground, 1487, 201, 1.1f, 3, 5, UnitType.Ground, 5, CardType.Rare));
-        unitDataDic.Add(18, new UnitData(18, "소총 아울베어", 45, UnitType.Ground, 925, 237, 2.3f, 7, 5, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(19, new UnitData(19, "모스레이디", 40, UnitType.Air, 938, 180, 1.6f, 2, 7, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(20, new UnitData(20, "전투 코끼리", 50, UnitType.Ground, 2641, 237, 1.4f, 7, 7, UnitType.Building, 5, CardType.Rare));
-        unitDataDic.Add(21, new UnitData(21, "인터셉터", 35, UnitType.Air, 532, 157, 1.4f, 2, 7, UnitType.Ground, 3, CardType.Rare));
-        unitDataDic.Add(22, new UnitData(22, "전투 고릴라", 45, UnitType.Ground, 1158, 615, 2.8f, 10, 3, UnitType.Building, 5, CardType.Rare));
-        unitDataDic.Add(23, new UnitData(23, "샐러맨더", 50, UnitType.Ground, 1138, 526, 2.3f, 6, 3, UnitType.Ground, 5, CardType.Rare));
-        unitDataDic.Add(24, new UnitData(24, "순교자", 40, UnitType.Ground, 1019, 243, 1.5f, 4, 5, UnitType.Both, 4, CardType.Epic));
-        unitDataDic.Add(25, new UnitData(25, "비행선", 35, UnitType.Air, 2407, 195, 3.0f, 1, 7, UnitType.Building, 3, CardType.Legendary));
-        unitDataDic.Add(26, new UnitData(26, "초월의 탑", 150, UnitType.Building, 7015, 5456, 1.0f, 99, 7, UnitType.Both, 8, CardType.Legendary));
-        unitDataDic.Add(27, new UnitData(27, "아케인 블래스터", 100, UnitType.Building, 6442, 324, 4.0f, 7, 5, UnitType.Both, 7, CardType.Epic));
-        unitDataDic.Add(28, new UnitData(28, "그리폰 라이더", 70, UnitType.Air, 1683, 354, 1.5f, 8, 5, UnitType.Ground, 5, CardType.Legendary));
-        unitDataDic.Add(29, new UnitData(29, "대포 거북", 85, UnitType.Ground, 1772, 672, 2.9f, 8, 7, UnitType.Ground, 6, CardType.Epic));
-        unitDataDic.Add(30, new UnitData(30, "강철 거인", 100, UnitType.Ground, 7972, 1047, 2.4f, 3, 3, UnitType.Building, 8, CardType.Legendary));
-        unitDataDic.Add(31, new UnitData(31, "드래곤", 100, UnitType.Air, 5047, 448, 2.3f, 4, 3, UnitType.Both, 8, CardType.Epic));
-        unitDataDic.Add(32, new UnitData(32, "대공포병", 80, UnitType.Ground, 2206, 934, 2.1f, 6, 7, UnitType.Both, 6, CardType.Epic));
-        unitDataDic.Add(33, new UnitData(33, "엑스 버팔로", 90, UnitType.Ground, 3704, 1517, 2.7f, 3, 3, UnitType.Ground, 7, CardType.Legendary));
-        unitDataDic.Add(34, new UnitData(34, "이블리스", 80, UnitType.Air, 3293, 522, 4.0f, 5, 3, UnitType.Both, 6, CardType.Legendary));
-        unitDataDic.Add(35, new UnitData(35, "사령여제", 70, UnitType.Ground, 1890, 495, 1.3f, 6, 7, UnitType.Both, 5, CardType.Legendary));
-        unitDataDic.Add(36, new UnitData(36, "열기구 펭귄병", 40, UnitType.Air, 720, 128, 2.2f, 2, 5, UnitType.Both, 4, CardType.Rare));
-        unitDataDic.Add(37, new UnitData(37, "저격수", 100, UnitType.Ground, 1198, 1091, 2.9f, 10, 3, UnitType.Both, 6, CardType.Legendary));
-        unitDataDic.Add(38, new UnitData(38, "켄타우루스", 80, UnitType.Ground, 2738, 730, 1.6f, 3, 7, UnitType.Ground, 6, CardType.Epic));
+        unitDataDic.Add(-5, new UnitData(-5, "3티어", 0, UnitType.Building, 16900, 90, 1f, 8f, 0, UnitType.Both, 0, CardType.Common,0));
+        unitDataDic.Add(-4, new UnitData(-4, "2티어", 90, UnitType.Building, 13000, 80, 1f, 8f, 0, UnitType.Both, 0, CardType.Common,0));
+        unitDataDic.Add(-3, new UnitData(-3, "1티어", 100, UnitType.Building, 10000, 70, 1f, 8f, 0, UnitType.Both, 0, CardType.Common,0));
+        unitDataDic.Add(-2, new UnitData(-2, "성소", 75, UnitType.Building, 4125, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common,0));
+        unitDataDic.Add(-1, new UnitData(-1, "막사", 50, UnitType.Building, 2750, 0, 0, 0, 0, UnitType.Ground, 10, CardType.Common,0));
+        unitDataDic.Add(0, new UnitData(0, "궁수탑", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common,0));
+        unitDataDic.Add(1, new UnitData(1, "포탑", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common,60));
+        unitDataDic.Add(2, new UnitData(2, "대공포탑", 50, UnitType.Building, 1650, 130, 0.8f, 9, 0, UnitType.Air, 5, CardType.Common,0));
+        unitDataDic.Add(3, new UnitData(3, "코볼트", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common,0));
+        unitDataDic.Add(4, new UnitData(4, "전열보병", 25, UnitType.Ground, 730, 106, 1.3f, 3, 7, UnitType.Ground, 3, CardType.Common,45));
+        unitDataDic.Add(5, new UnitData(5, "헌터", 15, UnitType.Ground, 195, 45, 0.8f, 5, 5, UnitType.Both, 2, CardType.Common, 30));
+        unitDataDic.Add(6, new UnitData(6, "트릭스터", 18, UnitType.Ground, 366, 45, 0.9f, 2, 5, UnitType.Both, 2, CardType.Common, 0));
+        unitDataDic.Add(7, new UnitData(7, "방패 펭귄병", 15, UnitType.Ground, 400, 52, 1.5f, 3, 5, UnitType.Ground, 2, CardType.Common, 0));
+        unitDataDic.Add(8, new UnitData(8, "리자드 투창병", 15, UnitType.Ground, 240, 106, 2.6f, 6, 5, UnitType.Ground, 2, CardType.Common, 0));
+        unitDataDic.Add(9, new UnitData(9, "꼬마 바이킹", 25, UnitType.Ground, 1288, 256, 2.2f, 3, 7, UnitType.Building, 3, CardType.Epic,0));
+        unitDataDic.Add(10, new UnitData(10, "마나 캐논", 75, UnitType.Building, 3660, 685, 2.8f, 8, 5, UnitType.Ground, 6, CardType.Rare, 0));
+        unitDataDic.Add(11, new UnitData(11, "발리스타", 75, UnitType.Building, 3660, 1021, 2.6f, 7, 5, UnitType.Ground, 6, CardType.Rare, 0));
+        unitDataDic.Add(12, new UnitData(12, "글레이셔", 40, UnitType.Ground, 926, 259, 2.0f, 5, 5, UnitType.Both, 4, CardType.Legendary, 0));
+        unitDataDic.Add(13, new UnitData(13, "해칠링", 40, UnitType.Air, 133, 121, 1.2f, 3, 7, UnitType.Both, 4, CardType.Rare, 0));
+        unitDataDic.Add(14, new UnitData(14, "그리즐리", 60, UnitType.Ground, 3594, 253, 1.5f, 3, 3, UnitType.Building, 5, CardType.Rare, 0));
+        unitDataDic.Add(15, new UnitData(15, "요술사", 48, UnitType.Ground, 1048, 511, 2.0f, 5, 5, UnitType.Both, 4, CardType.Rare, 0));
+        unitDataDic.Add(16, new UnitData(16, "스매셔", 50, UnitType.Ground, 1617, 572, 2.1f, 3, 5, UnitType.Ground, 5, CardType.Rare, 0));
+        unitDataDic.Add(17, new UnitData(17, "용인", 50, UnitType.Ground, 1487, 201, 1.1f, 3, 5, UnitType.Ground, 5, CardType.Rare, 0));
+        unitDataDic.Add(18, new UnitData(18, "소총 아울베어", 45, UnitType.Ground, 925, 237, 2.3f, 7, 5, UnitType.Both, 4, CardType.Rare, 0));
+        unitDataDic.Add(19, new UnitData(19, "모스레이디", 40, UnitType.Air, 938, 180, 1.6f, 2, 7, UnitType.Both, 4, CardType.Rare, 0));
+        unitDataDic.Add(20, new UnitData(20, "전투 코끼리", 50, UnitType.Ground, 2641, 237, 1.4f, 7, 7, UnitType.Building, 5, CardType.Rare, 0));
+        unitDataDic.Add(21, new UnitData(21, "인터셉터", 35, UnitType.Air, 532, 157, 1.4f, 2, 7, UnitType.Ground, 3, CardType.Rare,0));
+        unitDataDic.Add(22, new UnitData(22, "전투 고릴라", 45, UnitType.Ground, 1158, 615, 2.8f, 10, 3, UnitType.Building, 5, CardType.Rare, 0));
+        unitDataDic.Add(23, new UnitData(23, "샐러맨더", 50, UnitType.Ground, 1138, 526, 2.3f, 6, 3, UnitType.Ground, 5, CardType.Rare, 0));
+        unitDataDic.Add(24, new UnitData(24, "순교자", 40, UnitType.Ground, 1019, 243, 1.5f, 4, 5, UnitType.Both, 4, CardType.Epic, 0));
+        unitDataDic.Add(25, new UnitData(25, "비행선", 35, UnitType.Air, 2407, 195, 3.0f, 1, 7, UnitType.Building, 3, CardType.Legendary, 0));
+        unitDataDic.Add(26, new UnitData(26, "초월의 탑", 150, UnitType.Building, 7015, 5456, 1.0f, 99, 7, UnitType.Both, 8, CardType.Legendary, 0));
+        unitDataDic.Add(27, new UnitData(27, "아케인 블래스터", 100, UnitType.Building, 6442, 324, 4.0f, 7, 5, UnitType.Both, 7, CardType.Epic, 0));
+        unitDataDic.Add(28, new UnitData(28, "그리폰 라이더", 70, UnitType.Air, 1683, 354, 1.5f, 8, 5, UnitType.Ground, 5, CardType.Legendary, 0));
+        unitDataDic.Add(29, new UnitData(29, "대포 거북", 85, UnitType.Ground, 1772, 672, 2.9f, 8, 7, UnitType.Ground, 6, CardType.Epic, 0));
+        unitDataDic.Add(30, new UnitData(30, "강철 거인", 100, UnitType.Ground, 7972, 1047, 2.4f, 3, 3, UnitType.Building, 8, CardType.Legendary, 0));
+        unitDataDic.Add(31, new UnitData(31, "드래곤", 100, UnitType.Air, 5047, 448, 2.3f, 4, 3, UnitType.Both, 8, CardType.Epic, 0));
+        unitDataDic.Add(32, new UnitData(32, "대공포병", 80, UnitType.Ground, 2206, 934, 2.1f, 6, 7, UnitType.Both, 6, CardType.Epic, 0));
+        unitDataDic.Add(33, new UnitData(33, "엑스 버팔로", 90, UnitType.Ground, 3704, 1517, 2.7f, 3, 3, UnitType.Ground, 7, CardType.Legendary, 0));
+        unitDataDic.Add(34, new UnitData(34, "이블리스", 80, UnitType.Air, 3293, 522, 4.0f, 5, 3, UnitType.Both, 6, CardType.Legendary, 0));
+        unitDataDic.Add(35, new UnitData(35, "사령여제", 70, UnitType.Ground, 1890, 495, 1.3f, 6, 7, UnitType.Both, 5, CardType.Legendary, 0));
+        unitDataDic.Add(36, new UnitData(36, "열기구 펭귄병", 40, UnitType.Air, 720, 128, 2.2f, 2, 5, UnitType.Both, 4, CardType.Rare, 0));
+        unitDataDic.Add(37, new UnitData(37, "저격수", 100, UnitType.Ground, 1198, 1091, 2.9f, 10, 3, UnitType.Both, 6, CardType.Legendary, 0));
+        unitDataDic.Add(38, new UnitData(38, "켄타우루스", 80, UnitType.Ground, 2738, 730, 1.6f, 3, 7, UnitType.Ground, 6, CardType.Epic, 0));
 
         for (int id = 0; id < 6; id++)
         {

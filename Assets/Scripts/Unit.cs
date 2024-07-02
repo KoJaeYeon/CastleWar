@@ -139,7 +139,7 @@ public class Unit : MonoBehaviour, IAttack
         _spawnSlotIndex = index;
     }
 
-    public void InitData(UnitData unitData)
+    public void InitData(UnitData unitData, int index = 0)
     {
         _unitId = unitData.id;
         _cost = unitData.cost;
@@ -153,6 +153,13 @@ public class Unit : MonoBehaviour, IAttack
         _moveSpeed = unitData.MoveSpeed;
         _attackType = unitData.AttackType;
         _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
+        _spawnSlotIndex = index;
+
+
+        if (Animator != null)
+        {
+            Animator.speed = unitData.AttackAnimFrame / 60f / _attackSpeed;
+        }
 
         //캐릭터 공격범위 표시 이미지
         RectTransform rectAtkRangeImg = AttackRange_Img.GetComponent<RectTransform>();
@@ -344,7 +351,7 @@ public class Unit : MonoBehaviour, IAttack
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
         }
-        
-
     }
+
+
 }
