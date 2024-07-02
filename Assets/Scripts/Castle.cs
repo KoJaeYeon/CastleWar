@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Castle : MonoBehaviour, IAttack
 {
     private IState _currentState;
-    private float _spawnTime = 55f;
+    private float _spawnTime = 60f;
     Animator _animator;
 
     [SerializeField] int _unitId;
@@ -193,6 +193,7 @@ public class Castle : MonoBehaviour, IAttack
         yield return new WaitForSeconds(_spawnTime);
         parentObject_Timer.SetActive(false);
         OnChangeState(new CastleIdleState(this));
+        GameManager.Instance.RequestTierUp();
 
         CastleTierObjects[_index++].SetActive(false);
         CastleTierObjects[_index].SetActive(true);
@@ -232,6 +233,7 @@ public class Castle : MonoBehaviour, IAttack
         if (SpawnTimerImage != null)
         {
             SpawnTimerImage.fillAmount += value;
+            GameManager.Instance.TierUpLeftTime = SpawnTimerImage.fillAmount;
         }
     }
     public void OnTakeDamaged(float damage)

@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     private Action<int,int> _populationChangeCallback;
     private Action<int> _tierChangeCallback;
 
+    public float TierUpLeftTime { get; set; }
+
     Coroutine manaCoroutine;
     void Start()
     {
@@ -89,6 +91,11 @@ public class GameManager : MonoBehaviour
         _populationChangeCallback += populationCallback;
     }
 
+    public void UnRegisterPopulationChangeCallback(Action<int, int> populationCallback)
+    {
+        _populationChangeCallback -= populationCallback;
+    }
+
     public void RegisterTierChangeCallback(Action<int> tierChangeCallback)
     {
         _tierChangeCallback += tierChangeCallback;
@@ -98,12 +105,6 @@ public class GameManager : MonoBehaviour
     {
         _tierChangeCallback -= tierChangeCallback;
     }
-
-    public void UnRegisterPopulationChangeCallback(Action<int, int> populationCallback)
-    {
-        _populationChangeCallback -= populationCallback;
-    }
-
     public void RequestManaProduce(int mana)
     {
         _mana += mana;
@@ -157,15 +158,13 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 if (_mana >= 100)
-                {
-                    RequestManaUse(-100);
+                {                    
                     return true;
                 }
                 return false;
             case 2:
                 if (_mana >= 90)
                 {
-                    RequestManaUse(-90);
                     return true;
                 }
                 return false;
@@ -173,5 +172,20 @@ public class GameManager : MonoBehaviour
                 return false;
 
         }
+    }
+
+    public void RequestTierUp()
+    {
+        _tier++;
+        _tierChangeCallback.Invoke(_tier);
+    }
+
+    public int getTierUpNeedMana()
+    {
+        if (_tier == 1)
+            return 100;
+        else if (_tier == 2)
+            return 90;
+        else return 0;
     }
 }
