@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
 
     public bool RequestManaCheck(int mana)
     {
-        if(_mana <= mana )
+        if(_mana < mana)
         {
             return false;
         }

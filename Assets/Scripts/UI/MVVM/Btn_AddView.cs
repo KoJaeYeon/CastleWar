@@ -17,7 +17,13 @@ public class Btn_AddView : MonoBehaviour
     int _needPopulation;
     private void OnEnable()
     {
-        InitEnable();
+        if (_vm == null)
+        {
+            _vm = new Btn_AddViewModel();
+            _vm.PropertyChanged += OnPropertyChanged;
+            _vm.RegisterEventsOnEnable();
+            _vm.RefreshViewModel();
+        }
     }
     private void OnDisable()
     {
@@ -29,35 +35,28 @@ public class Btn_AddView : MonoBehaviour
         }
     }
 
-    public void InitEnable()
-    {
-        if (_vm == null)
-        {
-            _vm = new Btn_AddViewModel();
-            _vm.PropertyChanged += OnPropertyChanged;
-            _vm.RegisterEventsOnEnable();
-            _vm.RefreshViewModel();
-        }
-    }
-
     public void InitData(int mana, int population)
     {
         _cost = mana;
         _needPopulation = population;
         view.SetActive(true);
+        Text_UnitNeedMana.text = _cost.ToString();
+        Text_Population.text = _needPopulation.ToString();
     }
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        return;
         switch (e.PropertyName)
         {
             case nameof(_vm.Mana):
                 if (_vm.Mana >= _cost)
                 {
-                    Img_Button.color = Color.white;
                     Text_UnitNeedMana.color = Color.white;
                     Img_ManaMask.gameObject.SetActive(false);
+                    if (_vm.Population + _needPopulation <= _vm.MaxPopulation) // 인구수가 될 때
+                    {
+                        Img_Button.color = Color.white;
+                    }
                 }
                 else
                 {
@@ -69,7 +68,20 @@ public class Btn_AddView : MonoBehaviour
                 break;
             case nameof(_vm.Population):
             case nameof(_vm.MaxPopulation):
-                Text_Population.text = $"{_vm.Population}/{_vm.MaxPopulation}";
+                if (_vm.Population + _needPopulation > _vm.MaxPopulation) // 인구수가 모자를 때
+                {
+                    Text_Population.color = Color.red;
+                    Img_Button.color = Color.gray;
+                }
+                else // 인구수 여유일 때
+                {
+                    Text_Population.color = Color.white;
+                    if (_vm.Mana >= _cost)
+                    {
+                        Img_Button.color = Color.white;
+
+                    }
+                }
                 break;
         }
     }

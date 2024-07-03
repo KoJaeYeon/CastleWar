@@ -771,10 +771,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   view: {fileID: 1792238327453550760}
-  Text_Population: {fileID: 0}
-  Img_ManaMask: {fileID: 0}
-  Img_Button: {fileID: 0}
-  Text_UnitNeedMana: {fileID: 0}
+  Text_Population: {fileID: 4300921822827158777}
+  Img_ManaMask: {fileID: 1879264369307916013}
+  Img_Button: {fileID: 7334798879883774237}
+  Text_UnitNeedMana: {fileID: 1478980051072206054}
 --- !u!1 &8569412806396216464
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,6 +963,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51b68d7f88c8cd74580589ff3b7415fa, type: 3}
+--- !u!114 &1879264369307916013 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 766897660147051256, guid: 51b68d7f88c8cd74580589ff3b7415fa, type: 3}
+  m_PrefabInstance: {fileID: 1202722403759766549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3832040218170667905 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2710825997796872084, guid: 51b68d7f88c8cd74580589ff3b7415fa, type: 3}
@@ -1073,6 +1084,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}
+--- !u!114 &1478980051072206054 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3020834008845485602, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}
+  m_PrefabInstance: {fileID: 4425433162174939844}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7336113298512147564 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6387599807904364200, guid: 317e7e894c5fbb64ab124e0468406617, type: 3}

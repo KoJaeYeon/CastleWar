@@ -66,7 +66,11 @@ public class AddPanel : MonoBehaviour
 
     public void OnClick_AddButton()
     {
-        AddSlot(_index++);
+        if (GameManager.Instance.RequestManaCheck(40))
+        {
+            GameManager.Instance.RequestManaUse(-40);
+            AddSlot(_index++);
+        }
     }
 
     public void OnClick_TierUnitSelect(int tier)
