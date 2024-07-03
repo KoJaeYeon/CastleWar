@@ -275,12 +275,12 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Add(0, new UnitData(0, "궁수탑", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common,0));
         unitDataDic.Add(1, new UnitData(1, "포탑", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common,60));
         unitDataDic.Add(2, new UnitData(2, "대공포탑", 50, UnitType.Building, 1650, 130, 0.8f, 9, 0, UnitType.Air, 5, CardType.Common,0));
-        unitDataDic.Add(3, new UnitData(3, "코볼트", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common,120));
-        unitDataDic.Add(4, new UnitData(4, "전열보병", 25, UnitType.Ground, 730, 106, 1.3f, 3, 7, UnitType.Ground, 3, CardType.Common,90));
-        unitDataDic.Add(5, new UnitData(5, "헌터", 15, UnitType.Ground, 195, 45, 0.8f, 5, 5, UnitType.Both, 2, CardType.Common, 60));
-        unitDataDic.Add(6, new UnitData(6, "트릭스터", 18, UnitType.Ground, 366, 45, 0.9f, 2, 5, UnitType.Both, 2, CardType.Common, 0));
-        unitDataDic.Add(7, new UnitData(7, "방패 펭귄병", 15, UnitType.Ground, 400, 52, 1.5f, 3, 5, UnitType.Ground, 2, CardType.Common, 0));
-        unitDataDic.Add(8, new UnitData(8, "리자드 투창병", 15, UnitType.Ground, 240, 106, 2.6f, 6, 5, UnitType.Ground, 2, CardType.Common, 0));
+        unitDataDic.Add(3, new UnitData(3, "코볼트", 8, UnitType.Ground, 120, 52, 0.7f, 3, 5, UnitType.Ground, 1, CardType.Common,120));
+        unitDataDic.Add(4, new UnitData(4, "전열보병", 25, UnitType.Ground, 730, 106, 1.3f, 3, 4, UnitType.Ground, 3, CardType.Common,90));
+        unitDataDic.Add(5, new UnitData(5, "헌터", 15, UnitType.Ground, 195, 45, 0.8f, 5, 3, UnitType.Both, 2, CardType.Common, 60));
+        unitDataDic.Add(6, new UnitData(6, "트릭스터", 18, UnitType.Ground, 366, 45, 0.9f, 2, 3, UnitType.Both, 2, CardType.Common, 0));
+        unitDataDic.Add(7, new UnitData(7, "방패 펭귄병", 15, UnitType.Ground, 400, 52, 1.5f, 3, 4, UnitType.Ground, 2, CardType.Common, 0));
+        unitDataDic.Add(8, new UnitData(8, "리자드 투창병", 15, UnitType.Ground, 240, 106, 2.6f, 6, 4, UnitType.Ground, 2, CardType.Common, 0));
         unitDataDic.Add(9, new UnitData(9, "꼬마 바이킹", 25, UnitType.Ground, 1288, 256, 2.2f, 3, 7, UnitType.Building, 3, CardType.Epic,0));
         unitDataDic.Add(10, new UnitData(10, "마나 캐논", 75, UnitType.Building, 3660, 685, 2.8f, 8, 5, UnitType.Ground, 6, CardType.Rare, 0));
         unitDataDic.Add(11, new UnitData(11, "발리스타", 75, UnitType.Building, 3660, 1021, 2.6f, 7, 5, UnitType.Ground, 6, CardType.Rare, 0));
@@ -290,7 +290,7 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Add(15, new UnitData(15, "요술사", 48, UnitType.Ground, 1048, 511, 2.0f, 5, 5, UnitType.Both, 4, CardType.Rare, 0));
         unitDataDic.Add(16, new UnitData(16, "스매셔", 50, UnitType.Ground, 1617, 572, 2.1f, 3, 5, UnitType.Ground, 5, CardType.Rare, 0));
         unitDataDic.Add(17, new UnitData(17, "용인", 50, UnitType.Ground, 1487, 201, 1.1f, 3, 5, UnitType.Ground, 5, CardType.Rare, 0));
-        unitDataDic.Add(18, new UnitData(18, "소총 아울베어", 45, UnitType.Ground, 925, 237, 2.3f, 7, 5, UnitType.Both, 4, CardType.Rare, 0));
+        unitDataDic.Add(18, new UnitData(18, "소총 아울베어", 45, UnitType.Ground, 925, 237, 2.3f, 7, 3, UnitType.Both, 4, CardType.Rare, 0));
         unitDataDic.Add(19, new UnitData(19, "모스레이디", 40, UnitType.Air, 938, 180, 1.6f, 2, 7, UnitType.Both, 4, CardType.Rare, 0));
         unitDataDic.Add(20, new UnitData(20, "전투 코끼리", 50, UnitType.Ground, 2641, 237, 1.4f, 7, 7, UnitType.Building, 5, CardType.Rare, 0));
         unitDataDic.Add(21, new UnitData(21, "인터셉터", 35, UnitType.Air, 532, 157, 1.4f, 2, 7, UnitType.Ground, 3, CardType.Rare,0));

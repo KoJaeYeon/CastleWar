@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     Coroutine manaCoroutine;
     void Start()
     {
-        //Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60;
         manaCoroutine = StartCoroutine(ProduceMana());
     }
 

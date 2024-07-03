@@ -150,7 +150,7 @@ public class Unit : MonoBehaviour, IAttack
         _attackDamage = unitData.AttackDamage;
         _attackSpeed = unitData.AttackSpeed;
         _attackRange = unitData.AttackRange * 2;
-        _moveSpeed = unitData.MoveSpeed;
+        _moveSpeed = unitData.MoveSpeed * 1.5f;
         _attackType = unitData.AttackType;
         _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
         _spawnSlotIndex = index;
