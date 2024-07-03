@@ -43,7 +43,7 @@ public class Unit : MonoBehaviour, IAttack
     bool _canAttack = true;
     bool _canMove = true;
 
-    public float Helath
+        public float Helath
     {
         get => _health;
         set
@@ -73,6 +73,7 @@ public class Unit : MonoBehaviour, IAttack
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
     public float AttackDamage => _attackDamage;
+    public float TargetAnimSpeed { get; private set; }
     public UnitType AttackType => _attackType;
     public GameObject TargetEnemy
     {
@@ -156,11 +157,8 @@ public class Unit : MonoBehaviour, IAttack
         _searchRadius = unitData.AttackRange < 4 ? 12f : _attackRange + 2;
         _spawnSlotIndex = index;
 
-
-        if (Animator != null)
-        {
-            Animator.speed = unitData.AttackAnimFrame / 60f / _attackSpeed;
-        }
+         TargetAnimSpeed = unitData.AttackAnimFrame / 60f / _attackSpeed;
+        
 
         //캐릭터 공격범위 표시 이미지
         RectTransform rectAtkRangeImg = AttackRange_Img.GetComponent<RectTransform>();

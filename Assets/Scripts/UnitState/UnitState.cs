@@ -320,6 +320,7 @@ public class UnitAttackState : UnitState
     public override void Enter()
     {
         SetAnimationisAttack(true);
+        _unit.Animator.speed = _unit.TargetAnimSpeed;
     }
 
     public override void ExecuteFixedUpdate()
@@ -340,8 +341,7 @@ public class UnitAttackState : UnitState
     public override void Exit()
     {
         SetAnimationisAttack(false);
-
-
+        _unit.Animator.speed = 1;
     }
 
     public void CheckEnemy()
