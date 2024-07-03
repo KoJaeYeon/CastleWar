@@ -312,13 +312,16 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Add(37, new UnitData(37, "저격수", 100, UnitType.Ground, 1198, 1091, 2.9f, 10, 3, UnitType.Both, 6, CardType.Legendary, 0));
         unitDataDic.Add(38, new UnitData(38, "켄타우루스", 80, UnitType.Ground, 2738, 730, 1.6f, 3, 7, UnitType.Ground, 6, CardType.Epic, 0));
 
-        for (int id = 0; id < 6; id++)
+        for (int id = 0; id < 39; id++)
         {
-
-            Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
-            unitSpriteDic.Add(id, unitSprite);
+            if(id < 6 || id == 18)
+            {
+                Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
+                unitSpriteDic.Add(id, unitSprite);
+            }
 
         }
+        
     }
 
 

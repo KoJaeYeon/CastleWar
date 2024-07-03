@@ -12,6 +12,7 @@ public class AddPanel : MonoBehaviour
     [SerializeField] GameObject ChoicePanel;
     [SerializeField] GameObject[] Contents_TierUnit;
     [SerializeField] Button[] Button_Tier;
+    
     int _index = 0;
 
     UnitSelectSlot _slot;
@@ -99,15 +100,34 @@ public class AddPanel : MonoBehaviour
     }
 
     #region ChoicePanel
+    [SerializeField] Sprite[] Sprite_UnitType; // 0 Bulding, 1 Melee, 2 Range, 3 Mage
     [SerializeField] TextMeshProUGUI Text_Population;
     [SerializeField] TextMeshProUGUI Text_SelectUnitName;
     [SerializeField] TextMeshProUGUI Text_SpawnTimer;
+    [SerializeField] Image Img_AttackType;
     void Renew_ChoicePanel()
     {
         UnitData unitData = DatabaseManager.Instance.OnGetUnitData(_slot.Id);
         Text_SelectUnitName.text = unitData.name;
         Text_Population.text = unitData.Population.ToString();
         Text_SpawnTimer.text = "10";
+        List<int> ints = new List<int>() {6,12,15,19 };
+        if(unitData.unitType == UnitType.Building)
+        {
+            Img_AttackType.sprite = Sprite_UnitType[0];
+        }
+        else if (unitData.AttackRange < 4)
+        {
+            Img_AttackType.sprite = Sprite_UnitType[1];
+        }
+        else if(ints.Contains(unitData.id))
+        {
+            Img_AttackType.sprite = Sprite_UnitType[3];
+        }
+        else
+        {
+            Img_AttackType.sprite= Sprite_UnitType[2];
+        }
     }
     #endregion
 }

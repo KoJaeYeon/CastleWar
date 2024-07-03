@@ -48,6 +48,10 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                 break;
         }
         defaultLayer = LayerMask.NameToLayer("DeadUnit");
+
+        Btn_AddView View = GetComponent<Btn_AddView>();
+        View.enabled = true;
+        View.InitData(unitData.cost, unitData.Population);
     }
     public void Canceled()
     {
