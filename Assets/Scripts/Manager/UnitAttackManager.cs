@@ -33,8 +33,10 @@ public class UnitAttackManager : MonoBehaviour
         }
 
         RegisterAttackMethod(1, Attack_Cannon);
-        RegisterAttackMethod(4, Attack_Vanguard);
+        RegisterAttackMethod(3, Attack_Melee);
+        RegisterAttackMethod(4, Attack_Melee);
         RegisterAttackMethod(5, Attack_Archer);
+        RegisterAttackMethod(18, Attack_Owl);
     }
 
     public void RegisterAttackMethod(int id, UnitAttackDelegate attackMethod)
@@ -63,10 +65,11 @@ public class UnitAttackManager : MonoBehaviour
         GameObject projectilePrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
         projectilePrefab.SetActive(true);
         Projectile projectile = projectilePrefab.GetComponent<Projectile>();
-        projectile.InitTargetAndShoot(attackStartUnit.transform.position, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
+        Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
+        projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
     }
 
-    public void Attack_Vanguard(GameObject targetObject, Unit attackStartUnit)
+    public void Attack_Melee(GameObject targetObject, Unit attackStartUnit)
     {
         IAttack targetAttack = targetObject.GetComponent<IAttack>();
         if (targetAttack != null)
@@ -80,6 +83,16 @@ public class UnitAttackManager : MonoBehaviour
         GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
         arrowPrefab.SetActive(true);
         Projectile projectile = arrowPrefab.GetComponent<Projectile>();
-        projectile.InitTargetAndShoot(attackStartUnit.transform.position, targetObject, attackStartUnit.AttackDamage,attackStartUnit.SpwanSlotIndex);
+        Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
+        projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
+    }
+
+    public void Attack_Owl(GameObject targetObject, Unit attackStartUnit)
+    {
+        GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
+        arrowPrefab.SetActive(true);
+        Projectile projectile = arrowPrefab.GetComponent<Projectile>();
+        Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
+        projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
     }
 }

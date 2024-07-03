@@ -311,6 +311,20 @@ public class Unit : MonoBehaviour, IAttack
         
     }
 
+
+    public Vector3 OnGetProjectileTrans()
+    {
+        ProjectileTrans ProjectileTrans = GetComponentInChildren<ProjectileTrans>();
+        if(ProjectileTrans != null)
+        {
+            Transform trans = ProjectileTrans.transform;
+            return trans.position;
+        }
+        else
+        {
+            return transform.position;
+        }
+    }
     public IEnumerator Spawn_Init()
     {
         if (SpawnTimerImage == null) yield break;
