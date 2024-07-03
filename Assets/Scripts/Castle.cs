@@ -268,4 +268,12 @@ public class Castle : MonoBehaviour, IAttack
 
         }
     }
+    public bool OnCheckDamageDie(float damage)
+    {
+        if (_health - damage <= 0)
+        {
+            return true;
+        }
+        else return false;
+    }
 }

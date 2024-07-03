@@ -28,6 +28,8 @@ public class Projectile : MonoBehaviour
         {
             trailRender.Clear();
         }
+
+        CheckDamage();
     }
 
     void Update()
@@ -47,6 +49,19 @@ public class Projectile : MonoBehaviour
                 PoolManager.Instance.ReturnPrefab(_index, gameObject);
 
                 GiveDamage();
+            }
+        }
+    }
+
+    public void CheckDamage()
+    {
+        GameObject targetObject = _targetTrans.gameObject;
+        IAttack targetAttack = targetObject.GetComponent<IAttack>();
+        if (targetAttack != null)
+        {
+            if(targetAttack.OnCheckDamageDie(_attackDamage))
+            {
+                targetObject.layer = LayerMask.NameToLayer("DeadUnit");
             }
         }
     }

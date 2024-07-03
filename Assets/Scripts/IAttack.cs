@@ -5,5 +5,6 @@ using UnityEngine;
 public interface IAttack
 {
     public void OnTakeDamaged(float damage);
+    public bool OnCheckDamageDie(float damage);
 
 }
