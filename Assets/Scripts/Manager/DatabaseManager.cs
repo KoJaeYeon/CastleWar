@@ -275,7 +275,7 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Add(0, new UnitData(0, "궁수탑", 50, UnitType.Building, 1650, 45, 0.4f, 7, 0, UnitType.Both, 5, CardType.Common,0));
         unitDataDic.Add(1, new UnitData(1, "포탑", 50, UnitType.Building, 1650, 296, 1.7f, 6, 0, UnitType.Ground, 5, CardType.Common,60));
         unitDataDic.Add(2, new UnitData(2, "대공포탑", 50, UnitType.Building, 1650, 130, 0.8f, 9, 0, UnitType.Air, 5, CardType.Common,0));
-        unitDataDic.Add(3, new UnitData(3, "코볼트", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common,0));
+        unitDataDic.Add(3, new UnitData(3, "코볼트", 8, UnitType.Ground, 120, 52, 0.7f, 3, 7, UnitType.Ground, 1, CardType.Common,120));
         unitDataDic.Add(4, new UnitData(4, "전열보병", 25, UnitType.Ground, 730, 106, 1.3f, 3, 7, UnitType.Ground, 3, CardType.Common,90));
         unitDataDic.Add(5, new UnitData(5, "헌터", 15, UnitType.Ground, 195, 45, 0.8f, 5, 5, UnitType.Both, 2, CardType.Common, 60));
         unitDataDic.Add(6, new UnitData(6, "트릭스터", 18, UnitType.Ground, 366, 45, 0.9f, 2, 5, UnitType.Both, 2, CardType.Common, 0));
