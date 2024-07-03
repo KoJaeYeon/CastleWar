@@ -22,6 +22,12 @@ public class Projectile : MonoBehaviour
 
         // 발사체가 타겟을 바라보도록 설정
         transform.LookAt(_targetTrans);
+
+        var trailRender = GetComponentInChildren<TrailRenderer>();
+        if(trailRender != null )
+        {
+            trailRender.Clear();
+        }
     }
 
     void Update()

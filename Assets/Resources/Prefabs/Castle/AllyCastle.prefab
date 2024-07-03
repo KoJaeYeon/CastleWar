@@ -95,6 +95,7 @@ MonoBehaviour:
   - {fileID: 6803675210357692196}
   - {fileID: 6223343309985426905}
   - {fileID: 4923575507847874763}
+  AttackTrans: {fileID: 8756587929722926374}
 --- !u!65 &1930300045975572269
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -196,6 +197,11 @@ GameObject:
 --- !u!1 &8208070372624206966 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3400640558376872977, guid: 46bef7713d8de4044ac39b6d851068ef, type: 3}
+  m_PrefabInstance: {fileID: 6834612751415533671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8756587929722926374 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2836364266978792769, guid: 46bef7713d8de4044ac39b6d851068ef, type: 3}
   m_PrefabInstance: {fileID: 6834612751415533671}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &9038461388619128907 stripped

@@ -25,6 +25,7 @@ public class Castle : MonoBehaviour, IAttack
     [SerializeField] Image SpawnTimerImage;
 
     [SerializeField] GameObject[] CastleTierObjects;
+    [SerializeField] Transform AttackTrans;
 
     public MapCornerPoint MapCornerPoint { get; set; }
 
@@ -235,8 +236,11 @@ public class Castle : MonoBehaviour, IAttack
     }
     public void OnCalled_Attack_AnimationEventAttack()
     {
-        //[TODO] 풀매니저 추가해야함
-        GameObject arrow = Instantiate(new GameObject());
+        int index = IsTagAlly() ? 12 : 13;
+        GameObject projectilePrefab = PoolManager.Instance.GetPrefab(index, UnitId);
+        projectilePrefab.SetActive(true);
+        Projectile projectile = projectilePrefab.GetComponent<Projectile>();
+        projectile.InitTargetAndShoot(AttackTrans.position, _attackTargerEnemy, _attackDamage, index);
     }
 
     public void OnChangeState(IState newState)

@@ -29,14 +29,14 @@ public class PoolManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        for(int i = 0; i < 12; i++)
+        for(int i = 0; i < 14; i++)
         {
             projectileStacks[i] = new Stack<GameObject>();
         }
     }
 
     Dictionary<int, GameObject> projectilePrefabDic = new Dictionary<int, GameObject>();
-    Stack<GameObject>[] projectileStacks = new Stack<GameObject>[12];
+    Stack<GameObject>[] projectileStacks = new Stack<GameObject>[14];
 
     public Dictionary<int, GameObject> ProjectilePrefabDic
     {
