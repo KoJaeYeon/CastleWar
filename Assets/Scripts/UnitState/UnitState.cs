@@ -54,11 +54,32 @@ public class UnitMoveState : UnitState
     private float _rotationSpeed = 3f;
     private bool _targetChanged = false;
 
+    int layerMask;
     public UnitMoveState(Unit unit) : base(unit) { }
 
     public override void Enter()
     {
         Debug.Log("Entering Move State");
+        string[] targetLayers = GetTargetLayers();
+        layerMask = LayerMask.GetMask(targetLayers);
+    }
+
+    string[] GetTargetLayers()
+    {
+        switch (_unit.AttackType)
+        {
+            case UnitType.Ground:
+                return _unit.IsTagAlly() ? new[] { "EnemyGroundUnit", "EnemyBuilding" } : new[] { "AllyGroundUnit", "AllyBuilding" };
+            case UnitType.Air:
+                return _unit.IsTagAlly() ? new[] { "EnemyAirUnit" } : new[] { "AllyAirUnit" };
+            case UnitType.Both:
+                return _unit.IsTagAlly() ? new[] { "EnemyGroundUnit", "EnemyAirUnit", "EnemyBuilding" } : new[] { "AllyGroundUnit", "AllyAirUnit", "AllyBuilding" };
+            case UnitType.Building:
+                return _unit.IsTagAlly() ? new[] { "EnemyBuilding" } : new[] { "AllyBuilding" };
+            default:
+                return null;
+
+        }
     }
 
     public override void ExecuteFixedUpdate()
@@ -239,8 +260,6 @@ public class UnitMoveState : UnitState
         _lastSearchTime = Time.time;
 
         Vector3 origin = _unit.transform.position;
-        string[] targetLayers = _unit.IsTagAlly() ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
-        int layerMask = LayerMask.GetMask(targetLayers);
 
         int hitCount = Physics.OverlapSphereNonAlloc(origin, _unit.SearchRadius, hitColliders, layerMask);
 
@@ -534,5 +553,4 @@ public class UnitDeadState : UnitState
     {
         SpawnManager.Instance.OnCalled_ReturnUnit(_unit.SpwanSlotIndex, _unit.gameObject);
     }
-
 }

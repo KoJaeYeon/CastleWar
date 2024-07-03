@@ -66,9 +66,10 @@ public class CastleManager : MonoBehaviour
         Castle enemyCastle = EnemyCastle.GetComponent<Castle>();
         var castleData = DatabaseManager.Instance.OnGetUnitData(-3);
         allyCastle.InitData(castleData);
-        //enemyCastle.InitData(castleData);
+        enemyCastle.InitData(castleData);
 
-        allyCastle.StartState();        
+        allyCastle.StartState();
+        enemyCastle.StartState();
     }
 
     public void AddCampToUnion(Transform transform, bool isTagAlly)

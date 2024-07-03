@@ -28,9 +28,12 @@ public class CastleIdleState : CastleState
     private Collider[] hitColliders = new Collider[20]; // 충돌을 저장할 배열
     private float _searchInterval = 0.2f; // 검색 주기 (0.2초)
     private float _lastSearchTime = 0f;
+    int layerMask;
     public override void Enter()
     {
         Debug.Log("Entering Idle State");
+        string[] targetLayers = _castle.IsTagAlly() ? new[] { "EnemyGroundUnit", "EnemyAirUnit", "EnemyBuilding" } : new[] { "AllyGroundUnit", "AllyAirUnit", "AllyBuilding" };
+        layerMask = LayerMask.GetMask(targetLayers);
     }
 
     public override void ExecuteFixedUpdate()
@@ -64,8 +67,6 @@ public class CastleIdleState : CastleState
         _lastSearchTime = Time.time;
 
         Vector3 origin = _castle.transform.position;
-        string[] targetLayers = _castle.IsTagAlly() ? new[] { "EnemyGroundUnit", "EnemyAirUnit" } : new[] { "AllyGroundUnit", "AllyAirUnit" };
-        int layerMask = LayerMask.GetMask(targetLayers);
 
         int hitCount = Physics.OverlapSphereNonAlloc(origin, _castle.SearchRadius, hitColliders, layerMask);
 

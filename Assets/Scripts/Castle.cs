@@ -260,6 +260,12 @@ public class Castle : MonoBehaviour, IAttack
     }
     public void OnTakeDamaged(float damage)
     {
-        throw new System.NotImplementedException();
+        if (_health <= 0) return;
+
+        Helath -= damage;
+        if (_health <= 0)
+        {
+
+        }
     }
 }

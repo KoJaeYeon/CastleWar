@@ -73,6 +73,7 @@ public class Unit : MonoBehaviour, IAttack
     public float SearchRadius => _searchRadius;
     public float AttackRadius => _attackRange;
     public float AttackDamage => _attackDamage;
+    public UnitType AttackType => _attackType;
     public GameObject TargetEnemy
     {
         get => _targetEnemy;
@@ -164,6 +165,14 @@ public class Unit : MonoBehaviour, IAttack
         //캐릭터 공격범위 표시 이미지
         RectTransform rectAtkRangeImg = AttackRange_Img.GetComponent<RectTransform>();
         rectAtkRangeImg.sizeDelta = new Vector2(_attackRange*2, _attackRange*2);
+
+        //캐릭터 체력바 색상 변경
+        if(IsTagAlly() == false)
+        {
+            var fillImageTrans = HpSlider.transform.GetChild(1);
+            var fillImage = fillImageTrans.GetComponent<Image>();
+            fillImage.color = Color.red;
+        }
               
         if (_type == UnitType.Building)
         {
@@ -231,6 +240,9 @@ public class Unit : MonoBehaviour, IAttack
         yield return null;
         yield return null;
         OnChangeState(new UnitDeadState(this));
+
+        yield return new WaitForSeconds(2f);
+        _currentState.Exit();
     }
 
     public IEnumerator ProduceMana(int mana)
