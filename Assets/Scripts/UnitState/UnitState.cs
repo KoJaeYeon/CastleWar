@@ -86,6 +86,24 @@ public class UnitMoveState : UnitState
     {
         if (!_unit.CanAttack) return;
         SearchEnemy();
+        if(_unit.UnitType == UnitType.Ground)
+        {
+            MoveGroundUnit();
+        }
+        else if(_unit.UnitType == UnitType.Air)
+        {
+            MoveAirUnit();
+        }
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exiting Move State");
+    }
+
+    #region Move
+    private void MoveGroundUnit()
+    {
         if (_targetChanged)
         {
             _targetChanged = false;
@@ -107,7 +125,7 @@ public class UnitMoveState : UnitState
             }
         }
 
-        if(!_unit.CanMove)
+        if (!_unit.CanMove)
         {
             return;
         }
@@ -126,12 +144,30 @@ public class UnitMoveState : UnitState
         }
     }
 
-    public override void Exit()
+    private void MoveAirUnit()
     {
-        Debug.Log("Exiting Move State");
+        if (_targetChanged)
+        {
+            _targetChanged = false;
+            SearchEnemy();
+        }
+
+        if (!_unit.CanMove)
+        {
+            return;
+        }
+
+        if (_unit.TargetEnemy != null)
+        {
+            MoveTowardsTarget();
+        }
+        else
+        {
+            MoveNoneTarget();
+        }
     }
 
-    #region Move
+
     private void MoveTowardsTarget()
     {
         if (_unit.TargetEnemy != null)

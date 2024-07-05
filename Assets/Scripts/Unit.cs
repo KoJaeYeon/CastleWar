@@ -74,6 +74,7 @@ public class Unit : MonoBehaviour, IAttack
     public float AttackRadius => _attackRange;
     public float AttackDamage => _attackDamage;
     public float TargetAnimSpeed { get; private set; }
+    public UnitType UnitType => _type;
     public UnitType AttackType => _attackType;
     public GameObject TargetEnemy
     {
