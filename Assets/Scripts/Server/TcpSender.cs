@@ -59,6 +59,7 @@ public class TcpSender : MonoBehaviour
 
     public void SendPacket(byte[] buffer)
     {
+        Debug.Log("send");
         try
         {
             if (client == null)
@@ -107,7 +108,7 @@ public class TcpSender : MonoBehaviour
             return false;
         }
     }
-
+    [SerializeField] TextMeshProUGUI temp;
     private void ReceiveData()
     {
         while (isConnected)
@@ -144,6 +145,7 @@ public class TcpSender : MonoBehaviour
 
                     int packet = BitConverter.ToInt32(bytes, 0);
                     Debug.Log(packet);
+                    temp.text += packet;
                     
                 }
             }

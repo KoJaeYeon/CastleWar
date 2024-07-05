@@ -63,13 +63,14 @@ public class TCPServer
                 //Client 저장
                 clientList.Add(client);
 
-                //if (clientList.Count >= 2)
-                //{
-                //    keyValuePairs.Add(clientList[0], clientList[1]);
-                //    keyValuePairs.Add(clientList[1], clientList[0]);
+                if (clientList.Count >= 2)
+                {
+                    keyValuePairs.Add(clientList[0], clientList[1]);
+                    keyValuePairs.Add(clientList[1], clientList[0]);
 
-                //    clientList.RemoveRange(0, 2);
-                //}
+                    clientList.RemoveRange(0, 2);
+                    Console.WriteLine("Pair Searched");
+                }
             }
         }
         catch (SocketException e)
@@ -130,6 +131,10 @@ public class TCPServer
 
             // Send the resend packet
             stream.Write(reSendPacket, 0, reSendPacket.Length);
+
+            var PairClient = keyValuePairs[client];
+            var pairStream = PairClient.GetStream();
+            pairStream.Write(reSendPacket, 0, reSendPacket.Length);
 
             Console.WriteLine("Resent packet with length: " + reSendPacket.Length);
         }
