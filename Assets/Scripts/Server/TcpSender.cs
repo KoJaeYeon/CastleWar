@@ -151,7 +151,7 @@ public class TcpSender : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError("Error receiving data: " + e.Message);
+                Console.WriteLine(e.ToString());
             }
         }
     }
