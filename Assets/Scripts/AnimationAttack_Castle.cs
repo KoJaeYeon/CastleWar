@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationAttack_Castle : MonoBehaviour
+public class AnimationAttack_Castle : MonoBehaviour, IAnimationAttack
 {
     Castle _castle;
 

@@ -32,11 +32,12 @@ public class UnitAttackManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        RegisterAttackMethod(1, Attack_Cannon);
+        RegisterAttackMethod(1, Attack_Projectile);
         RegisterAttackMethod(3, Attack_Melee);
         RegisterAttackMethod(4, Attack_Melee);
-        RegisterAttackMethod(5, Attack_Archer);
-        RegisterAttackMethod(18, Attack_Owl);
+        RegisterAttackMethod(5, Attack_Projectile);
+        RegisterAttackMethod(13, Attack_Projectile);
+        RegisterAttackMethod(18, Attack_Projectile);
     }
 
     public void RegisterAttackMethod(int id, UnitAttackDelegate attackMethod)
@@ -60,14 +61,14 @@ public class UnitAttackManager : MonoBehaviour
         }
     }
 
-    public void Attack_Cannon(GameObject targetObject, Unit attackStartUnit)
-    {
-        GameObject projectilePrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
-        projectilePrefab.SetActive(true);
-        Projectile projectile = projectilePrefab.GetComponent<Projectile>();
-        Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
-        projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
-    }
+    //public void Attack_Cannon(GameObject targetObject, Unit attackStartUnit)
+    //{
+    //    GameObject projectilePrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
+    //    projectilePrefab.SetActive(true);
+    //    Projectile projectile = projectilePrefab.GetComponent<Projectile>();
+    //    Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
+    //    projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
+    //}
 
     public void Attack_Melee(GameObject targetObject, Unit attackStartUnit)
     {
@@ -78,7 +79,16 @@ public class UnitAttackManager : MonoBehaviour
         }
     }
 
-    public void Attack_Archer(GameObject targetObject, Unit attackStartUnit)
+    //public void Attack_Archer(GameObject targetObject, Unit attackStartUnit)
+    //{
+    //    GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
+    //    arrowPrefab.SetActive(true);
+    //    Projectile projectile = arrowPrefab.GetComponent<Projectile>();
+    //    Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
+    //    projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
+    //}
+
+    public void Attack_Projectile(GameObject targetObject, Unit attackStartUnit)
     {
         GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
         arrowPrefab.SetActive(true);
@@ -87,12 +97,12 @@ public class UnitAttackManager : MonoBehaviour
         projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
     }
 
-    public void Attack_Owl(GameObject targetObject, Unit attackStartUnit)
-    {
-        GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
-        arrowPrefab.SetActive(true);
-        Projectile projectile = arrowPrefab.GetComponent<Projectile>();
-        Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
-        projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
-    }
+    //public void Attack_Owl(GameObject targetObject, Unit attackStartUnit)
+    //{
+    //    GameObject arrowPrefab = PoolManager.Instance.GetPrefab(attackStartUnit.SpwanSlotIndex, attackStartUnit.UnitId);
+    //    arrowPrefab.SetActive(true);
+    //    Projectile projectile = arrowPrefab.GetComponent<Projectile>();
+    //    Vector3 startPos = attackStartUnit.OnGetProjectileTrans();
+    //    projectile.InitTargetAndShoot(startPos, targetObject, attackStartUnit.AttackDamage, attackStartUnit.SpwanSlotIndex);
+    //}
 }

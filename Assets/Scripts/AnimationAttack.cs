@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationAttack : MonoBehaviour
+public class AnimationAttack : MonoBehaviour,IAnimationAttack
 {
     Unit _unit;
     Unit Unit

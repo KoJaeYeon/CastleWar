@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour
         for(int i = 0; i< targetObj.transform.childCount; i++)
         {
             var childTrans = targetObj.transform.GetChild(i);
-            bool isModel = childTrans.GetComponent<AnimationAttack>() != null;
+            bool isModel = childTrans.GetComponent<IAnimationAttack>() != null;
             if (isModel)
             {
                 return childTrans;
