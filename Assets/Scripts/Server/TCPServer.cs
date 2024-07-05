@@ -1,15 +1,12 @@
+Ôªøusing System.Collections.Generic;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using UnityEngine;
 
-public class TCPServer : MonoBehaviour
+public class TCPServer
 {
-    Thread tcpListenerThread;
+    Thread tcpListenerThread = null;
     List<TcpClient> clientList;
     Dictionary<TcpClient, TcpClient> keyValuePairs = new Dictionary<TcpClient, TcpClient>();
     TcpListener server;
@@ -17,10 +14,21 @@ public class TCPServer : MonoBehaviour
 
     Dictionary<TcpClient, string> playerName = new Dictionary<TcpClient, string>();
 
+    static void Main(string[] args)
+    {
+        TCPServer server = new TCPServer();
+        server.ServerStart();
+        while (true)
+        {
+            string order = Console.ReadLine();
+            Console.WriteLine($"order : {order}");
+        }
+    }
+
     private void Start()
     {
-        Debug.Log("ServerStart");
-        clientList = new List<TcpClient>();
+        Console.WriteLine("ServerStart");
+
 
         tcpListenerThread = new Thread(new ThreadStart(ServerStart));
         tcpListenerThread.IsBackground = true;
@@ -29,6 +37,7 @@ public class TCPServer : MonoBehaviour
 
     private void ServerStart()
     {
+        clientList = new List<TcpClient>();
         server = null;
         try
         {
@@ -41,18 +50,18 @@ public class TCPServer : MonoBehaviour
             // Start listening for client requests.
             server.Start();
 
-            Debug.Log("Waiting for a connection... ");
+            Console.WriteLine("Waiting for a connection... ");
 
             while (isServerRunning)
             {
                 // Accept the TcpClient connection.
                 TcpClient client = server.AcceptTcpClient();
-                Debug.Log("Connect");
+                Console.WriteLine("Connect");
                 // Start a new thread to handle communication with the client.
                 Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientCommunication));
                 clientThread.Start(client);
 
-                //Client ¿˙¿Â
+                //Client Ï†ÄÏû•
                 clientList.Add(client);
 
                 if (clientList.Count >= 2)
@@ -66,7 +75,7 @@ public class TCPServer : MonoBehaviour
         }
         catch (SocketException e)
         {
-            Debug.Log("SocketException: " + e);
+            Console.WriteLine("SocketException: " + e);
         }
         finally
         {
@@ -87,9 +96,9 @@ public class TCPServer : MonoBehaviour
         {
             // Translate data bytes to a ASCII string.
             data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
-            Debug.Log("Received: " + data);
+            Console.WriteLine("Received: " + data);
 
-            if(data.Contains("[¿Ã∏ß]"))
+            if (data.Contains("[Ïù¥Î¶Ñ]"))
             {
                 playerName.Add(client, data.Split("#")[1]);
             }
@@ -100,12 +109,14 @@ public class TCPServer : MonoBehaviour
             enemyStream.Write(msg, 0, msg.Length);
 
             //stream.Write(msg,0, msg.Length);
-            Debug.Log("Sent: " + data);
+            Console.WriteLine("Sent: " + data);
         }
 
         // Shutdown and close the client connection.
         client.Close();
         clientList.Remove(client);
+
+        Console.WriteLine("Disconnect");
     }
 
     public void ServerEnd()

@@ -1,28 +1,53 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TcpSender : Singleton<TcpSender>
+public class TcpSender : MonoBehaviour
 {
+    private static TcpSender _instance;
+
+    public static TcpSender Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new GameObject("TcpSender").AddComponent<TcpSender>();
+            }
+            return _instance;
+        }
+
+    }
+
+    private void Awake()
+    {
+        if (_instance == null || _instance == this)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        ConnectToServer();
+    }
+
     TcpClient client;
     NetworkStream stream;
-    public ChattingPanel chattingPanel;
-    public TitleUI titleUI;
     [SerializeField] string server = "127.0.0.1";
     int port = 13000;
     bool isConnected = false;
 
     string myName = string.Empty;
     string enemyPlayerName = string.Empty;
-
-    private void Awake()
-    {
-        if (Instance != this) Destroy(this.gameObject);
-        DontDestroyOnLoad(this.gameObject);
-    }
 
     public bool ConnectToServer()
     {
@@ -33,7 +58,7 @@ public class TcpSender : Singleton<TcpSender>
             isConnected = true;
             stream = client.GetStream();
 
-            // ¼ö½Å ½º·¹µå ½ÃÀÛ
+            // ìˆ˜ì‹  ìŠ¤ë ˆë“œ ì‹œì‘
             StartCoroutine(ReceiveData());
             return true;
         }
@@ -61,7 +86,7 @@ public class TcpSender : Singleton<TcpSender>
 
     public void SendMyName()
     {
-        SendMsg($"[»ó´ë]/{myName}#");
+        SendMsg($"[ìƒëŒ€]/{myName}#");
     }
 
     public void SendMsg(String message)
@@ -104,11 +129,11 @@ public class TcpSender : Singleton<TcpSender>
                 {
                     stream = client.GetStream();
 
-                    // ¼­¹ö·ÎºÎÅÍ µ¥ÀÌÅÍ ÀĞ±â
+                    // ì„œë²„ë¡œë¶€í„° ë°ì´í„° ì½ê¸°
                     byte[] buffer = new byte[client.Available];
                     stream.Read(buffer, 0, buffer.Length);
 
-                    // ¹ŞÀº µ¥ÀÌÅÍ Ã³¸®
+                    // ë°›ì€ ë°ì´í„° ì²˜ë¦¬
                     string receivedMessage = System.Text.Encoding.UTF8.GetString(buffer);
 
                     string[] packets = receivedMessage.Split("#");
@@ -125,33 +150,14 @@ public class TcpSender : Singleton<TcpSender>
                 Debug.LogError("Error receiving data: " + e.Message);
             }
 
-            // 0.1ÃÊ ´ë±â ÈÄ ´Ù½Ã È®ÀÎ
+            // 0.1ì´ˆ ëŒ€ê¸° í›„ ë‹¤ì‹œ í™•ì¸
             yield return new WaitForSeconds(0.1f);
         }
     }
 
     private void ClassifyPacket(string receivedMessage)
     {
-        if (receivedMessage.Contains("[¼ÒÈ¯]"))
-        {
-            string[] packets = receivedMessage.Split('/');
-            SpawnManager.Instance.Spawn_Troop(int.Parse(packets[1]), TroopType.Enemy);
-        }
-        else if(receivedMessage.Contains("[½ÃÀÛ]"))
-        {
-            titleUI.LoadScene();
-        }
-        else if(receivedMessage.Contains("[»ó´ë]"))
-        {
-            string[] packets = receivedMessage.Split('/');
-            OnSetEnemyName(packets[1]);
-        }
-        else
-        {
-            Debug.Log("Received: " + receivedMessage);
-            if (string.IsNullOrWhiteSpace(receivedMessage)) return;
-            chattingPanel.OnChatLogWrite($"<color=blue>{enemyPlayerName}</color> : {receivedMessage}\n");
-        }
+
     }
 
 
