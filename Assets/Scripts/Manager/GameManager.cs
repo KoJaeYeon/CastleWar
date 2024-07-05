@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         manaCoroutine = StartCoroutine(ProduceMana());
+
     }
 
     //게임 시작할때 캐슬 마나생산
