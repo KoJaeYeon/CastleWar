@@ -43,7 +43,7 @@ public class TcpSender : MonoBehaviour
     TcpClient client;
     NetworkStream stream;
     [SerializeField] string server = "127.0.0.1";
-    int port = 13000;
+    int port = 2074;
     bool isConnected = false;
 
     string myName = string.Empty;
@@ -82,11 +82,6 @@ public class TcpSender : MonoBehaviour
     public string GetMyName()
     {
         return myName;
-    }
-
-    public void SendMyName()
-    {
-        SendMsg($"[상대]/{myName}#");
     }
 
     public void SendMsg(String message)
