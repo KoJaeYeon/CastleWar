@@ -285,7 +285,7 @@ public class DatabaseManager : MonoBehaviour
         unitDataDic.Add(10, new UnitData(10, "마나 캐논", 75, UnitType.Building, 3660, 685, 2.8f, 8, 5, UnitType.Ground, 6, CardType.Rare, 0));
         unitDataDic.Add(11, new UnitData(11, "발리스타", 75, UnitType.Building, 3660, 1021, 2.6f, 7, 5, UnitType.Ground, 6, CardType.Rare, 0));
         unitDataDic.Add(12, new UnitData(12, "글레이셔", 40, UnitType.Ground, 926, 259, 2.0f, 5, 5, UnitType.Both, 4, CardType.Legendary, 0));
-        unitDataDic.Add(13, new UnitData(13, "해칠링", 10, UnitType.Air, 133, 121, 1.2f, 3, 7, UnitType.Both, 1, CardType.Rare, 40));
+        unitDataDic.Add(13, new UnitData(13, "해칠링", 10, UnitType.Air, 133, 121, 1.2f, 3, 5, UnitType.Both, 1, CardType.Rare, 40));
         unitDataDic.Add(14, new UnitData(14, "그리즐리", 60, UnitType.Ground, 3594, 253, 1.5f, 3, 3, UnitType.Building, 5, CardType.Rare, 0));
         unitDataDic.Add(15, new UnitData(15, "요술사", 48, UnitType.Ground, 1048, 511, 2.0f, 5, 5, UnitType.Both, 4, CardType.Rare, 0));
         unitDataDic.Add(16, new UnitData(16, "스매셔", 50, UnitType.Ground, 1617, 572, 2.1f, 3, 5, UnitType.Ground, 5, CardType.Rare, 0));

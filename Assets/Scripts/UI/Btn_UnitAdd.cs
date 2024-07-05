@@ -9,6 +9,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
 {
     TouchType touchType = TouchType.Unit;
     bool isDown = false;
+    bool isAir = false;
     int _index;
 
     private float _spawnInterval = 0.1f; // 소환 주기 (0.1초)
@@ -25,6 +26,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     //소환 시 소모되는 값
     int cost;
     int population;
+    int layerMask;
 
     public void SetInit(int index, int id)
     {
@@ -41,6 +43,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
             case UnitType.Air:
                 originLayer = LayerMask.NameToLayer("AllyAirUnit");
                 touchType = TouchType.Unit;
+                isAir = true;
                 break;
             default:
                 originLayer = LayerMask.NameToLayer("AllyBuilding");
@@ -48,6 +51,21 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                 break;
         }
         defaultLayer = LayerMask.NameToLayer("DeadUnit");
+
+        //검사용 레이어
+        string[] targetLayers;
+        if (isAir)
+        {
+            targetLayers = new string[] { };
+        }
+        else
+        {
+            targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border", "Resource" };
+        }
+        
+        layerMask = LayerMask.GetMask(targetLayers);
+
+
 
         Btn_AddView View = GetComponent<Btn_AddView>();
         View.enabled = true;
@@ -142,8 +160,6 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
             if (touchType == TouchType.Unit)
             {
                 // 유닛 드래그
-                string[] targetLayers = new[] { "EnemyBuilding", "AllyBuilding", "Border", "Resource" };
-                int layerMask = LayerMask.GetMask(targetLayers);
 
                 touchPos.y = 0;
                 int hitCount = Physics.OverlapSphereNonAlloc(touchPos, 0.1f, hitColliders, layerMask);
