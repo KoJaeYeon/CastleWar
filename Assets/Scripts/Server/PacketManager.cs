@@ -1,64 +1,85 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-struct TouchPacket
+struct SpawnPacket
 {
     [MarshalAs(UnmanagedType.I4)]
     public int typeOfService;
     [MarshalAs(UnmanagedType.I4)]
     public int payloadLength;
+    [MarshalAs(UnmanagedType.I4)]
+    public int unitSlot;
     [MarshalAs(UnmanagedType.I4)]
     public int x;
     [MarshalAs(UnmanagedType.I4)]
-    public int y;
+    public int z;
 }
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-struct DirectionPacket
+struct AddSlotPacket
 {
     [MarshalAs(UnmanagedType.I4)]
     public int typeOfService;
     [MarshalAs(UnmanagedType.I4)]
     public int payloadLength;
     [MarshalAs(UnmanagedType.I4)]
-    public int direction;
+    public int unitId;
+    [MarshalAs(UnmanagedType.I4)]
+    public int slotIndex;
+}
+
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+struct CommandPacket
+{
+    [MarshalAs(UnmanagedType.I4)]
+    public int typeOfService;
+    [MarshalAs(UnmanagedType.I4)]
+    public int payloadLength;
+    [MarshalAs(UnmanagedType.I4)]
+    public int typeOfCommand; // Return, Cancel, TierUp
 }
 
 public class PacketManager
 {
     // Packet to send
-    private TouchPacket touchPacket = new TouchPacket();
-    private DirectionPacket directionPacket = new DirectionPacket();
+    private SpawnPacket spawnPacket = new SpawnPacket();
+    private AddSlotPacket addSlotPacket = new AddSlotPacket();
+    private CommandPacket commandPacket = new CommandPacket();
 
     public PacketManager(int Id)
     {
         
     }
 
-    public byte[] GetTouchPacket(int x, int y)
+    public byte[] GetSpawnPacket(int unitSlot, int x, int z)
     {
-        touchPacket.typeOfService = 0;
-        touchPacket.payloadLength = 8;
-        touchPacket.x = x;
-        touchPacket.y = y;
+        spawnPacket.typeOfService = 0;
+        spawnPacket.payloadLength = 12;
+        spawnPacket.unitSlot = unitSlot;
+        spawnPacket.x = x;
+        spawnPacket.z = z;
 
-        return Serialize<TouchPacket>(touchPacket);
+        return Serialize<SpawnPacket>(spawnPacket);
     }
 
-    public byte[] GetDirectionPacket(int direction)
+    public byte[] GetAddSlotPacket(int unitId, int slotIndex)
     {
-        directionPacket.typeOfService = 1;
-        directionPacket.payloadLength = 4;
-        directionPacket.direction = direction;
+        addSlotPacket.typeOfService = 1;
+        addSlotPacket.payloadLength = 8;
+        addSlotPacket.unitId = unitId;
+        addSlotPacket.slotIndex = slotIndex;
 
-        return Serialize<DirectionPacket>(directionPacket);
+        return Serialize<AddSlotPacket>(addSlotPacket);
+    }
+
+    public byte[] GetCommandPacket(int unitSlot, int typeOfCommand)
+    {
+        commandPacket.typeOfService = 2;
+        commandPacket.payloadLength = 4;
+        commandPacket.typeOfCommand = typeOfCommand;
+
+        return Serialize<CommandPacket>(commandPacket);
     }
 
     // Calling this method will return a byte array with the contents
