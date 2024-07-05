@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,7 +39,7 @@ public class TcpSender : MonoBehaviour
 
     private void Start()
     {
-        ConnectToServer();
+        Debug.Log(ConnectToServer());
     }
 
     TcpClient client;
@@ -93,7 +95,10 @@ public class TcpSender : MonoBehaviour
             stream = client.GetStream();
 
             // 수신 스레드 시작
-            StartCoroutine(ReceiveData());
+            Thread receiveThread = new Thread(new ThreadStart(ReceiveData));
+            receiveThread.IsBackground = true;
+            receiveThread.Start();
+
             return true;
         }
         catch (Exception e)
@@ -103,52 +108,7 @@ public class TcpSender : MonoBehaviour
         }
     }
 
-    public void OnSetMyName(string myName)
-    {
-        this.myName = myName;
-    }
-
-    public void OnSetEnemyName(string enemyName)
-    {
-        enemyPlayerName = enemyName;
-    }
-
-    public string GetMyName()
-    {
-        return myName;
-    }
-
-    public void SendMsg(String message)
-    {
-        try
-        {
-            if (client == null)
-            {
-                Debug.Log("ConnectNeed");
-                return;
-            }
-            // Translate the passed message into ASCII and store it as a Byte array.
-            Byte[] data = System.Text.Encoding.UTF8.GetBytes($"{message}#");
-
-            // Get a client stream for reading and writing.
-            stream = client.GetStream();
-
-            // Send the message to the connected TcpServer.
-            stream.Write(data, 0, data.Length);
-
-            Console.WriteLine("Sent: {0}", message);
-        }
-        catch (ArgumentNullException e)
-        {
-            Console.WriteLine("ArgumentNullException: {0}", e);
-        }
-        catch (SocketException e)
-        {
-            Console.WriteLine("SocketException: {0}", e);
-        }
-    }
-
-    IEnumerator ReceiveData()
+    private void ReceiveData()
     {
         while (isConnected)
         {
@@ -158,37 +118,41 @@ public class TcpSender : MonoBehaviour
                 {
                     stream = client.GetStream();
 
-                    // 서버로부터 데이터 읽기
-                    byte[] buffer = new byte[client.Available];
-                    stream.Read(buffer, 0, buffer.Length);
+                    Byte[] bytesTypeOfService = new Byte[4];
+                    Byte[] bytesPayloadLength = new Byte[4];
 
-                    // 받은 데이터 처리
-                    string receivedMessage = System.Text.Encoding.UTF8.GetString(buffer);
+                    int lengthTypeOfService = stream.Read(bytesTypeOfService, 0, 4);
+                    int lengthPayloadLength = stream.Read(bytesPayloadLength, 0, 4);
 
-                    string[] packets = receivedMessage.Split("#");
-                    foreach (string packet in packets)
+                    if (lengthTypeOfService <= 0 && lengthPayloadLength <= 0)
                     {
-                        ClassifyPacket(packet);
+                        break;
                     }
-                    
 
+                    // Reverse byte order, in case of big endian architecture
+                    if (!BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(bytesTypeOfService);
+                        Array.Reverse(bytesPayloadLength);
+                    }
+
+                    int typeOfService = BitConverter.ToInt32(bytesTypeOfService, 0);
+                    int payloadLength = BitConverter.ToInt32(bytesPayloadLength, 0);
+
+                    Byte[] bytes = new Byte[payloadLength];
+                    int length = stream.Read(bytes, 0, payloadLength);
+
+                    int packet = BitConverter.ToInt32(bytes, 0);
+                    Debug.Log(packet);
+                    
                 }
             }
             catch (Exception e)
             {
                 Debug.LogError("Error receiving data: " + e.Message);
             }
-
-            // 0.1초 대기 후 다시 확인
-            yield return new WaitForSeconds(0.1f);
         }
     }
-
-    private void ClassifyPacket(string receivedMessage)
-    {
-
-    }
-
 
     void OnDestroy()
     {

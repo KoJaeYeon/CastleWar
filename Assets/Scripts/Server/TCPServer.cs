@@ -87,7 +87,6 @@ public class TCPServer
         TcpClient client = (TcpClient)clientObj;
         NetworkStream stream = client.GetStream();
 
-        int i;
         while (true)
         {
             Byte[] bytesTypeOfService = new Byte[4];
@@ -96,10 +95,12 @@ public class TCPServer
             int lengthTypeOfService = stream.Read(bytesTypeOfService, 0, 4);
             int lengthPayloadLength = stream.Read(bytesPayloadLength, 0, 4);
 
-            //if (lengthTypeOfService <= 0 && lengthPayloadLength <= 0)
-            //{
-            //    break;
-            //}
+            //연결이 끊어질 때 발생
+            if (lengthTypeOfService <= 0 && lengthPayloadLength <= 0)
+            {
+                Console.WriteLine("Error!!!");
+                break;
+            }
 
             // Reverse byte order, in case of big endian architecture
             if (!BitConverter.IsLittleEndian)
@@ -113,26 +114,24 @@ public class TCPServer
 
             Byte[] bytes = new Byte[payloadLength];
             int length = stream.Read(bytes, 0, payloadLength);
-
+            Console.WriteLine(length);
             int packet = BitConverter.ToInt32(bytes, 0);
             Console.WriteLine(packet);
 
-            //// Translate data bytes to a ASCII string.
-            //data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
-            //Console.WriteLine("Received: " + data);
+            // Create the resend packet
+            Byte[] reSendPacket = new byte[8 + payloadLength];
 
-            //if (data.Contains("[이름]"))
-            //{
-            //    playerName.Add(client, data.Split("#")[1]);
-            //}
+            // Copy the typeOfService and payloadLength to the resend packet
+            Array.Copy(bytesTypeOfService, 0, reSendPacket, 0, 4);
+            Array.Copy(bytesPayloadLength, 0, reSendPacket, 4, 4);
 
-            //byte[] msg = System.Text.Encoding.UTF8.GetBytes(data);
+            // Copy the payload to the resend packet
+            Array.Copy(bytes, 0, reSendPacket, 8, payloadLength);
 
-            //NetworkStream enemyStream = keyValuePairs[client].GetStream();
-            //enemyStream.Write(msg, 0, msg.Length);
+            // Send the resend packet
+            stream.Write(reSendPacket, 0, reSendPacket.Length);
 
-            ////stream.Write(msg,0, msg.Length);
-            //Console.WriteLine("Sent: " + data);
+            Console.WriteLine("Resent packet with length: " + reSendPacket.Length);
         }
 
         // Shutdown and close the client connection.
