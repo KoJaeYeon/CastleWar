@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float travelTime; // 발사체가 타겟에 도달하는 데 걸리는 시간 (초)
+    GameObject _targetObj;
     Transform _targetTrans;
     Vector3 _startPosition;
     float _timeElapsed;
@@ -14,7 +15,8 @@ public class Projectile : MonoBehaviour
     public void InitTargetAndShoot(Vector3 initPos, GameObject target, float attackDamage, int slotIndex)
     {
         transform.position = initPos;
-        _targetTrans = target.transform;
+        _targetObj = target;
+        _targetTrans = SearchModelTrans(target);
         _startPosition = transform.position;
         _timeElapsed = 0f;
         _attackDamage = attackDamage;
@@ -31,6 +33,20 @@ public class Projectile : MonoBehaviour
 
         InitAction();
         CheckDamage();
+    }
+
+    private Transform SearchModelTrans(GameObject targetObj)
+    {
+        for(int i = 0; i< targetObj.transform.childCount; i++)
+        {
+            var childTrans = targetObj.transform.GetChild(i);
+            bool isModel = childTrans.GetComponent<AnimationAttack>() != null;
+            if (isModel)
+            {
+                return childTrans;
+            }
+        }
+        return null;
     }
 
     void Update()
@@ -56,25 +72,27 @@ public class Projectile : MonoBehaviour
     }
 
     public void CheckDamage()
-    {
-        GameObject targetObject = _targetTrans.gameObject;
-        IAttack targetAttack = targetObject.GetComponent<IAttack>();
+    {       
+        IAttack targetAttack = _targetObj.GetComponent<IAttack>();
         if (targetAttack != null)
         {
             if(targetAttack.OnCheckDamageDie(_attackDamage))
             {
-                targetObject.layer = LayerMask.NameToLayer("DeadUnit");
+                _targetObj.layer = LayerMask.NameToLayer("DeadUnit");
             }
         }
     }
 
     public virtual void GiveDamage()
     {
-        GameObject targetObject = _targetTrans.gameObject;
-        IAttack targetAttack = targetObject.GetComponent<IAttack>();
+        IAttack targetAttack = _targetObj.GetComponent<IAttack>();
         if (targetAttack != null)
         {
             targetAttack.OnTakeDamaged(_attackDamage);
+        }
+        else
+        {
+            Debug.LogWarning("targetIsNull");
         }
     }
 
