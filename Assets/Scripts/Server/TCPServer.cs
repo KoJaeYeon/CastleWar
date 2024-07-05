@@ -63,13 +63,13 @@ public class TCPServer
                 //Client 저장
                 clientList.Add(client);
 
-                if (clientList.Count >= 2)
-                {
-                    keyValuePairs.Add(clientList[0], clientList[1]);
-                    keyValuePairs.Add(clientList[1], clientList[0]);
+                //if (clientList.Count >= 2)
+                //{
+                //    keyValuePairs.Add(clientList[0], clientList[1]);
+                //    keyValuePairs.Add(clientList[1], clientList[0]);
 
-                    clientList.RemoveRange(0, 2);
-                }
+                //    clientList.RemoveRange(0, 2);
+                //}
             }
         }
         catch (SocketException e)
@@ -87,28 +87,52 @@ public class TCPServer
         TcpClient client = (TcpClient)clientObj;
         NetworkStream stream = client.GetStream();
 
-        Byte[] bytes = new Byte[256];
-        String data = null;
-
         int i;
-        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+        while (true)
         {
-            // Translate data bytes to a ASCII string.
-            data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
-            Console.WriteLine("Received: " + data);
+            Byte[] bytesTypeOfService = new Byte[4];
+            Byte[] bytesPayloadLength = new Byte[4];
 
-            if (data.Contains("[이름]"))
+            int lengthTypeOfService = stream.Read(bytesTypeOfService, 0, 4);
+            int lengthPayloadLength = stream.Read(bytesPayloadLength, 0, 4);
+
+            //if (lengthTypeOfService <= 0 && lengthPayloadLength <= 0)
+            //{
+            //    break;
+            //}
+
+            // Reverse byte order, in case of big endian architecture
+            if (!BitConverter.IsLittleEndian)
             {
-                playerName.Add(client, data.Split("#")[1]);
+                Array.Reverse(bytesTypeOfService);
+                Array.Reverse(bytesPayloadLength);
             }
 
-            byte[] msg = System.Text.Encoding.UTF8.GetBytes(data);
+            int typeOfService = BitConverter.ToInt32(bytesTypeOfService, 0);
+            int payloadLength = BitConverter.ToInt32(bytesPayloadLength, 0);
 
-            NetworkStream enemyStream = keyValuePairs[client].GetStream();
-            enemyStream.Write(msg, 0, msg.Length);
+            Byte[] bytes = new Byte[payloadLength];
+            int length = stream.Read(bytes, 0, payloadLength);
 
-            //stream.Write(msg,0, msg.Length);
-            Console.WriteLine("Sent: " + data);
+            int packet = BitConverter.ToInt32(bytes, 0);
+            Console.WriteLine(packet);
+
+            //// Translate data bytes to a ASCII string.
+            //data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
+            //Console.WriteLine("Received: " + data);
+
+            //if (data.Contains("[이름]"))
+            //{
+            //    playerName.Add(client, data.Split("#")[1]);
+            //}
+
+            //byte[] msg = System.Text.Encoding.UTF8.GetBytes(data);
+
+            //NetworkStream enemyStream = keyValuePairs[client].GetStream();
+            //enemyStream.Write(msg, 0, msg.Length);
+
+            ////stream.Write(msg,0, msg.Length);
+            //Console.WriteLine("Sent: " + data);
         }
 
         // Shutdown and close the client connection.

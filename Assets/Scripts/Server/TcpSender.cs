@@ -49,6 +49,40 @@ public class TcpSender : MonoBehaviour
     string myName = string.Empty;
     string enemyPlayerName = string.Empty;
 
+    public void OnClick_SendPacket()
+    {
+        var packetManager = new PacketManager();
+        SendPacket(packetManager.GetCommandPacket(2));
+    }
+
+    public void SendPacket(byte[] buffer)
+    {
+        try
+        {
+            if (client == null)
+            {
+                Debug.Log("ConnectNeed");
+                return;
+            }
+
+            // Get a client stream for reading and writing.
+            stream = client.GetStream();
+
+            // Send the message to the connected TcpServer.
+            stream.Write(buffer, 0, buffer.Length);
+
+            Console.WriteLine("Sent: {0}", buffer);
+        }
+        catch (ArgumentNullException e)
+        {
+            Console.WriteLine("ArgumentNullException: {0}", e);
+        }
+        catch (SocketException e)
+        {
+            Console.WriteLine("SocketException: {0}", e);
+        }
+    }
+
     public bool ConnectToServer()
     {
         if (isConnected) { return false; }

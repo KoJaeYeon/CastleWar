@@ -47,7 +47,7 @@ public class PacketManager
     private AddSlotPacket addSlotPacket = new AddSlotPacket();
     private CommandPacket commandPacket = new CommandPacket();
 
-    public PacketManager(int Id)
+    public PacketManager()
     {
         
     }
@@ -73,7 +73,7 @@ public class PacketManager
         return Serialize<AddSlotPacket>(addSlotPacket);
     }
 
-    public byte[] GetCommandPacket(int unitSlot, int typeOfCommand)
+    public byte[] GetCommandPacket(int typeOfCommand)
     {
         commandPacket.typeOfService = 2;
         commandPacket.payloadLength = 4;
