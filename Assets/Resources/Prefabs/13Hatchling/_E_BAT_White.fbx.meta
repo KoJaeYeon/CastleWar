@@ -1,9 +1,19 @@
 fileFormatVersion: 2
 guid: 6108e3184bce93e4b977715d71677c50
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bat
+    second: {fileID: 2100000, guid: 671fe825b13bd8b40a368499fa07d567, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: surfaceShader2
+    second: {fileID: 2100000, guid: 671fe825b13bd8b40a368499fa07d567, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -185,6 +195,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -245,6 +256,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
