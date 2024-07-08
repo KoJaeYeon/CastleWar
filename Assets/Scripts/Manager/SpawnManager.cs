@@ -178,6 +178,7 @@ public class SpawnManager : MonoBehaviour
 
         //하위 프리팹 베이스 프리팹에 생성해주기
         GameObject subUnitModel = Instantiate(subPrefab, baseUnit.transform);
+        
 
         //초기 데이터 부여
         var unit = baseUnit.GetComponent<Unit>();
@@ -202,6 +203,7 @@ public class SpawnManager : MonoBehaviour
         else
         {
             baseUnit.tag = "Enemy";
+            subUnitModel.transform.Rotate(0, 180, 0);
             switch (unitData.unitType)
             {
                 case UnitType.Ground:

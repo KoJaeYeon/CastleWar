@@ -135,10 +135,13 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                 {
                     GameManager.Instance.RequestPopulationUse(population);
                     GameManager.Instance.RequestManaUse(cost * -1);
-                    _spawnedUnit.layer = originLayer;
-                    var unit = _spawnedUnit.GetComponent<Unit>();
-                    unit?.StartState();
+                    //_spawnedUnit.layer = originLayer;
+                    //var unit = _spawnedUnit.GetComponent<Unit>();
+                    //unit?.StartState();
+                    _spawnedUnit.SetActive(false);
+                    Vector3 touchPos = _spawnedUnit.transform.position;
                     _spawnedUnit = null;
+                    TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
                 }
                 else
                 {
