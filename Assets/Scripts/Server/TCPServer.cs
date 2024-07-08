@@ -12,6 +12,8 @@ public class TCPServer
     TcpListener server;
     bool isServerRunning = true;
 
+    static int playerId = 1;
+
     Dictionary<TcpClient, string> playerName = new Dictionary<TcpClient, string>();
 
     static void Main(string[] args)
@@ -91,13 +93,15 @@ public class TCPServer
         while (true)
         {
             Byte[] bytesTypeOfService = new Byte[4];
+            Byte[] bytesPlayerId = new Byte[4];
             Byte[] bytesPayloadLength = new Byte[4];
 
             int lengthTypeOfService = stream.Read(bytesTypeOfService, 0, 4);
+            int lengthPlayerId = stream.Read(bytesPlayerId, 0, 4);
             int lengthPayloadLength = stream.Read(bytesPayloadLength, 0, 4);
 
             //연결이 끊어질 때 발생
-            if (lengthTypeOfService <= 0 && lengthPayloadLength <= 0)
+            if (lengthTypeOfService <= 0 && lengthPlayerId <= 0 && lengthPayloadLength <= 0)
             {
                 Console.WriteLine("Error!!!");
                 break;
@@ -107,10 +111,12 @@ public class TCPServer
             if (!BitConverter.IsLittleEndian)
             {
                 Array.Reverse(bytesTypeOfService);
+                Array.Reverse(bytesPlayerId);
                 Array.Reverse(bytesPayloadLength);
             }
 
             int typeOfService = BitConverter.ToInt32(bytesTypeOfService, 0);
+            int playerId = BitConverter.ToInt32(bytesPlayerId, 0);
             int payloadLength = BitConverter.ToInt32(bytesPayloadLength, 0);
 
             Byte[] bytes = new Byte[payloadLength];
@@ -120,23 +126,41 @@ public class TCPServer
             Console.WriteLine(packet);
 
             // Create the resend packet
-            Byte[] reSendPacket = new byte[8 + payloadLength];
+            Byte[] reSendPacket = new byte[12 + payloadLength];
 
             // Copy the typeOfService and payloadLength to the resend packet
             Array.Copy(bytesTypeOfService, 0, reSendPacket, 0, 4);
+            Array.Copy(bytesPlayerId, 0, reSendPacket, 0, 4);
             Array.Copy(bytesPayloadLength, 0, reSendPacket, 4, 4);
 
             // Copy the payload to the resend packet
-            Array.Copy(bytes, 0, reSendPacket, 8, payloadLength);
+            Array.Copy(bytes, 0, reSendPacket, 12, payloadLength);
 
-            // Send the resend packet
-            stream.Write(reSendPacket, 0, reSendPacket.Length);
+            if (typeOfService == 3)
+            {
+                // Set PlayerId
+                bytes = BitConverter.GetBytes(playerId++);
+                Array.Copy(bytes, 0, reSendPacket, 12, payloadLength);
 
-            var PairClient = keyValuePairs[client];
-            var pairStream = PairClient.GetStream();
-            pairStream.Write(reSendPacket, 0, reSendPacket.Length);
+                // Send the resend packet
+                stream.Write(reSendPacket, 0, reSendPacket.Length);
+            }
+            else
+            {
+                // Send the resend packet
+                stream.Write(reSendPacket, 0, reSendPacket.Length);
 
-            Console.WriteLine("Resent packet with length: " + reSendPacket.Length);
+                // Send resend packet to pair
+                var PairClient = keyValuePairs[client];
+                var pairStream = PairClient.GetStream();
+                pairStream.Write(reSendPacket, 0, reSendPacket.Length);
+
+                Console.WriteLine("Resent packet with length: " + reSendPacket.Length);
+            }
+
+
+
+
         }
 
         // Shutdown and close the client connection.

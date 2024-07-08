@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d9f99443dadbe4e943e12286b1e7f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: 13.124.195.70
+  server: 127.0.0.1
   temp: {fileID: 196910803}
 --- !u!4 &647778901
 Transform:

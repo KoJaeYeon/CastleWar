@@ -7,6 +7,8 @@ struct SpawnPacket
     [MarshalAs(UnmanagedType.I4)]
     public int typeOfService;
     [MarshalAs(UnmanagedType.I4)]
+    public int playerId;
+    [MarshalAs(UnmanagedType.I4)]
     public int payloadLength;
     [MarshalAs(UnmanagedType.I4)]
     public int unitSlot;
@@ -22,6 +24,8 @@ struct AddSlotPacket
     [MarshalAs(UnmanagedType.I4)]
     public int typeOfService;
     [MarshalAs(UnmanagedType.I4)]
+    public int playerId;
+    [MarshalAs(UnmanagedType.I4)]
     public int payloadLength;
     [MarshalAs(UnmanagedType.I4)]
     public int unitId;
@@ -35,9 +39,24 @@ struct CommandPacket
     [MarshalAs(UnmanagedType.I4)]
     public int typeOfService;
     [MarshalAs(UnmanagedType.I4)]
+    public int playerId;
+    [MarshalAs(UnmanagedType.I4)]
     public int payloadLength;
     [MarshalAs(UnmanagedType.I4)]
     public int typeOfCommand; // Return, Cancel, TierUp
+}
+
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+struct AccountPacket
+{
+    [MarshalAs(UnmanagedType.I4)]
+    public int typeOfService;
+    [MarshalAs(UnmanagedType.I4)]
+    public int playerId;
+    [MarshalAs(UnmanagedType.I4)]
+    public int payloadLength;
+    [MarshalAs(UnmanagedType.I4)]
+    public int newPlayerId;
 }
 
 public class PacketManager
@@ -46,15 +65,17 @@ public class PacketManager
     private SpawnPacket spawnPacket = new SpawnPacket();
     private AddSlotPacket addSlotPacket = new AddSlotPacket();
     private CommandPacket commandPacket = new CommandPacket();
+    private AccountPacket accountPacket = new AccountPacket();
 
     public PacketManager()
     {
         
     }
 
-    public byte[] GetSpawnPacket(int unitSlot, int x, int z)
+    public byte[] GetSpawnPacket(int unitSlot,int playerId, int x, int z)
     {
         spawnPacket.typeOfService = 0;
+        spawnPacket.playerId = playerId;
         spawnPacket.payloadLength = 12;
         spawnPacket.unitSlot = unitSlot;
         spawnPacket.x = x;
@@ -63,9 +84,10 @@ public class PacketManager
         return Serialize<SpawnPacket>(spawnPacket);
     }
 
-    public byte[] GetAddSlotPacket(int unitId, int slotIndex)
+    public byte[] GetAddSlotPacket(int unitId,int playerId, int slotIndex)
     {
         addSlotPacket.typeOfService = 1;
+        spawnPacket.playerId = playerId;
         addSlotPacket.payloadLength = 8;
         addSlotPacket.unitId = unitId;
         addSlotPacket.slotIndex = slotIndex;
@@ -73,13 +95,24 @@ public class PacketManager
         return Serialize<AddSlotPacket>(addSlotPacket);
     }
 
-    public byte[] GetCommandPacket(int typeOfCommand)
+    public byte[] GetCommandPacket(int playerId,int typeOfCommand)
     {
         commandPacket.typeOfService = 2;
+        commandPacket.playerId = playerId;
         commandPacket.payloadLength = 4;
         commandPacket.typeOfCommand = typeOfCommand;
 
         return Serialize<CommandPacket>(commandPacket);
+    }
+
+    public byte[] GetAccountPacket()
+    {
+        accountPacket.typeOfService = 3;
+        accountPacket.playerId = 0;
+        accountPacket.payloadLength = 4;
+        accountPacket.newPlayerId = 0;
+
+        return Serialize<AccountPacket>(accountPacket);
     }
 
     // Calling this method will return a byte array with the contents

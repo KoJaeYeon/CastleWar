@@ -48,13 +48,12 @@ public class TcpSender : MonoBehaviour
     int port = 2074;
     bool isConnected = false;
 
-    string myName = string.Empty;
-    string enemyPlayerName = string.Empty;
+    int _playerId;
 
     public void OnClick_SendPacket()
     {
         var packetManager = new PacketManager();
-        SendPacket(packetManager.GetCommandPacket(2));
+        SendPacket(packetManager.GetCommandPacket(2,2));
     }
 
     public void SendPacket(byte[] buffer)
@@ -100,6 +99,10 @@ public class TcpSender : MonoBehaviour
             receiveThread.IsBackground = true;
             receiveThread.Start();
 
+            // 플레이어 Id 설정
+            var packetManager = new PacketManager();
+            SendPacket(packetManager.GetAccountPacket());
+
             return true;
         }
         catch (Exception e)
@@ -120,13 +123,16 @@ public class TcpSender : MonoBehaviour
                     stream = client.GetStream();
 
                     Byte[] bytesTypeOfService = new Byte[4];
+                    Byte[] bytesPlayerId = new Byte[4];
                     Byte[] bytesPayloadLength = new Byte[4];
 
                     int lengthTypeOfService = stream.Read(bytesTypeOfService, 0, 4);
+                    int lengthPlayerId = stream.Read(bytesTypeOfService, 0, 4);
                     int lengthPayloadLength = stream.Read(bytesPayloadLength, 0, 4);
 
-                    if (lengthTypeOfService <= 0 && lengthPayloadLength <= 0)
+                    if (lengthTypeOfService <= 0 && lengthPlayerId <= 0 && lengthPayloadLength <= 0)
                     {
+                        Console.WriteLine("Error!!!");
                         break;
                     }
 
@@ -134,14 +140,19 @@ public class TcpSender : MonoBehaviour
                     if (!BitConverter.IsLittleEndian)
                     {
                         Array.Reverse(bytesTypeOfService);
+                        Array.Reverse(bytesPlayerId);
                         Array.Reverse(bytesPayloadLength);
                     }
 
                     int typeOfService = BitConverter.ToInt32(bytesTypeOfService, 0);
+                    int playerId = BitConverter.ToInt32(bytesPlayerId, 0);
                     int payloadLength = BitConverter.ToInt32(bytesPayloadLength, 0);
 
                     Byte[] bytes = new Byte[payloadLength];
                     int length = stream.Read(bytes, 0, payloadLength);
+
+
+
 
                     int packet = BitConverter.ToInt32(bytes, 0);
                     Debug.Log(packet);
