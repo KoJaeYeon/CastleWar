@@ -56,7 +56,9 @@ public class TcpSender : MonoBehaviour
 
     TcpClient client;
     NetworkStream stream;
-    [SerializeField] string server = "127.0.0.1";
+    string server = "127.0.0.1";
+    string awsServer = "43.201.24.38";
+    [SerializeField] bool awsServerUse = false;
     int port = 2074;
     bool isConnected = false;
 
@@ -107,6 +109,7 @@ public class TcpSender : MonoBehaviour
         if (isConnected) { return false; }
         try
         {
+            if (awsServerUse) server = awsServer;
             client = new TcpClient(server, port);
             isConnected = true;
             stream = client.GetStream();
@@ -260,7 +263,7 @@ public class TcpSender : MonoBehaviour
         int typeOfCommand = BitConverter.ToInt32(bytes, 0);
         Debug.Log("Command Type     : " + typeOfCommand);
 
-
+        EnqueueCommand(() => ExecuteCommand(typeOfCommand,playerId));
     }
 
     // Handle Account Signal
@@ -288,6 +291,12 @@ public class TcpSender : MonoBehaviour
         SendPacket(packet);
     }
 
+    public void RequestCommand(int commandType)
+    {
+        var packet = PacketManager.Instance.GetCommandPacket(_playerId, commandType);
+        SendPacket(packet);
+    }
+
     private void ExecuteAddUnitSlot(int slotIndex, int unitId)
     {
         SpawnManager.Instance.OnAdd_ObjectPoolingSlot(slotIndex, unitId);
@@ -296,6 +305,21 @@ public class TcpSender : MonoBehaviour
     private void ExecuteSpawnUnit(Vector3 touchPos, int index)
     {
         Btn_UnitAdd.SpawnUnit(touchPos, index);
+    }
+
+    private void ExecuteCommand(int typeOfCommand, int playerId)
+    {
+        switch (typeOfCommand)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                bool isTagAlly = _playerId == playerId;
+                CastleManager.Instance.Request_CastleTierUp(isTagAlly);
+                break;
+        }
     }
 
 

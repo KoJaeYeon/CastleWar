@@ -33,14 +33,15 @@ public class Btn_TierUp : MonoBehaviour
     void OnClick_TierUp()
     {
         TouchManager.Instance.ChangeSelectalble(null);
-        if (GameManager.Instance.RequestTierUpCheck())
+        if (GameManager.Instance.RequestTierUpCheck() && button.interactable == true)
         {
+            int needMana = GameManager.Instance.getTierUpNeedMana();
+            GameManager.Instance.RequestManaUse(-1 * needMana);
             button.interactable = false;
             manaMask.SetActive(false);
             tierUpMask.SetActive(true);
-            int needMana = GameManager.Instance.getTierUpNeedMana();
-            GameManager.Instance.RequestManaUse(-1 * needMana);
-            CastleManager.Instance.AllyCastleTierUp();
+
+            TcpSender.Instance.RequestCommand(3);
         }
     }
 

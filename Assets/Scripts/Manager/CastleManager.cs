@@ -109,9 +109,18 @@ public class CastleManager : MonoBehaviour
         }
     }
 
-    public void AllyCastleTierUp()
+    public void Request_CastleTierUp(bool isTagAlly)
     {
-        Castle allyCastle = AllyCastle.GetComponent<Castle>();
-        allyCastle.RequestTierUp();
+        if(isTagAlly == true)
+        {
+            Castle allyCastle = AllyCastle.GetComponent<Castle>();
+            allyCastle.RequestTierUp();
+        }
+        else
+        {
+            Castle enemyCastle = EnemyCastle.GetComponent<Castle>();
+            enemyCastle.RequestTierUp();
+        }
+
     }
 }
