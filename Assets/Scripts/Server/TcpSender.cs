@@ -111,7 +111,6 @@ public class TcpSender : MonoBehaviour
             return false;
         }
     }
-    [SerializeField] TextMeshProUGUI temp;
     private void ReceiveData()
     {
         while (isConnected)
@@ -163,25 +162,31 @@ public class TcpSender : MonoBehaviour
     }
 
     // Handle incomming request
-    private void HandleIncommingRequest(int typeOfService, int displayId, int payloadLength, byte[] bytes)
+    private void HandleIncommingRequest(int typeOfService, int playerId, int payloadLength, byte[] bytes)
     {
         Debug.Log("=========================================");
         Debug.Log("Type of Service : " + typeOfService);
-        Debug.Log("Display Id      : " + displayId);
+        Debug.Log("player Id      : " + playerId);
         Debug.Log("Payload Length  : " + payloadLength);
         switch (typeOfService)
         {
             case 0:
-                SpawnHandler(displayId, payloadLength, bytes);
+                SpawnHandler(playerId, payloadLength, bytes);
+                break;
+            case 1:
+                AddSlotHandler(playerId, payloadLength, bytes);
+                break;
+            case 2:
+                AddSlotHandler(playerId, payloadLength, bytes);
                 break;
             case 3:
-                AccountHandler(displayId, payloadLength, bytes);
+                AccountHandler(payloadLength, bytes);
                 break;
         }
     }
 
     // Handle Spawn Signal
-    private void SpawnHandler(int displayId, int payloadLength, byte[] bytes)
+    private void SpawnHandler(int playerId, int payloadLength, byte[] bytes)
     {
         Debug.Log("Execute Spawn Handler");
         int unitSlot = BitConverter.ToInt32(bytes, 0);
@@ -194,17 +199,55 @@ public class TcpSender : MonoBehaviour
 
     }
 
+    // Handle AddSlot Signal
+    private void AddSlotHandler(int playerId, int payloadLength, byte[] bytes)
+    {
+        Debug.Log("Execute AddSlot Handler");
+        int unitId = BitConverter.ToInt32(bytes, 0);
+        int slotIndex = BitConverter.ToInt32(bytes, 4);
+        Debug.Log("Unit Id     : " + unitId);
+        Debug.Log("Slot Index     : " + slotIndex);
+
+        if(_playerId.Equals(playerId))
+        {
+
+        }
+        else
+        {
+            slotIndex += 6;
+        }
+        RequestAddUnitSlot(slotIndex, unitId);
+    }
+
+    // Handle Command Signal
+    private void CommandHandler(int playerId, int payloadLength, byte[] bytes)
+    {
+        Debug.Log("Execute Command Handler");
+        int typeOfCommand = BitConverter.ToInt32(bytes, 0);
+        Debug.Log("Command Type     : " + typeOfCommand);
+
+
+    }
+
     // Handle Account Signal
-    private void AccountHandler(int displayId, int payloadLength, byte[] bytes)
+    private void AccountHandler(int payloadLength, byte[] bytes)
     {
         Debug.Log("Execute Account Handler");
         int playerId = BitConverter.ToInt32(bytes, 0);
         Debug.Log("Id     : " + playerId);
 
-        _playerId = playerId;
+        SetPlayerId(playerId);
     }
 
+    void RequestAddUnitSlot(int slotIndex, int unitId)
+    {
+        SpawnManager.Instance.OnAdd_ObjectPoolingSlot(slotIndex, unitId);
+    }
 
+    void SetPlayerId(int playerId)
+    {
+        _playerId = playerId;
+    }
 
     void OnDestroy()
     {
