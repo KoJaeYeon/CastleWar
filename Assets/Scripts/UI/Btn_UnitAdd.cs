@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public enum TouchType
@@ -20,7 +21,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     Coroutine coroutine;
 
     //배치 시 적용되는 레이어
-    int originLayer; // 배치 후 적용
+    static int originLayer; // 배치 후 적용
     int defaultLayer; // 배치 전 적용 충돌무시
 
     //소환 시 소모되는 값
@@ -172,21 +173,8 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                 if (Time.time - _lastSpawnTime<_spawnInterval) return; // 소환 주기가 되지 않으면 반환
                 _lastSpawnTime = Time.time;
 
-                if (GameManager.Instance.RequestManaCheck(cost) && GameManager.Instance.RequestPopulationCheck(population))
-                {
-                    GameManager.Instance.RequestPopulationUse(population);
-                    GameManager.Instance.RequestManaUse(cost * -1);
-                    var unit = _spawnedUnit.GetComponent<Unit>();
-                    unit?.StartState();
-                    _spawnedUnit.layer = originLayer;
 
-                    //대기 유닛 치환
-                    _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(_index);
-                    _spawnedUnit.layer = defaultLayer;
-                    _spawnedUnit.SetActive(true);
-                    touchPos.y = 0;
-                    _spawnedUnit.transform.position = touchPos;
-                }
+                RequestSpawnUnit(touchPos);
             }
             else if (touchType == TouchType.NotUnit)
             {
@@ -206,6 +194,31 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
         }
     }
 
+    void RequestSpawnUnit(Vector3 touchPos)
+    {
+        if (GameManager.Instance.RequestManaCheck(cost) && GameManager.Instance.RequestPopulationCheck(population))
+        {
+            GameManager.Instance.RequestPopulationUse(population);
+            GameManager.Instance.RequestManaUse(cost * -1);
+
+            //대기 유닛 치환
+            TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
+        }
+    }
+
+    public static void SpawnUnit(Vector3 touchPos, int index)
+    {
+        var newSpawnUnit = SpawnManager.Instance.OnCalled_GetUnit(index);
+        newSpawnUnit.SetActive(true);
+
+        var unit = newSpawnUnit.GetComponent<Unit>();
+        unit?.StartState();
+
+        newSpawnUnit.layer = originLayer;
+        newSpawnUnit.SetActive(true);
+        touchPos.y = 0;
+        newSpawnUnit.transform.position = touchPos;
+    }
     public void OnPointerExit()
     {
         if (_spawnedUnit != null)

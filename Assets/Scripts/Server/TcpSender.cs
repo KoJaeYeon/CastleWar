@@ -194,7 +194,7 @@ public class TcpSender : MonoBehaviour
                 AddSlotHandler(playerId, payloadLength, bytes);
                 break;
             case 2:
-                AddSlotHandler(playerId, payloadLength, bytes);
+                CommandHandler(playerId, payloadLength, bytes);
                 break;
             case 3:
                 AccountHandler(payloadLength, bytes);
@@ -221,7 +221,19 @@ public class TcpSender : MonoBehaviour
         Debug.Log("X axis     : " + x_axis);
         Debug.Log("Y axis     : " + z_axis);
 
+        if(_playerId != playerId)
+        {
+            x_axis *= -1;
+            z_axis *= -1;
+            unitSlot += 6;
+        }
+        float x_Pos = x_axis / 1000f;
+        float z_Pos = z_axis / 1000f;
 
+        Vector3 touchPos = new Vector3(x_Pos, 0,z_Pos);
+
+
+        EnqueueCommand(() => ExecuteSpawnUnit(touchPos, unitSlot));
     }
 
     // Handle AddSlot Signal
@@ -233,15 +245,10 @@ public class TcpSender : MonoBehaviour
         Debug.Log("Unit Id     : " + unitId);
         Debug.Log("Slot Index     : " + slotIndex);
 
-        if(_playerId.Equals(playerId))
-        {
-
-        }
-        else
-        {
+        if(_playerId != playerId)
+        { 
             slotIndex += 6;
-        }
-
+        }        
         //수신 쓰레드가 아닌 메인 쓰레드에서 실행시켜야 함
         EnqueueCommand(() => ExecuteAddUnitSlot(slotIndex, unitId));
     }
@@ -273,10 +280,27 @@ public class TcpSender : MonoBehaviour
         SendPacket(packet);
     }
 
+    public void RequestSpawnUnit(Vector3 touchPos, int index)
+    {
+        int X_Pos = (int)(touchPos.x * 1000);
+        int Z_Pos = (int)(touchPos.z * 1000);
+        var packet = PacketManager.Instance.GetSpawnPacket(index, _playerId,X_Pos,Z_Pos);
+        SendPacket(packet);
+    }
+
     private void ExecuteAddUnitSlot(int slotIndex, int unitId)
     {
         SpawnManager.Instance.OnAdd_ObjectPoolingSlot(slotIndex, unitId);
     }
+
+    private void ExecuteSpawnUnit(Vector3 touchPos, int index)
+    {
+        Btn_UnitAdd.SpawnUnit(touchPos, index);
+    }
+
+
+
+
     void SetPlayerId(int playerId)
     {
         _playerId = playerId;
