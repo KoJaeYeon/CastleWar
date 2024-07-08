@@ -209,6 +209,42 @@ public class Unit : MonoBehaviour, IAttack
         _health = _type == UnitType.Building ? 0 : _maxHealth;
         _targetEnemy = null;
         _attackTargerEnemy = null;
+
+        ResetLayer();
+    }
+
+    void ResetLayer()
+    {
+        if (SpwanSlotIndex < 6)
+        {
+            switch (_type)
+            {
+                case UnitType.Ground:
+                    gameObject.layer = LayerMask.NameToLayer("AllyGroundUnit");
+                    break;
+                case UnitType.Air:
+                    gameObject.layer = LayerMask.NameToLayer("AllyAirUnit");
+                    break;
+                case UnitType.Building:
+                    gameObject.layer = LayerMask.NameToLayer("AllyBuilding");
+                    break;
+            }
+        }
+        else
+        {
+            switch (_type)
+            {
+                case UnitType.Ground:
+                    gameObject.layer = LayerMask.NameToLayer("EnemyGroundUnit");
+                    break;
+                case UnitType.Air:
+                    gameObject.layer = LayerMask.NameToLayer("EnemyAirUnit");
+                    break;
+                case UnitType.Building:
+                    gameObject.layer = LayerMask.NameToLayer("EnemyBuilding");
+                    break;
+            }
+        }
     }
 
     public void StartState()
