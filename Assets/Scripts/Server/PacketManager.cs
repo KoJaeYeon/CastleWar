@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Unity.VisualScripting;
+using UnityEngine;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 struct SpawnPacket
@@ -61,6 +62,22 @@ struct AccountPacket
 
 public class PacketManager
 {
+    private static PacketManager _instance;
+
+    public static PacketManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new PacketManager();
+            }
+            return _instance;
+        }
+
+    }
+
+
     // Packet to send
     private SpawnPacket spawnPacket = new SpawnPacket();
     private AddSlotPacket addSlotPacket = new AddSlotPacket();

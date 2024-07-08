@@ -92,14 +92,15 @@ public class AddPanel : MonoBehaviour
 
     }
 
-    private void AddSlot(int index)
+    private void AddSlot(int slotIndex)
     {
         if (_slot != null)
         {
-            SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, _slot.Id);
+            TcpSender.Instance.RequestAddUnitSlot(slotIndex, _slot.Id);
+            //SpawnManager.Instance.OnAdd_ObjectPoolingSlot(index, _slot.Id);
             ChoicePanel.SetActive(false);
             _slot.OnCalled_Add();
-            _playerPanel.OnCalled_Added(index,_slot.transform.position, _slot.Id);
+            _playerPanel.OnCalled_Added(slotIndex, _slot.transform.position, _slot.Id);
         }
     }
 

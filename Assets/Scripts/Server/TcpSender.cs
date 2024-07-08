@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -42,6 +40,20 @@ public class TcpSender : MonoBehaviour
         Debug.Log(ConnectToServer());
     }
 
+    private Queue<Action> executeQueue = new Queue<Action>();
+
+    private void Update()
+    {
+        lock (executeQueue)
+        {
+            while (executeQueue.Count > 0)
+            {
+                var action = executeQueue.Dequeue();
+                action?.Invoke();
+            }
+        }
+    }
+
     TcpClient client;
     NetworkStream stream;
     [SerializeField] string server = "127.0.0.1";
@@ -54,6 +66,11 @@ public class TcpSender : MonoBehaviour
     {
         var packetManager = new PacketManager();
         SendPacket(packetManager.GetCommandPacket(2,2));
+    }
+
+    public void OnClick_SceneLoad()
+    {
+        SceneManager.LoadScene(1);
     }
 
     public void SendPacket(byte[] buffer)
@@ -185,6 +202,14 @@ public class TcpSender : MonoBehaviour
         }
     }
 
+    void EnqueueCommand(Action action)
+    {
+        lock (executeQueue)
+        {
+            executeQueue.Enqueue(action);
+        }
+    }
+
     // Handle Spawn Signal
     private void SpawnHandler(int playerId, int payloadLength, byte[] bytes)
     {
@@ -216,7 +241,9 @@ public class TcpSender : MonoBehaviour
         {
             slotIndex += 6;
         }
-        RequestAddUnitSlot(slotIndex, unitId);
+
+        //수신 쓰레드가 아닌 메인 쓰레드에서 실행시켜야 함
+        EnqueueCommand(() => ExecuteAddUnitSlot(slotIndex, unitId));
     }
 
     // Handle Command Signal
@@ -239,11 +266,17 @@ public class TcpSender : MonoBehaviour
         SetPlayerId(playerId);
     }
 
-    void RequestAddUnitSlot(int slotIndex, int unitId)
+
+    public void RequestAddUnitSlot(int slotIndex, int unitId)
+    {
+        var packet = PacketManager.Instance.GetAddSlotPacket(unitId, _playerId, slotIndex);
+        SendPacket(packet);
+    }
+
+    private void ExecuteAddUnitSlot(int slotIndex, int unitId)
     {
         SpawnManager.Instance.OnAdd_ObjectPoolingSlot(slotIndex, unitId);
     }
-
     void SetPlayerId(int playerId)
     {
         _playerId = playerId;
