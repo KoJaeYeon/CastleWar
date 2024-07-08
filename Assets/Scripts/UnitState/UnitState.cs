@@ -200,7 +200,7 @@ public class UnitMoveState : UnitState
 
     private Vector3 CheckMapCorner()
     {
-        if (_unit.tag == "Ally")
+        if (_unit.IsTagAlly())
         {
             return CheckMapCorner_GoUp();
         }
@@ -239,7 +239,7 @@ public class UnitMoveState : UnitState
             case MapCornerPoint.TopRightCenter:
                 return Vector3.right;
             default:
-                return Vector3.forward;
+                return Vector3.back;
         }
     }
 
@@ -583,7 +583,10 @@ public class UnitDeadState : UnitState
         _unit.gameObject.layer = LayerMask.NameToLayer("DeadUnit");
         _unit.Animator.SetTrigger("Death");
         UnitManager.Instance.UnRegisterRetreatCallback(_unit.IsTagAlly(), _unit.HandleOnRetreatState);
-        GameManager.Instance.RequestPopulationUse(_unit.Cost * -1);
+        if (_unit.IsTagAlly())
+        {
+            GameManager.Instance.RequestPopulationUse(_unit.Population * -1);
+        }
     }
 
     public override void Exit()

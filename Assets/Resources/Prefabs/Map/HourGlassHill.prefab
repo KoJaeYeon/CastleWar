@@ -759,6 +759,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2415387742399600066}
     m_Modifications:
+    - target: {fileID: 1696606836890174897, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1917314179898004628, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -799,9 +803,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3245915577812942539, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6321032377536401464, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
       propertyPath: m_Name
       value: Border_HourGlassHill
+      objectReference: {fileID: 0}
+    - target: {fileID: 6827230650936572839, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978484056108603915, guid: 7428dc16d7edaec4a88ef42508695608, type: 3}
+      propertyPath: m_Size.z
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
