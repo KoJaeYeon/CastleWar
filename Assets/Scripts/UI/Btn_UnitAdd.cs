@@ -21,7 +21,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     Coroutine coroutine;
 
     //배치 시 적용되는 레이어
-    static int originLayer; // 배치 후 적용
+    int originLayer; // 배치 후 적용
     int defaultLayer; // 배치 전 적용 충돌무시
 
     //소환 시 소모되는 값
@@ -214,7 +214,6 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
         var unit = newSpawnUnit.GetComponent<Unit>();
         unit?.StartState();
 
-        newSpawnUnit.layer = originLayer;
         newSpawnUnit.SetActive(true);
         touchPos.y = 0;
         newSpawnUnit.transform.position = touchPos;
@@ -233,6 +232,7 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     {
         if(_spawnedUnit != null)
         {
+            _spawnedUnit.layer = originLayer;
             //안쓰는 유닛 반환
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);
