@@ -583,6 +583,7 @@ public class UnitDeadState : UnitState
         _unit.gameObject.layer = LayerMask.NameToLayer("DeadUnit");
         _unit.Animator.SetTrigger("Death");
         UnitManager.Instance.UnRegisterRetreatCallback(_unit.IsTagAlly(), _unit.HandleOnRetreatState);
+        GameManager.Instance.RequestPopulationUse(_unit.Cost * -1);
     }
 
     public override void Exit()
