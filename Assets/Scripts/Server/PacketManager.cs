@@ -87,7 +87,7 @@ public class PacketManager
     public byte[] GetAddSlotPacket(int unitId,int playerId, int slotIndex)
     {
         addSlotPacket.typeOfService = 1;
-        spawnPacket.playerId = playerId;
+        addSlotPacket.playerId = playerId;
         addSlotPacket.payloadLength = 8;
         addSlotPacket.unitId = unitId;
         addSlotPacket.slotIndex = slotIndex;

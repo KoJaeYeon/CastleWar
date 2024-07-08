@@ -127,7 +127,7 @@ public class TcpSender : MonoBehaviour
                     Byte[] bytesPayloadLength = new Byte[4];
 
                     int lengthTypeOfService = stream.Read(bytesTypeOfService, 0, 4);
-                    int lengthPlayerId = stream.Read(bytesTypeOfService, 0, 4);
+                    int lengthPlayerId = stream.Read(bytesPlayerId, 0, 4);
                     int lengthPayloadLength = stream.Read(bytesPayloadLength, 0, 4);
 
                     if (lengthTypeOfService <= 0 && lengthPlayerId <= 0 && lengthPayloadLength <= 0)
@@ -151,13 +151,8 @@ public class TcpSender : MonoBehaviour
                     Byte[] bytes = new Byte[payloadLength];
                     int length = stream.Read(bytes, 0, payloadLength);
 
+                    HandleIncommingRequest(typeOfService, playerId, length, bytes);
 
-
-
-                    int packet = BitConverter.ToInt32(bytes, 0);
-                    Debug.Log(packet);
-                    temp.text += packet;
-                    
                 }
             }
             catch (Exception e)
@@ -166,6 +161,50 @@ public class TcpSender : MonoBehaviour
             }
         }
     }
+
+    // Handle incomming request
+    private void HandleIncommingRequest(int typeOfService, int displayId, int payloadLength, byte[] bytes)
+    {
+        Debug.Log("=========================================");
+        Debug.Log("Type of Service : " + typeOfService);
+        Debug.Log("Display Id      : " + displayId);
+        Debug.Log("Payload Length  : " + payloadLength);
+        switch (typeOfService)
+        {
+            case 0:
+                SpawnHandler(displayId, payloadLength, bytes);
+                break;
+            case 3:
+                AccountHandler(displayId, payloadLength, bytes);
+                break;
+        }
+    }
+
+    // Handle Spawn Signal
+    private void SpawnHandler(int displayId, int payloadLength, byte[] bytes)
+    {
+        Debug.Log("Execute Spawn Handler");
+        int unitSlot = BitConverter.ToInt32(bytes, 0);
+        int x_axis = BitConverter.ToInt32(bytes, 4);
+        int z_axis = BitConverter.ToInt32(bytes, 8);
+        Debug.Log("UnitSlot     : " + unitSlot);
+        Debug.Log("X axis     : " + x_axis);
+        Debug.Log("Y axis     : " + z_axis);
+
+
+    }
+
+    // Handle Account Signal
+    private void AccountHandler(int displayId, int payloadLength, byte[] bytes)
+    {
+        Debug.Log("Execute Account Handler");
+        int playerId = BitConverter.ToInt32(bytes, 0);
+        Debug.Log("Id     : " + playerId);
+
+        _playerId = playerId;
+    }
+
+
 
     void OnDestroy()
     {

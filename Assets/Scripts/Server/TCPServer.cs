@@ -12,7 +12,7 @@ public class TCPServer
     TcpListener server;
     bool isServerRunning = true;
 
-    static int playerId = 1;
+    static int _playerId = 1;
 
     Dictionary<TcpClient, string> playerName = new Dictionary<TcpClient, string>();
 
@@ -130,8 +130,8 @@ public class TCPServer
 
             // Copy the typeOfService and payloadLength to the resend packet
             Array.Copy(bytesTypeOfService, 0, reSendPacket, 0, 4);
-            Array.Copy(bytesPlayerId, 0, reSendPacket, 0, 4);
-            Array.Copy(bytesPayloadLength, 0, reSendPacket, 4, 4);
+            Array.Copy(bytesPlayerId, 0, reSendPacket, 4, 4);
+            Array.Copy(bytesPayloadLength, 0, reSendPacket, 8, 4);
 
             // Copy the payload to the resend packet
             Array.Copy(bytes, 0, reSendPacket, 12, payloadLength);
@@ -139,7 +139,7 @@ public class TCPServer
             if (typeOfService == 3)
             {
                 // Set PlayerId
-                bytes = BitConverter.GetBytes(playerId++);
+                bytes = BitConverter.GetBytes(_playerId++);
                 Array.Copy(bytes, 0, reSendPacket, 12, payloadLength);
 
                 // Send the resend packet
