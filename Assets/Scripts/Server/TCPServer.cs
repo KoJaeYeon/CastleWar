@@ -150,10 +150,14 @@ public class TCPServer
                 // Send the resend packet
                 stream.Write(reSendPacket, 0, reSendPacket.Length);
 
-                // Send resend packet to pair
-                var PairClient = keyValuePairs[client];
-                var pairStream = PairClient.GetStream();
-                pairStream.Write(reSendPacket, 0, reSendPacket.Length);
+                if (keyValuePairs.ContainsKey(client))
+                {
+                    // Send resend packet to pair
+                    var PairClient = keyValuePairs[client];
+                    var pairStream = PairClient.GetStream();
+                    pairStream.Write(reSendPacket, 0, reSendPacket.Length);
+                }
+
 
                 Console.WriteLine("Resent packet with length: " + reSendPacket.Length);
             }
