@@ -13,9 +13,9 @@ public class TopPanel : MonoBehaviour
 
         float leftTime = 360 - elapsedTime;
 
-        int minute = (int)leftTime/ 6;
+        int minute = (int)leftTime / 60;
         int second = (int)leftTime % 60;
 
-        _Timer.text = $"{minute}:{second}";
+        _Timer.text = $"{minute}:{second.ToString("00")}";
     }
 }
