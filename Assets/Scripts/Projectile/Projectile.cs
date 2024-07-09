@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
                 return childTrans;
             }
         }
-        return null;
+        return targetObj.transform.GetChild(0);
     }
 
     void Update()

@@ -241,7 +241,7 @@ public class SpawnManager : MonoBehaviour
         else
         {
             baseUnit.tag = "Enemy";
-            subUnitModel.transform.Rotate(0, 180, 0);
+            baseUnit.transform.Rotate(0, 180, 0);
             switch (unitData.unitType)
             {
                 case UnitType.Ground:

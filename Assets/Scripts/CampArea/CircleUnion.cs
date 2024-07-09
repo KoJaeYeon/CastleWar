@@ -37,12 +37,17 @@ public class CircleUnionManager : MonoBehaviour
         meshRenderer.material = isTagAlly ? CastleManager.Instance.AllyMaterial : CastleManager.Instance.EnemyMaterial;
     }
 
+    private void Update()
+    {
+        CheckMeshOnValueChanged();
+    }
+
     void CheckMeshOnValueChanged()
     {
-        if (circles.Count < 2)
-        {
-            return; // 원이 두 개 이상일 때만 합집합 계산
-        }
+        //if (circles.Count < 2)
+        //{
+        //    return; // 원이 두 개 이상일 때만 합집합 계산
+        //}
 
         List<Vector3> unionVertices = new List<Vector3>();
         List<int> unionTriangles = new List<int>();
@@ -138,7 +143,6 @@ public class CircleUnionManager : MonoBehaviour
             circleFilters.RemoveAt(index);
             circleDataList.RemoveAt(index);
         }
-
         CheckMeshOnValueChanged();
     }
 

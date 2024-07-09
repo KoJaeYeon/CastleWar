@@ -250,7 +250,7 @@ public class TcpSender : MonoBehaviour
 
         if(_playerId != playerId)
         { 
-            slotIndex += 6;
+            slotIndex += 8;
         }        
         //수신 쓰레드가 아닌 메인 쓰레드에서 실행시켜야 함
         EnqueueCommand(() => ExecuteAddUnitSlot(slotIndex, unitId));

@@ -139,6 +139,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         if (_spawnedUnit != null)
         {
             isDown = false;
+            ReturnBuilding();
         }
     }
 
