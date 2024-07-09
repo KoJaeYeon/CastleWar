@@ -85,7 +85,12 @@ public class UnitMoveState : UnitState
     public override void ExecuteFixedUpdate()
     {
         if (!_unit.CanAttack) return;
-        SearchEnemy();
+
+        //공격상태에 진입하면
+        if(SearchEnemy() == true)
+        {
+            return;
+        }
         if(_unit.UnitType == UnitType.Ground)
         {
             MoveGroundUnit();
@@ -270,14 +275,14 @@ public class UnitMoveState : UnitState
         _unit.transform.rotation = Quaternion.Slerp(_unit.transform.rotation, targetRotation, Time.fixedDeltaTime * _rotationSpeed);
     }
     #endregion
-    private void SearchEnemy()
+    private bool SearchEnemy()
     {
         if (_unit.TargetEnemy != null)
         {
             if (_unit.TargetEnemy.layer == LayerMask.NameToLayer("DeadUnit"))
             {
                 _unit.TargetEnemy = null;
-                return;
+                return false;
             }
 
             float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
@@ -288,11 +293,13 @@ public class UnitMoveState : UnitState
             else if (distance < _unit.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
             {
                 _unit.OnChangeState(new UnitAttackState(_unit));
+                return true;
             }
-            return;
+
+            return false;            
         }
 
-        if (Time.time - _lastSearchTime < _searchInterval) return; // 검색 주기가 되지 않으면 반환
+        if (Time.time - _lastSearchTime < _searchInterval) return false; // 검색 주기가 되지 않으면 반환
         _lastSearchTime = Time.time;
 
         Vector3 origin = _unit.transform.position;
@@ -321,10 +328,16 @@ public class UnitMoveState : UnitState
             }
         }
 
-        //if (_unit.TargetEnemy != null)
-        //{
-        //    Debug.Log("Target enemy: " + _unit.TargetEnemy.name);
-        //}
+        if(_unit.TargetEnemy != null)
+        {
+            float distance = Vector3.Distance(_unit.transform.position, _unit.TargetEnemy.transform.position);
+            if (distance < _unit.AttackRadius) // 공격 사거리 안으로 들어올 때 공격 상태로 진입
+            {
+                _unit.OnChangeState(new UnitAttackState(_unit));
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool BorderCheck()
