@@ -6,6 +6,23 @@ public class TitleCanvas : MonoBehaviour
 {
     public void OnClick_MatchGame()
     {
-        TcpSender.Instance.OnClick_SceneLoad();
+        Coroutine sendPing = TcpSender.Instance.SendPing;
+        if (sendPing == null)
+        {
+            bool connected = TcpSender.Instance.ConnectToServer();
+            if (connected)
+            {
+                sendPing = StartCoroutine(SendPing());
+            }
+        }
+    }
+
+    IEnumerator SendPing()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            TcpSender.Instance.RequestCommand(6);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
@@ -58,11 +59,15 @@ public class TcpSender : MonoBehaviour
     bool isConnected = false;
 
     int _playerId;
-
-    public void OnClick_SceneLoad()
+    public Coroutine SendPing { get; set; }
+    Coroutine _enemySearched;
+    public void m_SceneLoad()
     {
-        Debug.Log(ConnectToServer());
-        SceneManager.LoadScene(1);
+        if (_enemySearched == null)
+        {
+            _enemySearched = StartCoroutine(EnemySearched());
+            StopCoroutine(SendPing);
+        }
     }
 
     void SendPacket(byte[] buffer)
@@ -318,10 +323,26 @@ public class TcpSender : MonoBehaviour
             case 5:
                 GameManager.Instance.ReadyForGame(isTagAlly);
                 break;
+            case 6:
+                // 상대방이 통신을 보냈을 때
+                if(isTagAlly == false && _enemySearched == null)
+                {
+                    RequestCommand(6);
+                    m_SceneLoad();
+                }
+                break;
         }
     }
 
+    IEnumerator EnemySearched()
+    {
+        //3초뒤 게임시작
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(1);
 
+        yield return new WaitForSeconds(5f);
+        yield break;
+    }
 
 
     void SetPlayerId(int playerId)

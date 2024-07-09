@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviour
 
     public void ReadyForGame(bool isTagAlly)
     {
-        Debug.Log("sdf");
         if (isTagAlly)
         {
             _playerReady = true;
