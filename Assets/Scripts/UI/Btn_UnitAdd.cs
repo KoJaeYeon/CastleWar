@@ -21,7 +21,6 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     Coroutine coroutine;
 
     //배치 시 적용되는 레이어
-    int originLayer; // 배치 후 적용
     int defaultLayer; // 배치 전 적용 충돌무시
 
     //소환 시 소모되는 값
@@ -35,22 +34,6 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
         var unitData = DatabaseManager.Instance.OnGetUnitData(id);
         cost = unitData.cost;
         population = unitData.Population;
-        switch (unitData.unitType)
-        {
-            case UnitType.Ground:
-                originLayer =  LayerMask.NameToLayer("AllyGroundUnit");
-                touchType = TouchType.Unit;
-                break;
-            case UnitType.Air:
-                originLayer = LayerMask.NameToLayer("AllyAirUnit");
-                touchType = TouchType.Unit;
-                isAir = true;
-                break;
-            default:
-                originLayer = LayerMask.NameToLayer("AllyBuilding");
-                touchType = TouchType.NotUnit;
-                break;
-        }
         defaultLayer = LayerMask.NameToLayer("DeadUnit");
 
         //검사용 레이어
@@ -235,7 +218,6 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
     {
         if(_spawnedUnit != null)
         {
-            _spawnedUnit.layer = originLayer;
             //안쓰는 유닛 반환
             SpawnManager.Instance.OnCalled_ReturnUnit(_index, _spawnedUnit);
             _spawnedUnit.SetActive(false);

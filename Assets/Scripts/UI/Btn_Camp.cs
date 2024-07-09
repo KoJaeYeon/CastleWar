@@ -12,8 +12,9 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     GameObject _spawnedUnit;
     Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
 
+    int defaultLayer; // 배치 전 적용 충돌무시
+
     int _index = 6;
-    int tempLayer;
     Coroutine coroutine;
 
     private void Awake()
@@ -27,7 +28,8 @@ public class Btn_Camp : MonoBehaviour, ISelectable
             };
             button.onClick.AddListener(new UnityAction(spawnAction));
         }
-        tempLayer = LayerMask.NameToLayer("AllyBuilding");
+
+        defaultLayer = LayerMask.NameToLayer("DeadUnit");
     }
 
     public void Canceled()
@@ -68,7 +70,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
         isDown = true;
         _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(6);
 
-        _spawnedUnit.layer = LayerMask.NameToLayer("Default");
+        _spawnedUnit.layer = defaultLayer;
 
     }
 
@@ -76,8 +78,6 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     {
         isDown = false;
         if (_spawnedUnit == null) return;
-
-        _spawnedUnit.layer = tempLayer;
 
         //청사진이 적용되어 있을때
         if (_spawnedUnit.activeSelf)

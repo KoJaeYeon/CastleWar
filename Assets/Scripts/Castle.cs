@@ -245,9 +245,9 @@ public class Castle : MonoBehaviour, IAttack
 
     public void OnChangeState(IState newState)
     {
-        _currentState.Exit();
+        _currentState?.Exit();
         _currentState = newState;
-        _currentState.Enter();
+        _currentState?.Enter();
     }
 
     public void OnValueChanged_SpawnSlider(float value)
@@ -265,7 +265,13 @@ public class Castle : MonoBehaviour, IAttack
         Helath -= damage;
         if (_health <= 0)
         {
+            OnChangeState(null);
+            //캐슬 파괴
+            CastleManager.Instance.Request_CastleDestroy(IsTagAlly());
 
+            //레이어 복구
+            string targetLayer = IsTagAlly() ? "AllyBuilding" : "EnemyBuilding";
+            gameObject.layer = LayerMask.NameToLayer(targetLayer);
         }
     }
     public bool OnCheckDamageDie(float damage)

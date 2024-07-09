@@ -107,7 +107,6 @@ public class CastleAttackState : CastleState
     public override void ExecuteFixedUpdate()
     {
         CheckEnemy();
-        Debug.Log("AtkFixed");
     }
     public override void Exit()
     {
