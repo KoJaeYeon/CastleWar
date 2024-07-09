@@ -35,11 +35,6 @@ public class TcpSender : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Debug.Log(ConnectToServer());
-    }
-
     private Queue<Action> executeQueue = new Queue<Action>();
 
     private void Update()
@@ -66,6 +61,7 @@ public class TcpSender : MonoBehaviour
 
     public void OnClick_SceneLoad()
     {
+        Debug.Log(ConnectToServer());
         SceneManager.LoadScene(1);
     }
 
@@ -318,6 +314,9 @@ public class TcpSender : MonoBehaviour
                 break;
             case 4:
                 CastleManager.Instance.Request_CastleDestroy(isTagAlly);
+                break;
+            case 5:
+                GameManager.Instance.ReadyForGame(isTagAlly);
                 break;
         }
     }

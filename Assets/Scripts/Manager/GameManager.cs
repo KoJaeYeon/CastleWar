@@ -53,14 +53,63 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        manaCoroutine = StartCoroutine(ProduceMana());
+    }
 
+    bool _playerReady =false;
+    bool _EnemyReady = false;
+    bool _gameStart = false;
+    Coroutine _loopPacketSend;
+
+    public float GameStartTime { get; private set; }
+
+    public void ReadyForGame(bool isTagAlly)
+    {
+        Debug.Log("sdf");
+        if (isTagAlly)
+        {
+            _playerReady = true;
+            if (_loopPacketSend == null)
+            {
+                _loopPacketSend = StartCoroutine(SendReadyPacketLoop());
+            }
+        }
+        else
+        {
+            _EnemyReady = true;
+        }
+
+        if (_playerReady && _EnemyReady)
+        {
+            GameStart();
+        }
+
+    }
+
+    IEnumerator SendReadyPacketLoop()
+    {
+        while(true)
+        {
+            TcpSender.Instance.RequestCommand(5);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+
+    void GameStart()
+    {
+        if (_gameStart) return;
+
+        _gameStart = true;
+        StopCoroutine(_loopPacketSend);
+        manaCoroutine = StartCoroutine(ProduceMana());
+        UIManager.Instance.GameStart();
+        GameStartTime = Time.time;
     }
 
     //게임 시작할때 캐슬 마나생산
     IEnumerator ProduceMana()
     {
-        while(true)
+        while (true)
         {
             yield return new WaitForSeconds(2f);
             _mana += 10;

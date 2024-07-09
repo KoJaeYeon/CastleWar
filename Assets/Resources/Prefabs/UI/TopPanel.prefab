@@ -75,6 +75,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1310224072510548663}
+  - component: {fileID: 846626699034384298}
   m_Layer: 5
   m_Name: TopPanel
   m_TagString: Untagged
@@ -104,6 +105,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 850}
   m_SizeDelta: {x: 0, y: -1700}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &846626699034384298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895144325754418056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e993f32c671c249847d5071ef22c5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Timer: {fileID: 9016721093290497469}
 --- !u!1 &4386987189146793991
 GameObject:
   m_ObjectHideFlags: 0

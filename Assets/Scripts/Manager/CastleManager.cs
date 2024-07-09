@@ -73,6 +73,8 @@ public class CastleManager : MonoBehaviour
         allyCastle.StartState();
         enemyCastle.StartState();
 
+        StartCoroutine(StartCameraMove());
+
     }
 
     public void AddCampToUnion(Transform transform, bool isTagAlly)
@@ -131,13 +133,42 @@ public class CastleManager : MonoBehaviour
     {
         if(_destroyed == false)
         {
-            StartCoroutine(CameraMove(isTagAlly));
+            StartCoroutine(EndCameraMove(isTagAlly));
             _destroyed = true;
         }
         
     }
+    IEnumerator StartCameraMove()
+    {
+        yield return new WaitForSeconds(1f);
 
-    IEnumerator CameraMove(bool isTagAlly)
+        Camera _camera = Camera.main;
+        float duration = 2f;  // 총 걸리는 시간
+        float elapsedTime = 0f;  // 경과 시간
+        float startSize = _camera.orthographicSize;  // 시작 크기
+        Vector3 startPos = _camera.transform.position;
+
+        Vector3 targetPos = new Vector3(0, 45, -36.4f);
+        
+
+        while (elapsedTime < duration)
+        {
+            _camera.orthographicSize = Mathf.Lerp(startSize, 77.4f, elapsedTime / duration);
+            _camera.transform.position = Vector3.Lerp(startPos, targetPos, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;  // 경과 시간 업데이트
+            yield return null;
+        }
+
+        // 최종 크기로 확실히 설정
+        _camera.orthographicSize = 77.4f;
+        _camera.transform.position = targetPos;
+
+        TcpSender.Instance.RequestCommand(5);
+
+        yield break;
+    }
+
+    IEnumerator EndCameraMove(bool isTagAlly)
     {
         Camera _camera = Camera.main;
         float duration = 2f;  // 총 걸리는 시간
@@ -146,6 +177,8 @@ public class CastleManager : MonoBehaviour
         Vector3 startPos = _camera.transform.position;
 
         Vector3 targetPos = isTagAlly ? new Vector3(0, 45, -75) : new Vector3(0, 45, 25);
+
+        UIManager.Instance.GameEnd(isTagAlly);
 
         while (elapsedTime < duration)
         {
@@ -163,6 +196,6 @@ public class CastleManager : MonoBehaviour
 
         AllyCastle.SetActive(false);
         EnemyCastle.SetActive(false);
-        
+        yield break;
     }
 }
