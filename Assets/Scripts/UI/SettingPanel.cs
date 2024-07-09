@@ -25,4 +25,9 @@ public class SettingPanel : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void OnClick_Surrender()
+    {
+        TcpSender.Instance.RequestCommand(4);
+    }
 }

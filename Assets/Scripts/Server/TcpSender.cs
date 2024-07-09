@@ -178,10 +178,10 @@ public class TcpSender : MonoBehaviour
     // Handle incomming request
     private void HandleIncommingRequest(int typeOfService, int playerId, int payloadLength, byte[] bytes)
     {
-        //Debug.Log("=========================================");
-        //Debug.Log("Type of Service : " + typeOfService);
-        //Debug.Log("player Id      : " + playerId);
-        //Debug.Log("Payload Length  : " + payloadLength);
+        Debug.Log("=========================================");
+        Debug.Log("Type of Service : " + typeOfService);
+        Debug.Log("player Id      : " + playerId);
+        Debug.Log("Payload Length  : " + payloadLength);
         switch (typeOfService)
         {
             case 0:
@@ -317,6 +317,7 @@ public class TcpSender : MonoBehaviour
                 CastleManager.Instance.Request_CastleTierUp(isTagAlly);
                 break;
             case 4:
+                CastleManager.Instance.Request_CastleDestroy(isTagAlly);
                 break;
         }
     }
