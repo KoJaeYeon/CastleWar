@@ -64,12 +64,6 @@ public class TcpSender : MonoBehaviour
 
     int _playerId;
 
-    public void OnClick_SendPacket()
-    {
-        var packetManager = new PacketManager();
-        SendPacket(packetManager.GetCommandPacket(2,2));
-    }
-
     public void OnClick_SceneLoad()
     {
         SceneManager.LoadScene(1);
@@ -311,7 +305,7 @@ public class TcpSender : MonoBehaviour
     {
         bool isTagAlly = (_playerId == playerId);
 
-        switch (typeOfCommand)
+        switch (typeOfCommand) // 1 Return, 2 Cancel, 3 TierUp, 4 Surrender
         {
             case 1:
                 UnitManager.Instance.OnCalled_Retreat(isTagAlly);
@@ -321,6 +315,8 @@ public class TcpSender : MonoBehaviour
                 break;
             case 3:
                 CastleManager.Instance.Request_CastleTierUp(isTagAlly);
+                break;
+            case 4:
                 break;
         }
     }

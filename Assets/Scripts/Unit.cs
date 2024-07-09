@@ -211,6 +211,7 @@ public class Unit : MonoBehaviour, IAttack
         _health = _type == UnitType.Building ? 0 : _maxHealth;
         _targetEnemy = null;
         _attackTargerEnemy = null;
+        MapCornerPoint = MapCornerPoint.NoCorner;
 
         ResetLayer();
     }
