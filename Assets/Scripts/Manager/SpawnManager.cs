@@ -119,7 +119,9 @@ public class SpawnManager : MonoBehaviour
         StackSpawnUnitObject[campIdx+8] = new Stack<GameObject>();
 
         GameObject campPrefab = Resources.Load("Prefabs/Camp") as GameObject;
-        mergedPrefab.Add(-1, campPrefab);
+        GameObject EcampPrefab = Resources.Load("Prefabs/Camp_E") as GameObject;
+        mergedPrefab.Add(campIdx, campPrefab);
+        mergedPrefab.Add(campIdx+8, EcampPrefab);
         GameObject campRoot = new GameObject("CampRoot");
         campRoot.transform.SetParent(_root);
 
@@ -138,7 +140,7 @@ public class SpawnManager : MonoBehaviour
             StackSpawnUnitObject[6].Push(campPrefabClone);
 
             //Enemy Camp
-            GameObject EcampPrefabClone = Instantiate(campPrefab, campRoot.transform);
+            GameObject EcampPrefabClone = Instantiate(EcampPrefab, campRoot.transform);
             EcampPrefabClone.SetActive(false);
 
             //데이터 초기화
@@ -158,7 +160,7 @@ public class SpawnManager : MonoBehaviour
         StackSpawnUnitObject[sacnIdx+8] = new Stack<GameObject>();
 
         GameObject sanctuaryPrefab = Resources.Load("Prefabs/Sanctuary") as GameObject;
-        mergedPrefab.Add(-2, sanctuaryPrefab);
+        mergedPrefab.Add(sacnIdx, sanctuaryPrefab);
         GameObject sanctuaryRoot = new GameObject("Sanctuary");
         sanctuaryRoot.transform.SetParent(_root);
 
@@ -286,7 +288,7 @@ public class SpawnManager : MonoBehaviour
             //데이터 초기화
             Unit newPrefabUnit = newPrefab.GetComponent<Unit>();
             UnitData unitData = DatabaseManager.Instance.OnGetUnitData(newPrefabUnit.UnitId);
-            newPrefabUnit.InitData(unitData);
+            newPrefabUnit.InitData(unitData, index);
 
             //반환
             newPrefab.SetActive(false);

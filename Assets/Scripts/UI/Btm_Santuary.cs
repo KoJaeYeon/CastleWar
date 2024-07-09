@@ -92,9 +92,9 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
                 //_spawnedUnit = null;
 
                 {
-                    _spawnedUnit.SetActive(false);
                     Vector3 touchPos = _spawnedUnit.transform.position;
-                    _spawnedUnit = null;
+
+                    ReturnSanc();
                     TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
                 }
             }

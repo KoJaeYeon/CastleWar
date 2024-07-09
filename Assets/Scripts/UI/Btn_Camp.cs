@@ -92,9 +92,9 @@ public class Btn_Camp : MonoBehaviour, ISelectable
                 //_spawnedUnit = null;
 
                 {
-                    _spawnedUnit.SetActive(false);
                     Vector3 touchPos = _spawnedUnit.transform.position;
-                    _spawnedUnit = null;
+
+                    ReturnBuilding();
                     TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
                 }
             }

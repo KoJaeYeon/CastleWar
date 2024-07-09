@@ -137,9 +137,9 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
                     GameManager.Instance.RequestManaUse(cost * -1);
 
                     {
-                        _spawnedUnit.SetActive(false);
                         Vector3 touchPos = _spawnedUnit.transform.position;
-                        _spawnedUnit = null;
+
+                        ReturnUnit();
                         TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
                     }
                 }

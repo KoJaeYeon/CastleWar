@@ -159,7 +159,9 @@ public class Unit : MonoBehaviour, IAttack
         _spawnSlotIndex = index;
 
          TargetAnimSpeed = unitData.AttackAnimFrame / 60f / _attackSpeed;
-        
+
+        //캐릭터 레이어 설정
+        ResetLayer();
 
         //캐릭터 공격범위 표시 이미지
         RectTransform rectAtkRangeImg = AttackRange_Img.GetComponent<RectTransform>();
@@ -217,6 +219,7 @@ public class Unit : MonoBehaviour, IAttack
     {
         if (SpwanSlotIndex < 8)
         {
+            gameObject.tag = "Ally";
             switch (_type)
             {
                 case UnitType.Ground:
@@ -232,6 +235,7 @@ public class Unit : MonoBehaviour, IAttack
         }
         else
         {
+            gameObject.tag = "Enemy";
             switch (_type)
             {
                 case UnitType.Ground:
