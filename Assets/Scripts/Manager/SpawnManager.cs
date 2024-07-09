@@ -160,7 +160,9 @@ public class SpawnManager : MonoBehaviour
         StackSpawnUnitObject[sacnIdx+8] = new Stack<GameObject>();
 
         GameObject sanctuaryPrefab = Resources.Load("Prefabs/Sanctuary") as GameObject;
+        GameObject EsanctuaryPrefab = Resources.Load("Prefabs/Sanctuary_E") as GameObject;
         mergedPrefab.Add(sacnIdx, sanctuaryPrefab);
+        mergedPrefab.Add(sacnIdx+8, EsanctuaryPrefab);
         GameObject sanctuaryRoot = new GameObject("Sanctuary");
         sanctuaryRoot.transform.SetParent(_root);
 
@@ -179,14 +181,14 @@ public class SpawnManager : MonoBehaviour
             StackSpawnUnitObject[sacnIdx].Push(sancPrefabClone);
 
             //Enemy Sanc
-            GameObject EancPrefabClone = Instantiate(sanctuaryPrefab, sanctuaryRoot.transform);
-            EancPrefabClone.SetActive(false);
+            GameObject EsancPrefabClone = Instantiate(EsanctuaryPrefab, sanctuaryRoot.transform);
+            EsancPrefabClone.SetActive(false);
             //데이터 초기화
-            var EspawnUnit = EancPrefabClone.GetComponent<Unit>();
+            var EspawnUnit = EsancPrefabClone.GetComponent<Unit>();
             EspawnUnit.InitData(unitData,sacnIdx+8);
-            EancPrefabClone.layer = LayerMask.NameToLayer("EnemyBuilding");
-            EancPrefabClone.name = $"ESanctuary_{i}";
-            StackSpawnUnitObject[sacnIdx+8].Push(EancPrefabClone);
+            EsancPrefabClone.layer = LayerMask.NameToLayer("EnemyBuilding");
+            EsancPrefabClone.name = $"ESanctuary_{i}";
+            StackSpawnUnitObject[sacnIdx+8].Push(EsancPrefabClone);
         }
 
     }
