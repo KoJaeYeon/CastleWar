@@ -61,6 +61,8 @@ public class TcpSender : MonoBehaviour
     int _playerId;
     public Coroutine SendPing { get; set; }
     Coroutine _enemySearched;
+
+    public GameObject CancelButton { get;set; }
     public void m_SceneLoad()
     {
         if (_enemySearched == null)
@@ -329,6 +331,7 @@ public class TcpSender : MonoBehaviour
                 {
                     RequestCommand(6);
                     m_SceneLoad();
+                    CancelButton.SetActive(false);
                 }
                 break;
         }

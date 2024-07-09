@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class TitleCanvas : MonoBehaviour
 {
+    [SerializeField] GameObject _cancelButton;
+    private void OnEnable()
+    {
+        TcpSender.Instance.CancelButton = _cancelButton;
+    }
     public void OnClick_MatchGame()
     {
         Coroutine sendPing = TcpSender.Instance.SendPing;
@@ -15,6 +20,11 @@ public class TitleCanvas : MonoBehaviour
                 sendPing = StartCoroutine(SendPing());
             }
         }
+    }
+
+    public void OnClick_CancelMatch()
+    {
+        TcpSender.Instance.Disconnect();
     }
 
     IEnumerator SendPing()
