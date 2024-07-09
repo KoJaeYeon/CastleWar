@@ -33,11 +33,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    PlayerPanel _playerPanel;
+    [SerializeField] GameObject PlayerPanel;
+    [SerializeField] GameObject TopPanel;
+    [SerializeField] GameObject RecepitPanel;
 
-    public PlayerPanel PlayerPanel
+    public void GameEnd(bool isTagAlly)
     {
-        get { return _playerPanel; }
-        set { _playerPanel = value; }
+        PlayerPanel.SetActive(false);
+        TopPanel.SetActive(false);
+        RecepitPanel.SetActive(true);
     }
 }
