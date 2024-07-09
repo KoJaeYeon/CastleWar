@@ -226,9 +226,9 @@ public class TcpSender : MonoBehaviour
 
         if(_playerId != playerId)
         {
+            unitSlot += 8;
             x_axis *= -1;
             z_axis *= -1;
-            unitSlot += 6;
         }
         float x_Pos = x_axis / 1000f;
         float z_Pos = z_axis / 1000f;

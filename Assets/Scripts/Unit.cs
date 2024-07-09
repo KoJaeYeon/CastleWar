@@ -215,7 +215,7 @@ public class Unit : MonoBehaviour, IAttack
 
     void ResetLayer()
     {
-        if (SpwanSlotIndex < 6)
+        if (SpwanSlotIndex < 8)
         {
             switch (_type)
             {

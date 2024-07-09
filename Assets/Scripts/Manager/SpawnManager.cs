@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -94,10 +95,10 @@ public class SpawnManager : MonoBehaviour
 
     #endregion
     #region ObjectPooling
-    Stack<GameObject>[] StackSpawnUnitObject = new Stack<GameObject>[12];
+    Stack<GameObject>[] StackSpawnUnitObject = new Stack<GameObject>[16];
     Dictionary<int, GameObject> mergedPrefab = new Dictionary<int, GameObject>();
-    Stack<GameObject> StackCampObject = new Stack<GameObject>();
-    Stack<GameObject> StackSanctuaryObject = new Stack<GameObject>();
+    //Stack<GameObject> StackCampObject = new Stack<GameObject>();
+    //Stack<GameObject> StackSanctuaryObject = new Stack<GameObject>();
 
     void ObjectPooling_BasePrefab_OnAwake()
     {
@@ -113,6 +114,10 @@ public class SpawnManager : MonoBehaviour
     }
     void ObjectPooling_Camp_OnAwake()
     {
+        int campIdx = 6;
+        StackSpawnUnitObject[campIdx] = new Stack<GameObject>();
+        StackSpawnUnitObject[campIdx+8] = new Stack<GameObject>();
+
         GameObject campPrefab = Resources.Load("Prefabs/Camp") as GameObject;
         mergedPrefab.Add(-1, campPrefab);
         GameObject campRoot = new GameObject("CampRoot");
@@ -120,21 +125,38 @@ public class SpawnManager : MonoBehaviour
 
         for(int i = 0; i < 30; i++)
         {
+            //Ally Camp
             GameObject campPrefabClone = Instantiate(campPrefab, campRoot.transform);
             campPrefabClone.SetActive(false);
+
             //데이터 초기화
             var spawnUnit = campPrefabClone.GetComponent<Unit>();
             UnitData unitData = DatabaseManager.Instance.OnGetUnitData(-1);
-            spawnUnit.InitData(unitData);
+            spawnUnit.InitData(unitData,campIdx);
             campPrefabClone.layer = LayerMask.NameToLayer("AllyBuilding");
             campPrefabClone.name = $"Camp_{i}";
-            StackCampObject.Push(campPrefabClone);
+            StackSpawnUnitObject[6].Push(campPrefabClone);
+
+            //Enemy Camp
+            GameObject EcampPrefabClone = Instantiate(campPrefab, campRoot.transform);
+            EcampPrefabClone.SetActive(false);
+
+            //데이터 초기화
+            var EspawnUnit = EcampPrefabClone.GetComponent<Unit>();
+            EspawnUnit.InitData(unitData,campIdx+8);
+            EcampPrefabClone.layer = LayerMask.NameToLayer("EnemyBuilding");
+            EcampPrefabClone.name = $"ECamp_{i}";
+            StackSpawnUnitObject[campIdx+8].Push(EcampPrefabClone);
         }
 
     }
 
     void ObjectPooling_Sanctuary_OnAwake()
     {
+        int sacnIdx = 7;
+        StackSpawnUnitObject[sacnIdx] = new Stack<GameObject>();
+        StackSpawnUnitObject[sacnIdx+8] = new Stack<GameObject>();
+
         GameObject sanctuaryPrefab = Resources.Load("Prefabs/Sanctuary") as GameObject;
         mergedPrefab.Add(-2, sanctuaryPrefab);
         GameObject sanctuaryRoot = new GameObject("Sanctuary");
@@ -142,21 +164,33 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < 10; i++)
         {
+            //Ally Sanc
             GameObject sancPrefabClone = Instantiate(sanctuaryPrefab, sanctuaryRoot.transform);
             sancPrefabClone.SetActive(false);
+
             //데이터 초기화
             var spawnUnit = sancPrefabClone.GetComponent<Unit>();
             UnitData unitData = DatabaseManager.Instance.OnGetUnitData(-2);
-            spawnUnit.InitData(unitData);
+            spawnUnit.InitData(unitData,sacnIdx);
             sancPrefabClone.layer = LayerMask.NameToLayer("AllyBuilding");
             sancPrefabClone.name = $"Sanctuary_{i}";
-            StackSanctuaryObject.Push(sancPrefabClone);
+            StackSpawnUnitObject[sacnIdx].Push(sancPrefabClone);
+
+            //Enemy Sanc
+            GameObject EancPrefabClone = Instantiate(sanctuaryPrefab, sanctuaryRoot.transform);
+            EancPrefabClone.SetActive(false);
+            //데이터 초기화
+            var EspawnUnit = EancPrefabClone.GetComponent<Unit>();
+            EspawnUnit.InitData(unitData,sacnIdx+8);
+            EancPrefabClone.layer = LayerMask.NameToLayer("EnemyBuilding");
+            EancPrefabClone.name = $"ESanctuary_{i}";
+            StackSpawnUnitObject[sacnIdx+8].Push(EancPrefabClone);
         }
 
     }
 
     //카드를 등록할 때 실행하는 함수, 9초에 걸쳐 생성
-    public void OnAdd_ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, // 6 ~ 11 : Enemy
+    public void OnAdd_ObjectPoolingSlot(int index, int id) // 0 ~ 5 : Ally, 6 ~ 7 Camp,Sanctuary// 8 ~ 13 : Enemy //14 15 Camp,Sanc
     {
         StackSpawnUnitObject[index] = new Stack<GameObject>();
         Stack<GameObject> poolStack = StackSpawnUnitObject[index];
@@ -184,7 +218,7 @@ public class SpawnManager : MonoBehaviour
         var unit = baseUnit.GetComponent<Unit>();
         UnitData unitData = DatabaseManager.Instance.OnGetUnitData(id);
         unit.InitData(unitData, index);
-        if (index < 6)
+        if (index < 8)
         {
             baseUnit.tag = "Ally";
             switch (unitData.unitType)
@@ -266,43 +300,43 @@ public class SpawnManager : MonoBehaviour
         StackSpawnUnitObject[index].Push(returnUnit);
     }
 
-    public GameObject OnCalled_GetCamp()
-    {
-        if (StackCampObject.TryPop(out GameObject result))
-        {
-            return result;
-        }
-        else
-        {
-            GameObject newPrefab = Instantiate(mergedPrefab[-1]);
-            newPrefab.SetActive(false);
-            return newPrefab;
-        }
-    }
+    //public GameObject OnCalled_GetCamp()
+    //{
+    //    if (StackCampObject.TryPop(out GameObject result))
+    //    {
+    //        return result;
+    //    }
+    //    else
+    //    {
+    //        GameObject newPrefab = Instantiate(mergedPrefab[-1]);
+    //        newPrefab.SetActive(false);
+    //        return newPrefab;
+    //    }
+    //}
 
-    public GameObject OnCalled_GetSanctuary()
-    {
-        if (StackSanctuaryObject.TryPop(out GameObject result))
-        {
-            return result;
-        }
-        else
-        {
-            GameObject newPrefab = Instantiate(mergedPrefab[-2]);
-            newPrefab.SetActive(false);
-            return newPrefab;
-        }
-    }
+    //public GameObject OnCalled_GetSanctuary()
+    //{
+    //    if (StackSanctuaryObject.TryPop(out GameObject result))
+    //    {
+    //        return result;
+    //    }
+    //    else
+    //    {
+    //        GameObject newPrefab = Instantiate(mergedPrefab[-2]);
+    //        newPrefab.SetActive(false);
+    //        return newPrefab;
+    //    }
+    //}
 
-    public void OnCalled_ReturnCamp(GameObject returnUnit) //막사가 파괴될 때
-    {
-        returnUnit.SetActive(false);
-        StackCampObject.Push(returnUnit);
-    }
+    //public void OnCalled_ReturnCamp(GameObject returnUnit) //막사가 파괴될 때
+    //{
+    //    returnUnit.SetActive(false);
+    //    StackCampObject.Push(returnUnit);
+    //}
 
-    public void OnCalled_ReturnSanc(GameObject returnUnit) //막사가 파괴될 때
-    {
-        returnUnit.SetActive(false);
-        StackSanctuaryObject.Push(returnUnit);
-    }
+    //public void OnCalled_ReturnSanc(GameObject returnUnit) //막사가 파괴될 때
+    //{
+    //    returnUnit.SetActive(false);
+    //    StackSanctuaryObject.Push(returnUnit);
+    //}
 }

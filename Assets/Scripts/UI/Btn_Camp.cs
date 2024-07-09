@@ -12,6 +12,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     GameObject _spawnedUnit;
     Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
 
+    int _index = 6;
     int tempLayer;
     Coroutine coroutine;
 
@@ -65,7 +66,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     public void OnPointerDown()
     {
         isDown = true;
-        _spawnedUnit = SpawnManager.Instance.OnCalled_GetCamp();
+        _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(6);
 
         _spawnedUnit.layer = LayerMask.NameToLayer("Default");
 
@@ -85,10 +86,17 @@ public class Btn_Camp : MonoBehaviour, ISelectable
             if (GameManager.Instance.RequestManaCheck(50))
             {
                 GameManager.Instance.RequestManaUse(-50);
-                _spawnedUnit.layer = tempLayer;
-                var unit = _spawnedUnit.GetComponent<Unit>();
-                unit?.StartState();
-                _spawnedUnit = null;
+                //_spawnedUnit.layer = tempLayer;
+                //var unit = _spawnedUnit.GetComponent<Unit>();
+                //unit?.StartState();
+                //_spawnedUnit = null;
+
+                {
+                    _spawnedUnit.SetActive(false);
+                    Vector3 touchPos = _spawnedUnit.transform.position;
+                    _spawnedUnit = null;
+                    TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
+                }
             }
             else
             {
@@ -137,7 +145,7 @@ public class Btn_Camp : MonoBehaviour, ISelectable
     void ReturnBuilding()
     {
         //안쓰는 유닛 반환
-        SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
+        SpawnManager.Instance.OnCalled_ReturnUnit(6,_spawnedUnit);
         _spawnedUnit.SetActive(false);
         _spawnedUnit = null;
     }

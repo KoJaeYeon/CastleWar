@@ -67,7 +67,7 @@ public class Btn_CharcterSprite : MonoBehaviour, ISelectable
         isDown = true;
 
         //[TODO] HERO
-        _spawnedUnit = SpawnManager.Instance.OnCalled_GetCamp();
+        //_spawnedUnit = SpawnManager.Instance.OnCalled_GetCamp();
 
         _spawnedUnit.layer = LayerMask.NameToLayer("Default");
 
@@ -138,9 +138,9 @@ public class Btn_CharcterSprite : MonoBehaviour, ISelectable
 
     void ReturnBuilding()
     {
-        //안쓰는 유닛 반환
-        SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
-        _spawnedUnit.SetActive(false);
-        _spawnedUnit = null;
+        ////안쓰는 유닛 반환
+        //SpawnManager.Instance.OnCalled_ReturnCamp(_spawnedUnit);
+        //_spawnedUnit.SetActive(false);
+        //_spawnedUnit = null;
     }
 }

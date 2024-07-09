@@ -13,6 +13,7 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
     Collider[] hitColliders = new Collider[2]; // 충돌을 저장할 배열
 
     int tempLayer;
+    int _index = 7;
     Coroutine coroutine;
 
     private void Awake()
@@ -65,7 +66,7 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
     public void OnPointerDown()
     {
         isDown = true;
-        _spawnedUnit = SpawnManager.Instance.OnCalled_GetSanctuary();
+        _spawnedUnit = SpawnManager.Instance.OnCalled_GetUnit(7);
 
         _spawnedUnit.layer = LayerMask.NameToLayer("Default");
 
@@ -85,10 +86,17 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
             if (GameManager.Instance.RequestManaCheck(75))
             {
                 GameManager.Instance.RequestManaUse(-75);
-                _spawnedUnit.layer = tempLayer;
-                var unit = _spawnedUnit.GetComponent<Unit>();
-                unit?.StartState();
-                _spawnedUnit = null;
+                //_spawnedUnit.layer = tempLayer;
+                //var unit = _spawnedUnit.GetComponent<Unit>();
+                //unit?.StartState();
+                //_spawnedUnit = null;
+
+                {
+                    _spawnedUnit.SetActive(false);
+                    Vector3 touchPos = _spawnedUnit.transform.position;
+                    _spawnedUnit = null;
+                    TcpSender.Instance.RequestSpawnUnit(touchPos, _index);
+                }
             }
             else
             {
@@ -154,7 +162,7 @@ public class Btm_Sanctuary : MonoBehaviour, ISelectable
     private void ReturnSanc()
     {
         //안쓰는 유닛 반환
-        SpawnManager.Instance.OnCalled_ReturnSanc(_spawnedUnit);
+        SpawnManager.Instance.OnCalled_ReturnUnit(7, _spawnedUnit);
         _spawnedUnit.SetActive(false);
         _spawnedUnit = null;
     }
