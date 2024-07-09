@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,6 +29,7 @@ public class CastleManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+                
     }
 
     [SerializeField] GameObject AllyCastle;
@@ -36,10 +37,11 @@ public class CastleManager : MonoBehaviour
     [SerializeField] CircleUnionManager AllyUnion;
     [SerializeField] CircleUnionManager EnemyUnion;
     [SerializeField] Material _allyMaterial;
-    [SerializeField] Material _enemyMaterial;
+    [SerializeField] Material _enemyMaterial;    
 
     public Material AllyMaterial => _allyMaterial;
     public Material EnemyMaterial => _enemyMaterial;
+    bool _destroyed = false;
 
 
 
@@ -70,6 +72,7 @@ public class CastleManager : MonoBehaviour
 
         allyCastle.StartState();
         enemyCastle.StartState();
+
     }
 
     public void AddCampToUnion(Transform transform, bool isTagAlly)
@@ -122,5 +125,44 @@ public class CastleManager : MonoBehaviour
             enemyCastle.RequestTierUp();
         }
 
+    }
+
+    public void Request_CastleDestroy(bool isTagAlly)
+    {
+        if(_destroyed == false)
+        {
+            StartCoroutine(CameraMove(isTagAlly));
+            _destroyed = true;
+        }
+        
+    }
+
+    IEnumerator CameraMove(bool isTagAlly)
+    {
+        Camera _camera = Camera.main;
+        float duration = 2f;  // 총 걸리는 시간
+        float elapsedTime = 0f;  // 경과 시간
+        float startSize = _camera.orthographicSize;  // 시작 크기
+        Vector3 startPos = _camera.transform.position;
+
+        Vector3 targetPos = isTagAlly ? new Vector3(0, 45, -75) : new Vector3(0, 45, 25);
+
+        while (elapsedTime < duration)
+        {
+            _camera.orthographicSize = Mathf.Lerp(startSize, 20, elapsedTime / duration);
+            _camera.transform.position = Vector3.Lerp(startPos, targetPos, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;  // 경과 시간 업데이트
+            yield return null;
+        }
+
+        // 최종 크기로 확실히 설정
+        _camera.orthographicSize = 20;  
+        _camera.transform.position = targetPos;
+
+        yield return new WaitForSeconds(1f);
+
+        AllyCastle.SetActive(false);
+        EnemyCastle.SetActive(false);
+        
     }
 }
