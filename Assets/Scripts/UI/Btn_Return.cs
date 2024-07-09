@@ -53,7 +53,8 @@ public class Btn_Return : MonoBehaviour
         button.onClick.AddListener(OnClick_Btn_Cancel);
 
         //후퇴명령
-        UnitManager.Instance.OnCalled_Retreat(isTagAlly: true);
+        //UnitManager.Instance.OnCalled_Retreat(isTagAlly: true);
+        TcpSender.Instance.RequestCommand(1);
 
         //이미지 변경
         RetreatBtn.SetActive(false);
@@ -72,7 +73,8 @@ public class Btn_Return : MonoBehaviour
         button.onClick.AddListener(OnClick_Btn_Retreat);
 
         //취소명령
-        UnitManager.Instance.OnCalled_Cancel(isTagAlly: true);
+        //UnitManager.Instance.OnCalled_Cancel(isTagAlly: true);
+        TcpSender.Instance.RequestCommand(2);
 
         //이미지 변경
         RetreatBtn.SetActive(true);

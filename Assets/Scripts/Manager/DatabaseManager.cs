@@ -184,12 +184,12 @@ public class DatabaseManager : MonoBehaviour
                         cardType,
                         frame
                     ));
-                    if(id < 6)
+
+                    if (id < 6 || id == 18 || id == 13)
                     {
                         Sprite unitSprite = Resources.Load<Sprite>($"Sprites/UI/UnitSprite/Unit_{id}") as Sprite;
                         unitSpriteDic.Add(id, unitSprite);
                     }
-
                 }
                 catch
                 {

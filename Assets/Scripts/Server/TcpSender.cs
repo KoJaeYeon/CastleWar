@@ -75,7 +75,7 @@ public class TcpSender : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void SendPacket(byte[] buffer)
+    void SendPacket(byte[] buffer)
     {
         Debug.Log("send");
         try
@@ -184,10 +184,10 @@ public class TcpSender : MonoBehaviour
     // Handle incomming request
     private void HandleIncommingRequest(int typeOfService, int playerId, int payloadLength, byte[] bytes)
     {
-        Debug.Log("=========================================");
-        Debug.Log("Type of Service : " + typeOfService);
-        Debug.Log("player Id      : " + playerId);
-        Debug.Log("Payload Length  : " + payloadLength);
+        //Debug.Log("=========================================");
+        //Debug.Log("Type of Service : " + typeOfService);
+        //Debug.Log("player Id      : " + playerId);
+        //Debug.Log("Payload Length  : " + payloadLength);
         switch (typeOfService)
         {
             case 0:
@@ -309,14 +309,17 @@ public class TcpSender : MonoBehaviour
 
     private void ExecuteCommand(int typeOfCommand, int playerId)
     {
+        bool isTagAlly = (_playerId == playerId);
+
         switch (typeOfCommand)
         {
             case 1:
+                UnitManager.Instance.OnCalled_Retreat(isTagAlly);
                 break;
             case 2:
+                UnitManager.Instance.OnCalled_Cancel(isTagAlly);
                 break;
             case 3:
-                bool isTagAlly = _playerId == playerId;
                 CastleManager.Instance.Request_CastleTierUp(isTagAlly);
                 break;
         }
