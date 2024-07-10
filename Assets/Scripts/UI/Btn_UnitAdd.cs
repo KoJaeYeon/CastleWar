@@ -36,6 +36,20 @@ public class Btn_UnitAdd : MonoBehaviour, ISelectable
         population = unitData.Population;
         defaultLayer = LayerMask.NameToLayer("DeadUnit");
 
+        switch (unitData.unitType)
+        {
+            case UnitType.Ground:
+                touchType = TouchType.Unit;
+                break;
+            case UnitType.Air:
+                touchType = TouchType.Unit;
+                isAir = true;
+                break;
+            default:
+                touchType = TouchType.NotUnit;
+                break;
+        }        
+
         //검사용 레이어
         string[] targetLayers;
         if (isAir)
