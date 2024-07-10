@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -62,11 +63,17 @@ public class TcpSender : MonoBehaviour
     public Coroutine SendPing { get; set; }
     Coroutine _enemySearched;
 
-    public GameObject CancelButton { get;set; }
+    public GameObject CancelButton { get; set; }
+    public TextMeshProUGUI SearchText {get; set;}
     public void m_SceneLoad()
     {
         if (_enemySearched == null)
         {
+            if (CancelButton != null)
+            {
+                CancelButton.SetActive(false);
+                SearchText.text = "플레이어를 찾았습니다.\n곧 게임을 시작합니다.";
+            }
             _enemySearched = StartCoroutine(EnemySearched());
             StopCoroutine(SendPing);
         }
@@ -327,11 +334,10 @@ public class TcpSender : MonoBehaviour
                 break;
             case 6:
                 // 상대방이 통신을 보냈을 때
-                if(isTagAlly == false && _enemySearched == null)
+                if (isTagAlly == false && _enemySearched == null)
                 {
                     RequestCommand(6);
                     m_SceneLoad();
-                    CancelButton.SetActive(false);
                 }
                 break;
         }
@@ -339,8 +345,8 @@ public class TcpSender : MonoBehaviour
 
     IEnumerator EnemySearched()
     {
-        //3초뒤 게임시작
-        yield return new WaitForSeconds(3f);
+        //5초뒤 게임시작
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(1);
 
         yield return new WaitForSeconds(5f);

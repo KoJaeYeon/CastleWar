@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TitleCanvas : MonoBehaviour
 {
     [SerializeField] GameObject _cancelButton;
+    [SerializeField] TextMeshProUGUI SearchText;
     private void OnEnable()
     {
         TcpSender.Instance.CancelButton = _cancelButton;
+        TcpSender.Instance.SearchText = SearchText;
     }
     public void OnClick_MatchGame()
     {
