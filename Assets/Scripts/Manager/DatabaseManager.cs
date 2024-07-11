@@ -78,6 +78,7 @@ public class DatabaseManager : MonoBehaviour
     [SerializeField] string _dbName = "test";
     [SerializeField] string _uid = "root";
     [SerializeField] string _pwd = "1234";
+    [SerializeField] bool _useLocal;
 
     private bool _isConnectTestCompolete;
 
@@ -112,7 +113,10 @@ public class DatabaseManager : MonoBehaviour
 
     public void ConnectToDB()
     {
-        _isConnectTestCompolete = ConnetTest();
+        if (_useLocal == false)
+        {
+            _isConnectTestCompolete = ConnetTest();
+        }
         SendQuery();
     }
 
