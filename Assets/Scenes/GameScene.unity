@@ -998,6 +998,7 @@ MonoBehaviour:
   _dbName: test
   _uid: root
   _pwd: 1234
+  _useLocal: 0
 --- !u!4 &1945575344
 Transform:
   m_ObjectHideFlags: 0

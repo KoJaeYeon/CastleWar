@@ -31,11 +31,14 @@ public class UIManager : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+        topPanel = TopPanel.GetComponent<TopPanel>();
     }
 
     [SerializeField] GameObject PlayerPanel;
     [SerializeField] GameObject TopPanel;
     [SerializeField] ReceiptPanel ReceiptPanel;
+    TopPanel topPanel;
 
     public void GameStart()
     {
@@ -51,5 +54,14 @@ public class UIManager : MonoBehaviour
 
         bool isTagAllyWin = !isTagAlly;
         ReceiptPanel.WhoIsWin(isTagAllyWin);
+    }
+
+    public void AddEnemyId(int slotIndex, int unitId)
+    {
+        topPanel.OnAddUnitId(slotIndex, unitId);
+    }
+    public void ActivateEnemySprite(int slotIndex)
+    {
+        topPanel.OnActivateSprite(slotIndex);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -75,7 +76,10 @@ public class TcpSender : MonoBehaviour
                 SearchText.text = "플레이어를 찾았습니다.\n곧 게임을 시작합니다.";
             }
             _enemySearched = StartCoroutine(EnemySearched());
-            StopCoroutine(SendPing);
+            if (SendPing != null)
+            {
+                StopCoroutine(SendPing);
+            }
         }
     }
 
@@ -304,11 +308,21 @@ public class TcpSender : MonoBehaviour
     private void ExecuteAddUnitSlot(int slotIndex, int unitId)
     {
         SpawnManager.Instance.OnAdd_ObjectPoolingSlot(slotIndex, unitId);
+
+        if (slotIndex >= 8 && slotIndex <= 13)
+        {
+            UIManager.Instance.AddEnemyId(slotIndex, unitId);
+        }
     }
 
     private void ExecuteSpawnUnit(Vector3 touchPos, int index)
     {
         Btn_UnitAdd.SpawnUnit(touchPos, index);
+
+        if(index >= 8 && index <= 13)
+        {
+            UIManager.Instance.ActivateEnemySprite(index);
+        }
     }
 
     private void ExecuteCommand(int typeOfCommand, int playerId)
