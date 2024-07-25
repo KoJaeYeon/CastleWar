@@ -38,8 +38,32 @@ public class TcpSender : MonoBehaviour
         }
     }
 
-    private Queue<Action> executeQueue = new Queue<Action>();
 
+
+    TcpClient client;
+    NetworkStream stream;
+    string server = "127.0.0.1";
+    string awsServer = "43.201.24.38";
+    [SerializeField] bool awsServerUse = false;
+    [SerializeField] bool test= false;
+    int port = 2074;
+    bool isConnected = false;
+
+    int _playerId;
+    public Coroutine SendPing { get; set; }
+    Coroutine _enemySearched;
+
+    public GameObject CancelButton { get; set; }
+    public TextMeshProUGUI SearchText {get; set;}
+
+    private Queue<Action> executeQueue = new Queue<Action>();
+    private void Start()
+    {
+        if(test)
+        {
+            m_SceneLoad();
+        }
+    }
     private void Update()
     {
         lock (executeQueue)
@@ -51,21 +75,6 @@ public class TcpSender : MonoBehaviour
             }
         }
     }
-
-    TcpClient client;
-    NetworkStream stream;
-    string server = "127.0.0.1";
-    string awsServer = "43.201.24.38";
-    [SerializeField] bool awsServerUse = false;
-    int port = 2074;
-    bool isConnected = false;
-
-    int _playerId;
-    public Coroutine SendPing { get; set; }
-    Coroutine _enemySearched;
-
-    public GameObject CancelButton { get; set; }
-    public TextMeshProUGUI SearchText {get; set;}
     public void m_SceneLoad()
     {
         if (_enemySearched == null)

@@ -105,6 +105,7 @@ public class AddPanel : MonoBehaviour
     }
 
     #region ChoicePanel
+    [Header("ChoicePanel")]
     [SerializeField] Sprite[] Sprite_UnitType; // 0 Bulding, 1 Melee, 2 Range, 3 Mage
     [SerializeField] TextMeshProUGUI Text_Population;
     [SerializeField] TextMeshProUGUI Text_SelectUnitName;

@@ -53,6 +53,11 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
+
+        if(test)
+        {
+            _EnemyReady = true;
+        }
     }
 
     bool _playerReady =false;
@@ -61,6 +66,8 @@ public class GameManager : MonoBehaviour
     Coroutine _loopPacketSend;
 
     public float GameStartTime { get; private set; }
+
+    [SerializeField] bool test;
 
     public void ReadyForGame(bool isTagAlly)
     {
@@ -99,7 +106,10 @@ public class GameManager : MonoBehaviour
         if (_gameStart) return;
 
         _gameStart = true;
-        StopCoroutine(_loopPacketSend);
+        if(_loopPacketSend != null)
+        {
+            StopCoroutine(_loopPacketSend);
+        }
         manaCoroutine = StartCoroutine(ProduceMana());
         UIManager.Instance.GameStart();
         GameStartTime = Time.time;
