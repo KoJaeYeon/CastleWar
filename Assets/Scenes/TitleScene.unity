@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -420,8 +420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d9f99443dadbe4e943e12286b1e7f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  awsServerUse: 0
-  test: 1
+  awsServerUse: 1
+  test: 0
 --- !u!4 &647778901
 Transform:
   m_ObjectHideFlags: 0
@@ -634,11 +634,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45a739b18ffac1343b52fcab64ff4d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ip: 43.201.24.38
+  _ip: 15.165.77.208
   _dbName: test
   _uid: root
   _pwd: 1234
-  _useLocal: 1
+  _useLocal: 0
 --- !u!4 &1245732230
 Transform:
   m_ObjectHideFlags: 0

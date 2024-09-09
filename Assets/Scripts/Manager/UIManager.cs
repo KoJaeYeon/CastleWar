@@ -38,12 +38,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject PlayerPanel;
     [SerializeField] GameObject TopPanel;
     [SerializeField] ReceiptPanel ReceiptPanel;
+    [SerializeField] GameObject LoadingPanel;
     TopPanel topPanel;
 
     public void GameStart()
     {
         PlayerPanel.SetActive(true);
         TopPanel.SetActive(true);
+        LoadingPanel.SetActive(false);
     }
 
     public void GameEnd(bool isTagAlly)

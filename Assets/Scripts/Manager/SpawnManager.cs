@@ -53,19 +53,6 @@ public class SpawnManager : MonoBehaviour
         _root = new GameObject("UnitPrefabRoot").transform;
     }
 
-    //모델링 없는 기초 베이스모델 반환, 게임을 시작할 때 미리 생성
-    GameObject GetBasePrefab()
-    {
-        if(Stack_BaseUnit.TryPop(out GameObject result))
-        {
-            return result;
-        }
-        else
-        {
-            Debug.Log("Instantiate");
-            return Instantiate(unit_Base_Prefab);
-        }
-    }
     void GetCacheSubPrefabModel(int id, System.Action<GameObject> onLoaded)
     {
         if (cachedSubPrefabs.ContainsKey(id))
@@ -90,6 +77,20 @@ public class SpawnManager : MonoBehaviour
                     Debug.LogError("Failed to load sub-prefab.");
                 }
             };
+        }
+    }
+
+    //모델링 없는 기초 베이스모델 반환, 게임을 시작할 때 미리 생성
+    GameObject GetBasePrefab()
+    {
+        if (Stack_BaseUnit.TryPop(out GameObject result))
+        {
+            return result;
+        }
+        else
+        {
+            Debug.Log("Instantiate");
+            return Instantiate(unit_Base_Prefab);
         }
     }
 

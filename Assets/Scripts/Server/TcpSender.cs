@@ -43,7 +43,7 @@ public class TcpSender : MonoBehaviour
     TcpClient client;
     NetworkStream stream;
     string server = "127.0.0.1";
-    string awsServer = "43.201.24.38";
+    string awsServer = "15.165.77.208";
     [SerializeField] bool awsServerUse = false;
     [SerializeField] bool test= false;
     int port = 2074;
